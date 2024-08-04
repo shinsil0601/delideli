@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사장님 - 메인페이지</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Client CSS -->
+        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Client JS -->
+        <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+    </head>
+    <body>
+        <div class="client-wrap">
+            <!-- Start:Aside -->
+            <th:block th:include="inc/client/aside :: clientAside"></footer>
+            <!-- End:Aside -->
+
+            <!-- Start:Main -->
+            <main id="mainpage__wrap">
+                <!-- Start:Header -->
+                <th:block th:include="inc/client/header :: clientHeader"></th:block>
+                <!-- End:Header -->
+            </main>
+            <!-- End:Main -->
+        </div>
+    </body>
+</html>
