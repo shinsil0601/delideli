@@ -1,7 +1,8 @@
 #aside {
     position: relative;
-    display: grid;
-    gap: 4rem;
+}
+.aside__logo {
+    padding-bottom: 4rem;
 }
 .aside__nav--depth1 {
     position: relative;
