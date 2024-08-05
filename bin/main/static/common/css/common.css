@@ -88,14 +88,14 @@ body::-webkit-scrollbar-track {
     --violet-800 : #5B21B6;
     --violet-900 : #4C1D95;
     --teal-100 : #CCFBF1;
-    --teal-100 : #99F6E4;
-    --teal-100 : #5EEAD4;
-    --teal-100 : #2DD4BF;
-    --teal-100 : #14B8A6;
-    --teal-100 : #0D9488;
-    --teal-100 : #0F766E;
-    --teal-100 : #115E59;
-    --teal-100 : #134E4A;
+    --teal-200 : #99F6E4;
+    --teal-300 : #5EEAD4;
+    --teal-400 : #2DD4BF;
+    --teal-500 : #14B8A6;
+    --teal-600 : #0D9488;
+    --teal-700 : #0F766E;
+    --teal-800 : #115E59;
+    --teal-900 : #134E4A;
     /* box-shadow */
     --box-shadow-100 : rgba(149, 157, 165, 0.2) 0px 8px 24px;
     --box-shadow-200 : rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
