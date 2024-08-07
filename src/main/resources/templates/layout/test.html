@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사장 마이페이지</title>
+</head>
+<body>
+<h1>사장 마이페이지</h1>
+<div>
+    <p>사장 아이디: <span th:text="${client.clientId}"></span></p>
+    <p>사장 이름: <span th:text="${client.clientName}"></span></p>
+    <p>사장 EID: <span th:text="${client.clientEID}"></span></p>
+    <p>사장 전화번호: <span th:text="${client.clientPhone}"></span></p>
+    <p>사장 이메일: <span th:text="${client.clientEmail}"></span></p>
+    <p>사장 계좌: <span th:text="${client.getBankName()}"></span></p>
+    <p>사장 은행: <span th:text="${client.getBankAccount()}"></span></p>
+</div>
+</body>
+</html>
