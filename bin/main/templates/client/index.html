@@ -6,17 +6,18 @@
         <title>사장님 - 메인페이지</title>
         <!-- Include:공통 CSS -->
         <th:block th:include="inc/common/common-css :: commonCss"></th:block>
-        <!-- Include:Client CSS -->
+        <!-- Include:Admin CSS -->
         <th:block th:include="inc/client/client-css :: clientCss"></th:block>
         <!-- Include:공통 JS -->
         <th:block th:include="inc/common/common-js :: commonJs"></th:block>
-        <!-- Include:Client JS -->
+        <!-- Include:Admin JS -->
         <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+
     </head>
     <body>
         <div class="client-wrap">
             <!-- Start:Aside -->
-            <th:block th:include="inc/client/aside :: clientAside"></footer>
+            <th:block th:include="inc/client/aside :: clientAside"></th:block>
             <!-- End:Aside -->
 
             <!-- Start:Main -->
@@ -24,6 +25,11 @@
                 <!-- Start:Header -->
                 <th:block th:include="inc/client/header :: clientHeader"></th:block>
                 <!-- End:Header -->
+                
+                <!-- Start:Contents -->
+                <section class="contents">
+                </section>
+                <!-- End:Contents -->
             </main>
             <!-- End:Main -->
         </div>
