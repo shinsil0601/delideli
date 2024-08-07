@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>사용자 - 메인페이지</title>
+        <title>사용자 - 로그인</title>
         <!-- Include:공통 CSS -->
         <th:block th:include="inc/common/common-css :: commonCss"></th:block>
         <!-- Include:User CSS -->
@@ -19,7 +19,23 @@
         <!-- End:Header -->
 
         <!-- Start:Main -->
-        <main id="mainpage__wrap"></main>
+        <main id="mainpage__wrap">
+            <form action="/user/loginProc" method="post">
+                <input type="hidden" name="userType" value="user">
+                <label for="userId">아이디:</label>
+                <input type="text" id="userId" name="userId">
+                <br>
+                <label for="password">비밀번호:</label>
+                <input type="password" id="password" name="password">
+                <br>
+                <button type="submit">Login</button>
+                <li><a href="/user/register">유저 회원가입</a></li>
+                <li><a href="/user/findId">유저 아이디 찾기</a></li>
+                <li><a href="/user/findPw">유저 비밀번호 찾기</a></li>
+                <li><a href="/">뒤로가기</a></li>
+            </form>
+            <div style="color: red;" th:if="${param.error}" th:text="${param.error}"></div>
+        </main>
         <!-- End:Main -->
 
         <!-- Start:Footer -->

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 회원가입</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <form id="registerForm" action="/user/register" method="post" enctype="multipart/form-data">
+                <label for="userId">사용자 ID:</label>
+                <input type="text" id="userId" name="userId" required>
+                <button type="button" id="checkUserIdButton">아이디 중복 확인</button>
+                <span id="userIdMessage" class="error-message"></span>
+                <br>
+                <label for="userPw">비밀번호:</label>
+                <input type="password" id="userPw" name="userPw" required>
+                <br>
+                <label for="checkUserPw">비밀번호 확인:</label>
+                <input type="password" id="checkUserPw" name="checkUserPw" required>
+                <span id="passwordMessage" class="error-message"></span>
+                <br>
+                <label for="userName">이름:</label>
+                <input type="text" id="userName" name="userName" required>
+                <br>
+                <label for="userNickname">닉네임:</label>
+                <input type="text" id="userNickname" name="userNickname" required>
+                <br>
+                <label for="userBirth">생년월일:</label>
+                <input type="text" id="userBirth" name="userBirth" required>
+                <br>
+                <label for="userPhone">전화번호:</label>
+                <input type="text" id="userPhone" name="userPhone" required>
+                <br>
+                <label for="userEmail">이메일:</label>
+                <input type="email" id="userEmail" name="userEmail" required>
+                <span id="userEmailMessage" class="error-message"></span>
+                <button type="button" id="sendCodeButton">인증 코드 전송</button>
+                <br>
+                <label for="verificationCode">인증 코드:</label>
+                <input type="text" id="verificationCode" name="verificationCode" required>
+                <button type="button" id="verifyCodeButton">인증 코드 확인</button>
+                <br>
+                <label for="userProfile">프로필 이미지:</label>
+                <input type="file" id="userProfile" name="userProfile">
+                <br>
+                <!-- 주소 입력 필드 추가 -->
+                <label for="userAddress">주소:</label>
+                <input type="text" id="userAddress" name="userAddress" required readonly>
+                <button type="button" onclick="execDaumPostcode()">주소 찾기</button>
+                <br>
+                <label for="userZipcode">우편번호:</label>
+                <input type="text" id="userZipcode" name="userZipcode" required readonly>
+                <br>
+                <label for="userAddrDetail">상세 주소:</label>
+                <input type="text" id="userAddrDetail" name="userAddrDetail" required>
+                <br>
+                <button type="submit" id="registerButton" disabled>등록</button>
+                <li><a href="/">뒤로가기</a></li>
+            </form>
+            <div id="message" class="success-message"></div>
+            <div id="errorMessage" class="error-message"></div>
+
+            <script src="/user/js/module/register.js"></script>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>
