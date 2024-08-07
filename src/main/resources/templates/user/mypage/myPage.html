@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 마이페이지</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <div>
+                <p>사용자 아이디: <span th:text="${user.userId}"></span></p>
+                <p>사용자 이름: <span th:text="${user.userName}"></span></p>
+                <p>사용자 닉네임: <span th:text="${user.userNickname}"></span></p>
+                <p>사용자 생년월일: <span th:text="${user.userBirth}"></span></p>
+                <p>사용자 전화번호: <span th:text="${user.userPhone}"></span></p>
+                <p>사용자 이메일: <span th:text="${user.userEmail}"></span></p>
+                <p>사용자 프로필: <img th:src="@{${user.userProfile}}" alt="User Profile"></p>
+                <p>사용자 포인트: <span th:text="${user.userPoint}"></span></p>
+                <p>사용자 등급: <span th:text="${user.userRank}"></span></p>
+                <p>사용자 상태: <span th:text="${user.userStatus}"></span></p>
+                <p>사용자 역할: <span th:text="${user.userRole}"></span></p>
+                <p>사용자 등록일: <span th:text="${user.userRegdate}"></span></p>
+                <p>사용자 업데이트일: <span th:text="${user.userUpdate}"></span></p>
+            </div>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

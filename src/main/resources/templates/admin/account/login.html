@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>관리자 - 로그인</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Admin CSS -->
+        <th:block th:include="inc/admin/admin-css :: adminCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Admin JS -->
+        <th:block th:include="inc/admin/admin-js :: adminJs"></th:block>
+
+    </head>
+    <body>
+        <div class="admin-wrap">
+            <!-- Start:Aside -->
+            <th:block th:include="inc/admin/aside :: adminAside"></th:block>
+            <!-- End:Aside -->
+
+            <!-- Start:Main -->
+            <main id="mainpage__wrap">
+                <!-- Start:Header -->
+                <th:block th:include="inc/admin/header :: adminHeader"></th:block>
+                <!-- End:Header -->
+
+                <!-- Start:Contents -->
+                <section class="contents">
+                    <form action="/admin/login" method="post">
+                        <label for="username">아이디:</label>
+                        <input type="text" id="username" name="username" required><br>
+
+                        <label for="password">비밀번호:</label>
+                        <input type="password" id="password" name="password" required><br>
+
+                        <button type="submit">로그인</button>
+                    </form>
+                    <div style="color: red;" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+                </section>
+                <!-- End:Contents -->
+            </main>
+            <!-- End:Main -->
+        </div>
+    </body>
+</html>
