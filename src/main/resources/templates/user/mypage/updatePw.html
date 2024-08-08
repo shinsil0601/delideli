@@ -20,6 +20,15 @@
 
         <!-- Start:Main -->
         <main id="mainpage__wrap">
+            <a href="/user/myAddress">주소관리</a><br>
+            <a href="/user/checkAccount">내 정보 수정</a><br>
+            <a href="/user/updatePw">비밀번호 변경</a><br>
+            <a href="/user/myOrder">주문내역</a><br>
+            <a href="/user/myReview">내 리뷰관리</a><br>
+            <a href="/user/myLike">찜목록</a><br>
+            <a href="/user/myCart">장바구니</a><br>
+            <a href="/user/myAsk">내 문의확인</a><br>
+            <a href="/user/withdrawal">회원탈퇴</a><br>
             <form method="post" action="/user/updatePassword">
                 <input type="hidden" name="userId" th:value="${user.userId}">
                 <input type="hidden" name="currentUserPw" th:value="${user.userPw}">

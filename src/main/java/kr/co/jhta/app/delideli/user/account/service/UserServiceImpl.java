@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -119,6 +120,12 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    // 해당 계정의 주소 전부 불러오기
+    @Override
+    public ArrayList<UserAddress> userAddressList(Long userKey) {
+        return userMapper.selectUserAddressList(userKey);
+    }
+
     @Override
     public boolean checkUserIdExists(String userId) {
         return userMapper.selectUserById(userId).isPresent();
@@ -127,6 +134,38 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkUserEmailExists(String email) {
         return userMapper.selectUserByEmail(email).isPresent();
+    }
+
+    @Override
+    public void addAddress(Long userKey, String newAddress, String newAddrDetail, String newZipcode) {
+        UserAddress address = new UserAddress();
+        address.setUserKey(userKey);
+        address.setAddress(newAddress);
+        address.setAddrDetail(newAddrDetail);
+        address.setZipcode(newZipcode);
+        address.setDefaultAddress(false);
+        userMapper.insertUserAddress(address);
+    }
+
+    @Override
+    public void modifyAddress(Long addressKey, String newAddress, String newAddrDetail, String newZipcode) {
+        UserAddress address = new UserAddress();
+        address.setUserAddressKey(addressKey);
+        address.setAddress(newAddress);
+        address.setAddrDetail(newAddrDetail);
+        address.setZipcode(newZipcode);
+        userMapper.updateUserAddress(address);
+    }
+
+    @Override
+    public void setDefaultAddress(Long userKey, Long addressKey) {
+        userMapper.resetDefaultAddress(userKey);
+        userMapper.setDefaultAddress(addressKey);
+    }
+
+    @Override
+    public void deleteAddress(Long addressKey) {
+        userMapper.deleteUserAddress(addressKey);
     }
 
     private String saveProfileImage(MultipartFile file) {
