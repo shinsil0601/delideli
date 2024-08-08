@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사장님 - 회원가입</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Client CSS -->
+        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Client JS -->
+        <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+
+    </head>
+    <body>
+        <div class="client-wrap">
+            <!-- Start:Aside -->
+            <th:block th:include="inc/client/aside :: clientAside"></th:block>
+            <!-- End:Aside -->
+
+            <!-- Start:Main -->
+            <main id="mainpage__wrap">
+                <!-- Start:Header -->
+                <th:block th:include="inc/client/header :: clientHeader"></th:block>
+                <!-- End:Header -->
+
+                <!-- Start:Contents -->
+                <section class="contents">
+                    <form id="registerForm" action="/client/register" method="post">
+                        <label for="clientEID">사업자 등록번호:</label>
+                        <input type="text" id="clientEID" name="clientEID" required>
+                        <button type="button" id="checkEID">사업자 등록 번호 확인</button>
+                        <span id="clientEIDMessage" class="error-message"></span>
+                        <br>
+                        <label for="clientName">이름:</label>
+                        <input type="text" id="clientName" name="clientName" required>
+                        <br>
+                        <label for="clientPhone">전화번호:</label>
+                        <input type="text" id="clientPhone" name="clientPhone" required>
+                        <br>
+                        <label for="clientId">사장님 ID:</label>
+                        <input type="text" id="clientId" name="clientId" required>
+                        <button type="button" id="checkClientIdButton">아이디 중복 확인</button>
+                        <span id="clientIdMessage" class="error-message"></span>
+                        <br>
+                        <label for="clientPw">비밀번호:</label>
+                        <input type="password" id="clientPw" name="clientPw" required>
+                        <br>
+                        <label for="checkClientPw">비밀번호 확인:</label>
+                        <input type="password" id="checkClientPw" name="checkClientPw" required>
+                        <span id="passwordMessage" class="error-message"></span>
+                        <br>
+                        <label for="clientEmail">이메일:</label>
+                        <input type="email" id="clientEmail" name="clientEmail" required>
+                        <span id="clientEmailMessage" class="error-message"></span>
+                        <button type="button" id="sendCodeButton">인증 코드 전송</button>
+                        <br>
+                        <label for="verificationCode">인증 코드:</label>
+                        <input type="text" id="verificationCode" name="verificationCode" required>
+                        <button type="button" id="verifyCodeButton">인증 코드 확인</button>
+                        <br>
+                        <label for="bankName">은행 이름:</label>
+                        <input type="text" id="bankName" name="bankName" required>
+                        <br>
+                        <label for="bankAccount">은행 계좌:</label>
+                        <input type="text" id="bankAccount" name="bankAccount" required>
+                        <br>
+                        <button type="submit" id="registerButton" disabled>등록</button>
+                        <li><a href="/">뒤로가기</a></li>
+                    </form>
+                    <div id="message" class="success-message"></div>
+                    <div id="errorMessage" class="error-message"></div>
+
+                    <script src="/client/js/module/register.js"></script>
+                </section>
+                <!-- End:Contents -->
+            </main>
+            <!-- End:Main -->
+        </div>
+    </body>
+</html>

@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>사용자 - 메인페이지</title>
+        <title>사용자 - 비밀번호찾기</title>
         <!-- Include:공통 CSS -->
         <th:block th:include="inc/common/common-css :: commonCss"></th:block>
         <!-- Include:User CSS -->
@@ -19,7 +19,22 @@
         <!-- End:Header -->
 
         <!-- Start:Main -->
-        <main id="mainpage__wrap"></main>
+        <main id="mainpage__wrap">
+            <form id="findPwForm">
+                <label for="userId">사용자 ID:</label>
+                <input type="text" id="userId" name="userId" required>
+                <br>
+                <label for="userEmail">이메일:</label>
+                <input type="email" id="userEmail" name="userEmail" required>
+                <br>
+                <button type="button" id="sendResetLinkButton">비밀번호 변경 링크 전송</button>
+                <li><a href="/user/login">유저 로그인</a></li>
+            </form>
+            <div id="message" style="color: green;"></div>
+            <div id="errorMessage" style="color: red;"></div>
+
+            <script src="/user/js/module/findPw.js"></script>
+        </main>
         <!-- End:Main -->
 
         <!-- Start:Footer -->

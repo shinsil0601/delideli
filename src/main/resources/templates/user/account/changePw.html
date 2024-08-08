@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>사용자 - 메인페이지</title>
+        <title>사용자 - 비밀번호변경(비로그인)</title>
         <!-- Include:공통 CSS -->
         <th:block th:include="inc/common/common-css :: commonCss"></th:block>
         <!-- Include:User CSS -->
@@ -19,7 +19,23 @@
         <!-- End:Header -->
 
         <!-- Start:Main -->
-        <main id="mainpage__wrap"></main>
+        <main id="mainpage__wrap">
+            <form method="post" action="/user/changePassword">
+                <input type="hidden" name="userId" th:value="${userId}">
+                <label for="userPw">새 비밀번호:</label>
+                <input type="password" id="userPw" name="newPassword" required>
+                <br>
+                <label for="checkUserPw">새 비밀번호 확인:</label>
+                <input type="password" id="checkUserPw" name="confirmPassword" required>
+                <br>
+                <span id="passwordMessage"></span>
+                <br>
+                <button type="submit">비밀번호 변경</button>
+            </form>
+            <div id="errorMessage" style="color: red;" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+            <script src="/user/js/module/changePw.js"></script>
+        </main>
         <!-- End:Main -->
 
         <!-- Start:Footer -->
