@@ -1,0 +1,169 @@
+.admin-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 4rem;
+    background: var(--gray-900);
+    display: grid;
+    grid-template-columns: 36rem 1fr;
+    gap: 4rem;
+}
+#mainpage__wrap {
+    background: var(--whiteColor);
+    border-radius: 2rem;
+    overflow: hidden;
+}
+.contents {
+    padding: 6rem 4rem;
+}
+.contents__title {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+/* Overview */
+.mp-overview-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding-top: 2rem;
+}
+.mp-overview-item {
+    padding: 2rem;
+    border-radius: 2rem;
+    box-shadow: var(--box-shadow-100);
+}
+.overview-item--top {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+.overview-item--icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 0.8rem;
+    background: var(--violet-200);
+    font-size: 1.4rem;
+    color: var(--violet-500);
+}
+.overview-item--title {
+    font-size: var(--font-size-18);
+    font-weight: 500;
+    color: var(--gray-900);
+}
+.overview-item--bot {
+    padding-top: 1.6rem;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+}
+.overview-item--count {
+    font-size: var(--font-size-32);
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1;
+}
+.overview-item--link {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: var(--font-size-14);
+}
+.overview-item--link:hover {
+    color: var(--violet-500);
+}
+.overview-item--link i {
+    font-size: var(--font-size-12);
+    transition: .3s;
+}
+.overview-item--link:hover i {
+    transform: translateX(4px);
+}
+/* Review & Coupon */
+.mp-rvcp {
+    position: relative;
+    padding-top: 6rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+.mp-rvcp--top {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+}
+.mp-mvcp--link {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: var(--font-size-14);
+}
+.mp-mvcp--link:hover {
+    color: var(--violet-500);
+}
+.mp-mvcp--link i {
+    font-size: var(--font-size-12);
+    transition: .3s;
+}
+.mp-mvcp--link:hover i {
+    transform: translateX(4px);
+}
+.mp-rvcp--bot {
+    padding-top: 2rem;
+}
+.mp-rvcp--items {
+    display: grid;
+    gap: 2rem;
+}
+.mp-rvcp--items > li > a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem 2rem;
+    box-shadow: var(--box-shadow-100);
+    border-radius: 2rem;
+    overflow: hidden;
+    transition: .3s;
+}
+.mp-rvcp--items > li > a:hover {
+    background: var(--violet-200);
+    transform: translateY(-5px);
+}
+.mp-rvcp--info {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+}
+.mp-rvcp--info-left {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+.mp-rvcp--info-left i {
+    font-size: var(--font-size-18);
+    color: var(--failedColor);
+}
+.mp-rvcp--info-right {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: var(--font-size-14);
+}
+.mp-rvcp--info-right i {
+    color: var(--mainColor);
+}
+.mp-rvcp--items > li > a .mp-mvcp--link {
+    font-weight: 500;
+}
+.mp-rvcp--items > li > a:hover .mp-mvcp--link {
+    color: var(--violet-500);
+}
+.mp-rvcp--items > li > a:hover .mp-mvcp--link i {
+    transform: translateX(4px);
+}
+.mp-rvcp--couponName {
+    font-weight: 700;
+}

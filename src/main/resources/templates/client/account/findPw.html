@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사장님 - 비밀번호찾기</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Client CSS -->
+        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Client JS -->
+        <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+
+    </head>
+    <body>
+        <div class="client-wrap">
+            <!-- Start:Aside -->
+            <th:block th:include="inc/client/aside :: clientAside"></th:block>
+            <!-- End:Aside -->
+
+            <!-- Start:Main -->
+            <main id="mainpage__wrap">
+                <!-- Start:Header -->
+                <th:block th:include="inc/client/header :: clientHeader"></th:block>
+                <!-- End:Header -->
+
+                <!-- Start:Contents -->
+                <section class="contents">
+                    <form id="findPwForm">
+                        <label for="clientId">아이디:</label>
+                        <input type="text" id="clientId" name="clientId" required>
+                        <br>
+                        <label for="clientEID">사업자 등록번호:</label>
+                        <input type="text" id="clientEID" name="clientEID" required>
+                        <button type="button" id="checkEID">사업자 등록 번호 확인</button>
+                        <span id="clientEIDMessage" class="error-message"></span>
+                        <br>
+                        <label for="clientName">이름:</label>
+                        <input type="text" id="clientName" name="clientName" required>
+                        <br>
+                        <button type="button" id="sendResetLinkButton" disabled>비밀번호 변경 링크 전송</button>
+                        <li><a href="/client/login">사장 로그인</a></li>
+                        <li><a href="/client/register">사장 회원가입</a></li>
+                        <li><a href="/client/findId">사장 아이디 찾기</a></li>
+                    </form>
+                    <div id="message" style="color: green;"></div>
+                    <div id="errorMessage" style="color: red;"></div>
+
+                    <script src="/client/js/module/findPw.js"></script>
+                </section>
+                <!-- End:Contents -->
+            </main>
+            <!-- End:Main -->
+        </div>
+    </body>
+</html>

@@ -1,0 +1,105 @@
+<th:block th:fragment="adminAside">
+    <aside id="aside">
+        <h1 class="aside__logo">
+            <a href="#none">
+                <img src="/admin/images/logo-white.png" alt="모자란남매들흰색로고">
+            </a>
+        </h1>
+        <div class="aside__nav">
+            <ul class="aside__nav--depth1">
+                <li>
+                    <a href="#none" class="on">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-layer-group"></i>
+                            Overview
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-user"></i>
+                            회원관리
+                        </span>
+                        <span class="aside__nav--arrow">
+                            <i class="fa-solid fa-caret-down"></i>
+                        </span>
+                    </a>
+                    <ul class="aside__nav--depth2">
+                        <li>
+                            <a href="#none" class="active">고객</a>
+                        </li>
+                        <li>
+                            <a href="#none">사장</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#none">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-store"></i>
+                            가게관리
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-list"></i>
+                            카테고리
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <span class="aside__nav--title">
+                            <i class="fa-regular fa-window-restore"></i>
+                            게시판
+                        </span>
+                        <span class="aside__nav--arrow">
+                            <i class="fa-solid fa-caret-down"></i>
+                        </span>
+                    </a>
+                    <ul class="aside__nav--depth2">
+                        <li>
+                            <a href="#none" class="active">공지사항</a>
+                        </li>
+                        <li>
+                            <a href="#none">이벤트</a>
+                        </li>
+                        <li>
+                            <a href="#none">1:1 문의</a>
+                        </li>
+                        <li>
+                            <a href="#none">배너관리</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#none">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            리뷰관리
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-receipt"></i>
+                            쿠폰관리
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-gear"></i>
+                            환경설정
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+</th:block>

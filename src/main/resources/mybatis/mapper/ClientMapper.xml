@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.client.account.mapper.ClientMapper">
+
+    <resultMap id="ClientAccountResultMap" type="kr.co.jhta.app.delideli.client.account.domain.ClientAccount">
+        <id property="clientKey" column="client_key"/>
+        <result property="clientEID" column="client_EID"/>
+        <result property="clientName" column="client_name"/>
+        <result property="clientPhone" column="client_phone"/>
+        <result property="clientId" column="client_id"/>
+        <result property="clientPw" column="client_pw"/>
+        <result property="clientEmail" column="client_email"/>
+        <result property="bankName" column="bank_name"/>
+        <result property="bankAccount" column="bank_account"/>
+        <result property="clientAccess" column="client_access"/>
+        <result property="clientDelete" column="client_delete"/>
+        <result property="clientRole" column="client_role"/>
+        <result property="clientRegdate" column="client_regdate"/>
+        <result property="clientUpdate" column="client_update"/>
+    </resultMap>
+
+    <insert id="insertClient" parameterType="ClientAccount">
+        INSERT INTO client_account (client_EID, client_name, client_phone, client_id, client_pw, client_email, bank_name, bank_account)
+        VALUES (#{clientEID}, #{clientName}, #{clientPhone}, #{clientId}, #{clientPw}, #{clientEmail}, #{bankName}, #{bankAccount})
+    </insert>
+
+    <select id="selectClientById" parameterType="String" resultMap="ClientAccountResultMap">
+        SELECT * FROM client_account WHERE client_id = #{clientId}
+    </select>
+
+    <select id="selectClientByEmail" parameterType="String" resultMap="ClientAccountResultMap">
+        SELECT * FROM client_account WHERE client_email = #{email}
+    </select>
+
+    <select id="selectClientByEIDAndName" parameterType="map" resultMap="ClientAccountResultMap">
+        SELECT * FROM client_account WHERE client_EID = #{clientEID} AND client_name = #{clientName}
+    </select>
+
+    <select id="selectClientByIdAndEIDAndName" parameterType="map" resultMap="ClientAccountResultMap">
+        SELECT * FROM client_account WHERE client_id = #{clientId} AND client_EID = #{clientEID} AND client_name = #{clientName}
+    </select>
+
+    <select id="checkAccessAccount" parameterType="ClientAccount" resultType="boolean">
+        SELECT client_access as clientAccess FROM client_account WHERE client_id = #{clientId} AND client_pw = #{clientPw}
+    </select>
+
+    <update id="updatePwClient" parameterType="ClientAccount">
+        UPDATE client_account
+        SET client_pw = #{clientPw},
+        client_update = NOW()
+        WHERE client_id = #{clientId}
+    </update>
+
+</mapper>
