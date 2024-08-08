@@ -117,4 +117,20 @@ $(document).ready(function() {
             $("#registerForm")[0].submit();
         }
     });
+<<<<<<< HEAD
 });
+=======
+
+    // 프로필 이미지 미리보기
+    $("#userProfile").change(function() {
+        var input = this;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $("#profilePreview").attr("src", e.target.result).show();
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
+});
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66

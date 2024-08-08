@@ -30,6 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String token = getTokenFromRequest(request);
+<<<<<<< HEAD
         log.info("토큰: {}", token);
         if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
             log.info("토큰 유효");
@@ -37,13 +38,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String role = jwtTokenProvider.getRoleFromToken(token);
             log.info("유저명: {}", username);
             log.info("역할: {}", role);
+=======
+        //log.info("토큰: {}", token);
+        if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
+            //log.info("토큰 유효");
+            String username = jwtTokenProvider.getUsernameFromToken(token);
+            String role = jwtTokenProvider.getRoleFromToken(token);
+            //log.info("유저명: {}", username);
+            //log.info("역할: {}", role);
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
 
             UserDetails userDetails = combinedUserDetailsService.loadUserByUsernameAndType(username, role);
 
             if (userDetails != null) {
+<<<<<<< HEAD
                 log.info("유저 상세정보: {}", userDetails);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 log.info("사용자 정보 기반 인증 토큰: {}", authentication);
+=======
+                //log.info("유저 상세정보: {}", userDetails);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                //log.info("사용자 정보 기반 인증 토큰: {}", authentication);
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
@@ -54,6 +70,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String getTokenFromRequest(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
+<<<<<<< HEAD
             log.info("쿠키가 없음");
             return null;
         }
@@ -61,6 +78,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.info("받은 쿠키: {}", cookie.getName());
             if (cookie.getName().equals("JWT")) {
                 log.info("일치하는 토큰 있음: {}", cookie.getValue());
+=======
+            //log.info("쿠키가 없음");
+            return null;
+        }
+        for (Cookie cookie : cookies) {
+            //log.info("받은 쿠키: {}", cookie.getName());
+            if (cookie.getName().equals("JWT")) {
+                //log.info("일치하는 토큰 있음: {}", cookie.getValue());
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
                 return cookie.getValue();
             }
         }

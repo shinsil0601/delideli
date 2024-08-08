@@ -6,6 +6,10 @@ import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
 import kr.co.jhta.app.delideli.user.dto.UserDTO;
 import kr.co.jhta.app.delideli.user.account.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
+=======
+import lombok.extern.slf4j.Slf4j;
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +25,10 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+<<<<<<< HEAD
+=======
+@Slf4j
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -90,6 +98,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+<<<<<<< HEAD
+=======
+    public boolean checkPw(String userId, String userPw) {
+        UserAccount userAccount = findUserById(userId);
+        return passwordEncoder.matches(userPw, userAccount.getUserPw());
+    }
+
+    @Override
+    public void modifyUser(UserDTO userDTO) {
+        // 계정 정보 저장
+        UserAccount user = new UserAccount();
+        user.setUserId(userDTO.getUserId());
+        user.setUserName(userDTO.getUserName());
+        user.setUserNickname(userDTO.getUserNickname());
+        user.setUserBirth(userDTO.getUserBirth());
+        user.setUserPhone(userDTO.getUserPhone());
+        user.setUserEmail(userDTO.getUserEmail());
+
+        MultipartFile profileFile = userDTO.getUserProfile();
+        if (!profileFile.isEmpty()) {
+            String profilePath = saveProfileImage(profileFile);
+            user.setUserProfile(profilePath);
+        } else {
+            user.setUserProfile(null); // 프로필 이미지가 비어 있는 경우 null로 설정
+        }
+        userMapper.modifyUser(user);
+
+    }
+
+    @Override
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
     public boolean checkUserIdExists(String userId) {
         return userMapper.selectUserById(userId).isPresent();
     }
@@ -114,6 +153,10 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
 
+<<<<<<< HEAD
         return "/user/images/uploads/" + uniqueFilename;
+=======
+        return "../user/images/uploads/" + uniqueFilename;
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
     }
 }

@@ -1,14 +1,20 @@
 <th:block th:fragment="userHeader">
+    <html xmlns:th="http://www.thymeleaf.org">
     <header id="header">
         <div class="inner">
             <div class="header__top">
-                <h1 class="header__logo">
-                    <a href="#none">
+                <h1 class="header__logo" th:if="${user == null}">
+                    <a href="/">
+                        <img src="/user/images/logo-color.png" alt="딜리델리컬러로고">
+                    </a>
+                </h1>
+                <h1 class="header__logo" th:if="${user != null}">
+                    <a href="/user/home">
                         <img src="/user/images/logo-color.png" alt="딜리델리컬러로고">
                     </a>
                 </h1>
                 <!-- 로그인 전 -->
-                <ul class="header__top-menu header__status--off">
+                <ul class="header__top-menu header__status--off" th:if="${user == null}">
                     <li>
                         <a href="/user/login">로그인</a>
                     </li>
@@ -20,10 +26,10 @@
                     </li>
                 </ul>
                 <!-- 로그인 후 -->
-                <ul class="header__top-menu header__status--on" style="display: none;">
+                <ul class="header__top-menu header__status--on" th:if="${user != null}">
                     <!-- 사용자프로필 -->
                     <li>
-                        <a href="#none" class="header__profile">
+                        <a href="/user/myPage" class="header__profile">
                             <img src="/user/images/profile-default.png" alt="사용자프로필">
                         </a>
                     </li>
@@ -37,6 +43,12 @@
                     <li>
                         <a href="#none">
                             <i class="fa-solid fa-heart"></i>
+                        </a>
+                    </li>
+                    <!-- 로그아웃 -->
+                    <li>
+                        <a href="/user/logout">
+                            로그아웃
                         </a>
                     </li>
                 </ul>

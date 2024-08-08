@@ -56,4 +56,24 @@
         WHERE user_id = #{userId}
     </update>
 
+<<<<<<< HEAD
+=======
+    <update id="modifyUser" parameterType="UserAccount">
+        UPDATE user_account
+        <set>
+            user_name = #{userName},
+            user_nickname = #{userNickname},
+            user_birth = #{userBirth},
+            user_phone = #{userPhone},
+            user_email = #{userEmail},
+            user_update = NOW()
+            <if test="userProfile != null">
+                , user_profile = #{userProfile}
+            </if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
 </mapper>

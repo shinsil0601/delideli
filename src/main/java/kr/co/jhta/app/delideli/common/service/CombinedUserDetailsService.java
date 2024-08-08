@@ -26,7 +26,11 @@ public class CombinedUserDetailsService implements UserDetailsService {
     }
 
     public UserDetails loadUserByUsernameAndType(String username, String role) throws UsernameNotFoundException {
+<<<<<<< HEAD
         log.info("CombinedUserDetailsService - 사용자 이름과 역할로 사용자 정보 로드: {} 역할: {}", username, role);
+=======
+        //log.info("CombinedUserDetailsService - 사용자 이름과 역할로 사용자 정보 로드: {} 역할: {}", username, role);
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
 
         if ("ROLE_USER".equals(role)) {
             UserAccount userAccount = userMapper.selectUserById(username).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다. 사용자 이름: " + username));

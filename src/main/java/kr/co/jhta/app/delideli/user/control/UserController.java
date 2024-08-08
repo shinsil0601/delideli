@@ -19,7 +19,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+<<<<<<< HEAD
 import org.springframework.security.core.userdetails.User;
+=======
+import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +50,24 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     @Autowired
     private final JwtTokenProvider jwtTokenProvider;
+<<<<<<< HEAD
+=======
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
+
+
+    @GetMapping("home")
+    public String home(@AuthenticationPrincipal User user, Model model) {
+        if (user != null) {
+            log.info("User is authenticated: {}", user.getUsername());
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+        } else {
+            log.info("User is not authenticated");
+        }
+        return "index";
+    }
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
 
     // 로그인창 이동
     @GetMapping("/login")
@@ -51,7 +75,11 @@ public class UserController {
         if (error != null) {
             model.addAttribute("errorMessage", "아이디 또는 비밀번호가 일치하지 않습니다.");
         }
+<<<<<<< HEAD
         log.info("로그인창 넘어옴");
+=======
+        //log.info("로그인창 넘어옴");
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
         return "user/account/login";
     }
 
@@ -73,7 +101,11 @@ public class UserController {
             Cookie cookie = jwtTokenProvider.createCookie(token);
             response.addCookie(cookie);
 
+<<<<<<< HEAD
             return "redirect:/";
+=======
+            return "redirect:home";
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
         } catch (AuthenticationException e) {
             log.error("Authentication failed for user: " + userId);
             log.error("Authentication failed", e);
@@ -147,7 +179,11 @@ public class UserController {
         return response;
     }
 
+<<<<<<< HEAD
     // 비밀번호 변경 창 이동
+=======
+    // 비밀번호 변경 창 이동 (비로그인시)
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
     @GetMapping("/userChangePw")
     public String userChangePw(@RequestParam String token, Model model) {
         if (jwtTokenProvider.validateToken(token) && "RESET_PASSWORD".equals(jwtTokenProvider.getRoleFromToken(token))) {
@@ -160,7 +196,11 @@ public class UserController {
         }
     }
 
+<<<<<<< HEAD
     // 비밀번호 변경
+=======
+    // 비밀번호 변경 (비로그인시)
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
     @PostMapping("/changePassword")
     public String changePassword(@RequestParam String userId, @RequestParam String newPassword, @RequestParam String confirmPassword, Model model) {
         if (!newPassword.equals(confirmPassword)) {
@@ -229,4 +269,68 @@ public class UserController {
         model.addAttribute("user", userAccount);
         return "user/mypage/myPage";
     }
+<<<<<<< HEAD
+=======
+
+    // 내 정보 확인
+    @GetMapping("/checkAccount")
+    public String checkAccount(@AuthenticationPrincipal User user, Model model) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        model.addAttribute("user", userAccount);
+        return "user/mypage/checkAccount";
+    }
+
+    // 비밀번호 확인
+    @PostMapping("/checkPw")
+    public String checkPw(@AuthenticationPrincipal User user,@RequestParam String userId, @RequestParam String userPw, Model model) {
+        if (userService.checkPw(userId, userPw)) {
+            return "redirect:/user/modifyUser";
+        } else {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+            return "user/mypage/checkAccount";
+        }
+    }
+
+    // 내 정보 수정 창 이동
+    @GetMapping("/modifyUser")
+    public String modifyUser(@AuthenticationPrincipal User user, Model model) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        model.addAttribute("user", userAccount);
+        return "user/mypage/modifyUser";
+    }
+    
+    // 내 정보 수정
+    @PostMapping("/modifyUser")
+    public String modifyUser(@ModelAttribute UserDTO userDTO, Model model) {
+        userService.modifyUser(userDTO);
+        return "redirect:/user/myPage";
+    }
+
+    // 비밀번호 변경 (로그인시)
+    @GetMapping("/updatePw")
+    public String updatePw(@AuthenticationPrincipal User user, Model model) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        model.addAttribute("user", userAccount);
+        return "user/mypage/updatePw";
+    }
+
+    // 비밀번호 업데이트
+    @PostMapping("/updatePassword")
+    public String updatePassword(@AuthenticationPrincipal User user, @RequestParam String userId, @RequestParam String userPw, @RequestParam String newPassword, Model model) {
+        // 기존 비밀번호와 입력한 비밀번호가 일치하는 지 확인
+        if (!passwordEncoder.matches(userPw, userService.findUserById(userId).getUserPw())) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+            model.addAttribute("errorMessage", "현재 비밀번호가 일치하지 않습니다.");
+            return "user/mypage/updatePw";
+        }
+
+        userService.updatePassword(userId, newPassword);
+
+        return "redirect:/user/myPage";
+    }
+
+>>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
 }
