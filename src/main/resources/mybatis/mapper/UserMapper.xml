@@ -56,8 +56,6 @@
         WHERE user_id = #{userId}
     </update>
 
-<<<<<<< HEAD
-=======
     <update id="modifyUser" parameterType="UserAccount">
         UPDATE user_account
         <set>
@@ -73,7 +71,4 @@
         </set>
         WHERE user_id = #{userId}
     </update>
-
-
->>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
 </mapper>
