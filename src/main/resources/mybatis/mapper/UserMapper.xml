@@ -23,6 +23,17 @@
         <result property="userUpdate" column="user_update"/>
     </resultMap>
 
+    <resultMap id="UserAddressResultMap" type="kr.co.jhta.app.delideli.user.account.domain.UserAddress">
+        <id property="userAddressKey" column="user_address_key"/>
+        <result property="userKey" column="user_key"/>
+        <result property="address" column="address"/>
+        <result property="zipcode" column="zipcode"/>
+        <result property="addrDetail" column="addr_detail"/>
+        <result property="defaultAddress" column="default_address"/>
+        <result property="addressRegdt" column="address_regdt"/>
+        <result property="addressUpdt" column="address_updt"/>
+    </resultMap>
+
     <insert id="insertUser" parameterType="UserAccount" useGeneratedKeys="true" keyProperty="userKey">
         INSERT INTO user_account (user_id, user_pw, user_name, user_nickname, user_birth, user_phone, user_email, user_profile)
         VALUES (#{userId}, #{userPw}, #{userName}, #{userNickname}, #{userBirth}, #{userPhone}, #{userEmail}, #{userProfile})
@@ -71,4 +82,38 @@
         </set>
         WHERE user_id = #{userId}
     </update>
+<<<<<<< HEAD
+=======
+
+    <select id="selectUserAddressList" parameterType="Long" resultMap="UserAddressResultMap">
+        SELECT * FROM user_address WHERE user_key = #{userKey}
+    </select>
+
+    <update id="updateUserAddress" parameterType="UserAddress">
+        UPDATE user_address
+        SET address = #{address},
+        addr_detail = #{addrDetail},
+        zipcode = #{zipcode},
+        address_updt = NOW()
+        WHERE user_address_key = #{userAddressKey}
+    </update>
+
+    <update id="resetDefaultAddress" parameterType="long">
+        UPDATE user_address
+        SET default_address = false
+        WHERE user_key = #{userKey}
+    </update>
+
+    <update id="setDefaultAddress" parameterType="long">
+        UPDATE user_address
+        SET default_address = true
+        WHERE user_address_key = #{addressKey}
+    </update>
+
+    <delete id="deleteUserAddress" parameterType="long">
+        DELETE FROM user_address
+        WHERE user_address_key = #{addressKey}
+    </delete>
+
+>>>>>>> 7add44eef5015ac798dd83196046a5ae72bfbae4
 </mapper>

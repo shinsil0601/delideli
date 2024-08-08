@@ -7,12 +7,14 @@ import kr.co.jhta.app.delideli.common.security.JwtTokenProvider;
 import kr.co.jhta.app.delideli.common.service.EmailService;
 import kr.co.jhta.app.delideli.common.service.EmailVerificationService;
 import kr.co.jhta.app.delideli.user.account.domain.UserAccount;
+import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
 import kr.co.jhta.app.delideli.user.dto.UserDTO;
 import kr.co.jhta.app.delideli.user.account.exception.DuplicateUserIdException;
 import kr.co.jhta.app.delideli.user.account.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -305,6 +309,50 @@ public class UserController {
         userService.updatePassword(userId, newPassword);
 
         return "redirect:/user/myPage";
+    }
+
+    // 내 주소 관리
+    @GetMapping("/myAddress")
+    public String myAddress(@AuthenticationPrincipal User user, Model model) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        ArrayList<UserAddress> addressList = userService.userAddressList(userAccount.getUserKey());
+        model.addAttribute("user", userAccount);
+        model.addAttribute("addressList", addressList);
+        return "user/mypage/myAddress";
+    }
+
+    // 주소 추가
+    @PostMapping("/addAddress")
+    @ResponseBody
+    public ResponseEntity<?> addAddress(@RequestParam String newAddress, @RequestParam String newAddrDetail, @RequestParam String newZipcode, @AuthenticationPrincipal User user) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        userService.addAddress(userAccount.getUserKey(), newAddress, newAddrDetail, newZipcode);
+        return ResponseEntity.ok().build();
+    }
+
+    // 주소 수정
+    @PostMapping("/modifyAddress")
+    @ResponseBody
+    public ResponseEntity<?> modifyAddress(@RequestParam Long addressKey, @RequestParam String newAddress, @RequestParam String newAddrDetail, @RequestParam String newZipcode) {
+        userService.modifyAddress(addressKey, newAddress, newAddrDetail, newZipcode);
+        return ResponseEntity.ok().build();
+    }
+
+    // 대표 주소 설정
+    @PostMapping("/setDefaultAddress")
+    @ResponseBody
+    public ResponseEntity<?> setDefaultAddress(@RequestParam Long addressKey, @AuthenticationPrincipal User user) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        userService.setDefaultAddress(userAccount.getUserKey(), addressKey);
+        return ResponseEntity.ok().build();
+    }
+
+    // 주소 삭제
+    @PostMapping("/deleteAddress")
+    @ResponseBody
+    public ResponseEntity<?> deleteAddress(@RequestParam Long addressKey) {
+        userService.deleteAddress(addressKey);
+        return ResponseEntity.ok().build();
     }
 
 }
