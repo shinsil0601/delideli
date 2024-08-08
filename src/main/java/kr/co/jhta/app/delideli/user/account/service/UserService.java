@@ -17,12 +17,9 @@ public interface UserService {
     boolean validateUser(String userId, String userEmail);
 
     void updatePassword(String userId, String newPassword);
-<<<<<<< HEAD
-=======
 
     boolean checkPw(String userId, String userPw);
 
     void modifyUser(UserDTO userDTO);
 
->>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
 }

@@ -13,10 +13,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-<<<<<<< HEAD
-=======
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
->>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,17 +34,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-<<<<<<< HEAD
-        http.csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/error",
-=======
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "home", "/error",
->>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
                                 "/user/login","/user/register", "/user/loginProc", "/user/findId", "/user/findPw", "/user/sendResetLink", "/user/userChangePw", "/user/changePassword", "/user/checkUserId", "/user/checkUserEmail", "/user/sendVerificationCode", "/user/verifyCode",
                                 "/client/login", "/client/register", "client/loginProc", "/client/findId", "/client/findPw", "/client/sendResetLink", "/client/clientChangePw", "/client/changePassword", "client/checkClientId", "client/checkClientEmail", "/client/sendVerificationCode", "/client/verifyCode",
                                 "/admin/login", "admin/loginProc" ).permitAll()
