@@ -17,4 +17,9 @@ public interface UserService {
     boolean validateUser(String userId, String userEmail);
 
     void updatePassword(String userId, String newPassword);
+
+    boolean checkPw(String userId, String userPw);
+
+    void modifyUser(UserDTO userDTO);
+
 }

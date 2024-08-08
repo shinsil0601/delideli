@@ -15,4 +15,5 @@ public interface UserMapper {
     Optional<UserAccount> selectUserByIdAndEmail(String userId, String email);
     void updatePwUser(UserAccount user);
     void insertUserAddress(UserAddress address);
+    void modifyUser(UserAccount user);
 }
