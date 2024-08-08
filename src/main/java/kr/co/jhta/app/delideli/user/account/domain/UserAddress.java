@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class UserAddress {
-    private int userAddressKey;
+    private Long userAddressKey;
     private Long userKey;
     private String address;
     private String zipcode;
