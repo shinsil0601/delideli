@@ -17,12 +17,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserMapper userMapper;
 
+    // 사용자를 username (유저 아이디) 으로 로드하는 메서드
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("UserDetailsServiceImpl - loadUserByUsername 시작 with username: {}", username);
 
         UserAccount user;
         try {
+            // username (유저 아이디) 으로 사용자를 조회
             user = userMapper.selectUserById(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
         } catch (Exception e) {
@@ -30,6 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw e;
         }
 
+        // UserDetails 객체 생성
         UserDetails userDetails = User.builder()
                 .username(user.getUserId())
                 .password(user.getUserPw())
@@ -39,6 +42,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         log.info("UserDetailsServiceImpl - loadUserByUsername 완료 with userDetails: {}", userDetails);
         return userDetails;
     }
-
-
 }

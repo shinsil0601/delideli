@@ -33,9 +33,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
+    // 회원가입
     @Override
     public void registerUser(UserDTO userDTO) {
-        // 계정 정보 저장
         UserAccount user = new UserAccount();
         user.setUserId(userDTO.getUserId());
         user.setUserPw(passwordEncoder.encode(userDTO.getUserPw()));
@@ -52,7 +52,6 @@ public class UserServiceImpl implements UserService {
         }
         userMapper.insertUser(user);
 
-        // 주소 정보 저장
         UserAddress address = new UserAddress();
         address.setUserKey(user.getUserKey());
         address.setAddress(userDTO.getUserAddress());
@@ -63,12 +62,14 @@ public class UserServiceImpl implements UserService {
         userMapper.insertUserAddress(address);
     }
 
+    // 아이디 찾기
     @Override
     public UserAccount findUserById(String userId) {
         return userMapper.selectUserById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + userId));
     }
 
+    // 이메일로 아이디 전송
     @Override
     public boolean findIdAndSendEmail(String userName, String userEmail) {
         Optional<UserAccount> userOpt = userMapper.selectUserByEmailAndName(userName, userEmail);
@@ -80,11 +81,13 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    // 아이디, 이메일 일치 확인
     @Override
     public boolean validateUser(String userId, String userEmail) {
         return userMapper.selectUserByIdAndEmail(userId, userEmail).isPresent();
     }
 
+    // 비밀번호 수정
     @Override
     public void updatePassword(String userId, String newPassword) {
         UserAccount userAccount = findUserById(userId);
@@ -92,15 +95,16 @@ public class UserServiceImpl implements UserService {
         userMapper.updatePwUser(userAccount);
     }
 
+    // 비밀번호 확인
     @Override
     public boolean checkPw(String userId, String userPw) {
         UserAccount userAccount = findUserById(userId);
         return passwordEncoder.matches(userPw, userAccount.getUserPw());
     }
 
+    // 계정정보 수정
     @Override
     public void modifyUser(UserDTO userDTO) {
-        // 계정 정보 저장
         UserAccount user = new UserAccount();
         user.setUserId(userDTO.getUserId());
         user.setUserName(userDTO.getUserName());
@@ -117,25 +121,27 @@ public class UserServiceImpl implements UserService {
             user.setUserProfile(null); // 프로필 이미지가 비어 있는 경우 null로 설정
         }
         userMapper.modifyUser(user);
-
     }
 
-    // 해당 계정의 주소 전부 불러오기
+    // 주소 목록
     @Override
     public ArrayList<UserAddress> userAddressList(Long userKey) {
         return userMapper.selectUserAddressList(userKey);
     }
 
+    // 아이디 중복 확인
     @Override
     public boolean checkUserIdExists(String userId) {
         return userMapper.selectUserById(userId).isPresent();
     }
 
+    // 이메일 중복 확인
     @Override
     public boolean checkUserEmailExists(String email) {
         return userMapper.selectUserByEmail(email).isPresent();
     }
 
+    // 주소 추가
     @Override
     public void addAddress(Long userKey, String newAddress, String newAddrDetail, String newZipcode) {
         UserAddress address = new UserAddress();
@@ -147,6 +153,7 @@ public class UserServiceImpl implements UserService {
         userMapper.insertUserAddress(address);
     }
 
+    // 주소 수정
     @Override
     public void modifyAddress(Long addressKey, String newAddress, String newAddrDetail, String newZipcode) {
         UserAddress address = new UserAddress();
@@ -157,17 +164,20 @@ public class UserServiceImpl implements UserService {
         userMapper.updateUserAddress(address);
     }
 
+    // 대표 주소 변경
     @Override
     public void setDefaultAddress(Long userKey, Long addressKey) {
         userMapper.resetDefaultAddress(userKey);
         userMapper.setDefaultAddress(addressKey);
     }
 
+    // 주소 삭제
     @Override
     public void deleteAddress(Long addressKey) {
         userMapper.deleteUserAddress(addressKey);
     }
 
+    // 프로필 이미지 저장
     private String saveProfileImage(MultipartFile file) {
         String uploadDir = "src/main/resources/static/user/images/uploads/";
         String originalFilename = file.getOriginalFilename();
