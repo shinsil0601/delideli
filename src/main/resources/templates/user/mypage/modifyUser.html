@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 내 정보 수정</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <form id="modifyUserForm" action="/user/modifyUser" method="post" enctype="multipart/form-data">
+                <label for="userId">사용자 ID:</label>
+                <input type="text" id="userId" name="userId" th:value="${user.userId}" readonly>
+                <br>
+                <label for="userName">이름:</label>
+                <input type="text" id="userName" name="userName" th:value="${user.userName}" required>
+                <br>
+                <label for="userNickname">닉네임:</label>
+                <input type="text" id="userNickname" name="userNickname" th:value="${user.userNickname}" required>
+                <br>
+                <label for="userBirth">생년월일:</label>
+                <input type="text" id="userBirth" name="userBirth" th:value="${user.userBirth}" required>
+                <br>
+                <label for="userPhone">전화번호:</label>
+                <input type="text" id="userPhone" name="userPhone" th:value="${user.userPhone}" required>
+                <br>
+                <label for="userEmail">이메일:</label>
+                <input type="email" id="userEmail" name="userEmail" th:value="${user.userEmail}" required>
+                <input type="hidden" id="currentUserEmail" th:value="${user.userEmail}">
+                <span id="userEmailMessage" class="error-message"></span>
+                <button type="button" id="sendCodeButton" style="display:none;">인증 코드 전송</button>
+                <br>
+                <label for="verificationCode" style="display:none;">인증 코드:</label>
+                <input type="text" id="verificationCode" name="verificationCode" style="display:none;" required>
+                <button type="button" id="verifyCodeButton" style="display:none;">인증 코드 확인</button>
+                <br>
+                <label for="userProfile">프로필 이미지:</label>
+                <img id="profilePreview" th:src="@{${user.userProfile}}" alt="User Profile" style="max-width: 100px; max-height: 100px;">
+                <input type="file" id="userProfile" name="userProfile" accept="image/*">
+                <br>
+                <button type="submit" id="ModifyButton" disabled>수정</button>
+                <li><a href="/user/myPage">뒤로가기</a></li>
+            </form>
+            <div id="message" class="success-message"></div>
+            <div id="errorMessage" class="error-message"></div>
+
+            <script src="/user/js/module/modifyUser.js"></script>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

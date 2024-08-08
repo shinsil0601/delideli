@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.user.account.mapper.UserMapper">
+
+    <resultMap id="UserAccountResultMap" type="kr.co.jhta.app.delideli.user.account.domain.UserAccount">
+        <id property="userKey" column="user_key"/>
+        <result property="userId" column="user_id"/>
+        <result property="userPw" column="user_pw"/>
+        <result property="userName" column="user_name"/>
+        <result property="userNickname" column="user_nickname"/>
+        <result property="userBirth" column="user_birth"/>
+        <result property="userPhone" column="user_phone"/>
+        <result property="userEmail" column="user_email"/>
+        <result property="userProfile" column="user_profile"/>
+        <result property="userPoint" column="user_point"/>
+        <result property="userRank" column="user_rank"/>
+        <result property="userStatus" column="user_status"/>
+        <result property="userRole" column="user_role"/>
+        <result property="userRegdate" column="user_regdate"/>
+        <result property="userUpdate" column="user_update"/>
+    </resultMap>
+
+    <insert id="insertUser" parameterType="UserAccount" useGeneratedKeys="true" keyProperty="userKey">
+        INSERT INTO user_account (user_id, user_pw, user_name, user_nickname, user_birth, user_phone, user_email, user_profile)
+        VALUES (#{userId}, #{userPw}, #{userName}, #{userNickname}, #{userBirth}, #{userPhone}, #{userEmail}, #{userProfile})
+    </insert>
+
+    <insert id="insertUserAddress" parameterType="UserAddress">
+        INSERT INTO user_address (user_key, address, zipcode, addr_detail, default_address)
+        VALUES (#{userKey}, #{address}, #{zipcode}, #{addrDetail}, #{defaultAddress})
+    </insert>
+
+    <select id="selectUserById" parameterType="String" resultMap="UserAccountResultMap">
+        SELECT * FROM user_account WHERE user_id = #{userId}
+    </select>
+
+    <select id="selectUserByEmail" parameterType="String" resultMap="UserAccountResultMap">
+        SELECT * FROM user_account WHERE user_email = #{email}
+    </select>
+
+    <select id="selectUserByEmailAndName" parameterType="map" resultMap="UserAccountResultMap">
+        SELECT * FROM user_account WHERE user_email = #{userEmail} AND user_name = #{userName}
+    </select>
+
+    <select id="selectUserByIdAndEmail" parameterType="map" resultMap="UserAccountResultMap">
+        SELECT * FROM user_account WHERE user_id = #{userId} AND user_email = #{email}
+    </select>
+
+    <update id="updatePwUser" parameterType="UserAccount">
+        UPDATE user_account
+        SET user_pw = #{userPw},
+        user_update = NOW()
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="modifyUser" parameterType="UserAccount">
+        UPDATE user_account
+        <set>
+            user_name = #{userName},
+            user_nickname = #{userNickname},
+            user_birth = #{userBirth},
+            user_phone = #{userPhone},
+            user_email = #{userEmail},
+            user_update = NOW()
+            <if test="userProfile != null">
+                , user_profile = #{userProfile}
+            </if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+
+</mapper>
