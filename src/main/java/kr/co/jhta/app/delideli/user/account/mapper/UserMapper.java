@@ -17,9 +17,6 @@ public interface UserMapper {
     void updatePwUser(UserAccount user);
     void insertUserAddress(UserAddress address);
     void modifyUser(UserAccount user);
-<<<<<<< HEAD
-}
-=======
     ArrayList<UserAddress> selectUserAddressList(Long userKey);
 
     void updateUserAddress(UserAddress address);
@@ -30,4 +27,3 @@ public interface UserMapper {
 
     void deleteUserAddress(Long addressKey);
 }
->>>>>>> 7add44eef5015ac798dd83196046a5ae72bfbae4

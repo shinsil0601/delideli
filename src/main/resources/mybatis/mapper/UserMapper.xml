@@ -82,8 +82,6 @@
         </set>
         WHERE user_id = #{userId}
     </update>
-<<<<<<< HEAD
-=======
 
     <select id="selectUserAddressList" parameterType="Long" resultMap="UserAddressResultMap">
         SELECT * FROM user_address WHERE user_key = #{userKey}
@@ -115,5 +113,4 @@
         WHERE user_address_key = #{addressKey}
     </delete>
 
->>>>>>> 7add44eef5015ac798dd83196046a5ae72bfbae4
 </mapper>
