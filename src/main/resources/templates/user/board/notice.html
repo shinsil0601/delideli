@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 공지사항 게시판</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <table>
+                <tr>
+                    <th>글번호</th>
+                    <th>제목</th>
+                    <th>등록일</th>
+                    <th>조회수</th>
+                </tr>
+                <tr th:each="board, iterState : ${list}">
+                    <td th:text="${iterState.count}"></td>
+                    <td><a th:href="@{detail/{num}(num=${board.boardKey})}" th:text="${'['+board.boardStatus+ ']  '+board.boardTitle}"></a></td>
+                    <td th:text="${board.boardRegdate}"></td>
+                    <td th:text="${board.boardHits}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <nav>
+                            <ul>
+                                <th:block th:if="${map.prev}">
+                                    <li><a th:href="@{/user/notice(page=${map.startPageNo})}">이전</a></li>
+                                </th:block>
+                                <li th:each="i : ${#numbers.sequence(map.startPageNo, map.endPageNo)}">
+                                    <a th:href="@{/user/notice(page=${i}, keyword=${keyword})}" th:text="${i}"></a>
+                                </li>
+                                <th:block th:if="${map.next}">
+                                    <li><a th:href="@{/user/notice(page=${map.endPageNo})}">다음</a></li>
+                                </th:block>
+                            </ul>
+                        </nav>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <form th:action="@{/user/notice}" method="get">
+                            <input type="text" name="keyword" id="">
+                            <input type="submit" value="검색">
+                        </form>
+                    </td>
+                </tr>
+            </table>
+            <h3><a href="/">목록</a></h3>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

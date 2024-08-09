@@ -6,6 +6,7 @@ import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
 import kr.co.jhta.app.delideli.user.dto.UserDTO;
 import kr.co.jhta.app.delideli.user.account.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,11 +17,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -30,9 +33,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
+    // 회원가입
     @Override
     public void registerUser(UserDTO userDTO) {
-        // 계정 정보 저장
         UserAccount user = new UserAccount();
         user.setUserId(userDTO.getUserId());
         user.setUserPw(passwordEncoder.encode(userDTO.getUserPw()));
@@ -49,7 +52,6 @@ public class UserServiceImpl implements UserService {
         }
         userMapper.insertUser(user);
 
-        // 주소 정보 저장
         UserAddress address = new UserAddress();
         address.setUserKey(user.getUserKey());
         address.setAddress(userDTO.getUserAddress());
@@ -60,12 +62,14 @@ public class UserServiceImpl implements UserService {
         userMapper.insertUserAddress(address);
     }
 
+    // 아이디 찾기
     @Override
     public UserAccount findUserById(String userId) {
         return userMapper.selectUserById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + userId));
     }
 
+    // 이메일로 아이디 전송
     @Override
     public boolean findIdAndSendEmail(String userName, String userEmail) {
         Optional<UserAccount> userOpt = userMapper.selectUserByEmailAndName(userName, userEmail);
@@ -77,11 +81,13 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    // 아이디, 이메일 일치 확인
     @Override
     public boolean validateUser(String userId, String userEmail) {
         return userMapper.selectUserByIdAndEmail(userId, userEmail).isPresent();
     }
 
+    // 비밀번호 수정
     @Override
     public void updatePassword(String userId, String newPassword) {
         UserAccount userAccount = findUserById(userId);
@@ -89,16 +95,89 @@ public class UserServiceImpl implements UserService {
         userMapper.updatePwUser(userAccount);
     }
 
+    // 비밀번호 확인
+    @Override
+    public boolean checkPw(String userId, String userPw) {
+        UserAccount userAccount = findUserById(userId);
+        return passwordEncoder.matches(userPw, userAccount.getUserPw());
+    }
+
+    // 계정정보 수정
+    @Override
+    public void modifyUser(UserDTO userDTO) {
+        UserAccount user = new UserAccount();
+        user.setUserId(userDTO.getUserId());
+        user.setUserName(userDTO.getUserName());
+        user.setUserNickname(userDTO.getUserNickname());
+        user.setUserBirth(userDTO.getUserBirth());
+        user.setUserPhone(userDTO.getUserPhone());
+        user.setUserEmail(userDTO.getUserEmail());
+
+        MultipartFile profileFile = userDTO.getUserProfile();
+        if (!profileFile.isEmpty()) {
+            String profilePath = saveProfileImage(profileFile);
+            user.setUserProfile(profilePath);
+        } else {
+            user.setUserProfile(null); // 프로필 이미지가 비어 있는 경우 null로 설정
+        }
+        userMapper.modifyUser(user);
+    }
+
+    // 주소 목록
+    @Override
+    public ArrayList<UserAddress> userAddressList(Long userKey) {
+        return userMapper.selectUserAddressList(userKey);
+    }
+
+    // 아이디 중복 확인
     @Override
     public boolean checkUserIdExists(String userId) {
         return userMapper.selectUserById(userId).isPresent();
     }
 
+    // 이메일 중복 확인
     @Override
     public boolean checkUserEmailExists(String email) {
         return userMapper.selectUserByEmail(email).isPresent();
     }
 
+    // 주소 추가
+    @Override
+    public void addAddress(Long userKey, String newAddress, String newAddrDetail, String newZipcode) {
+        UserAddress address = new UserAddress();
+        address.setUserKey(userKey);
+        address.setAddress(newAddress);
+        address.setAddrDetail(newAddrDetail);
+        address.setZipcode(newZipcode);
+        address.setDefaultAddress(false);
+        userMapper.insertUserAddress(address);
+    }
+
+    // 주소 수정
+    @Override
+    public void modifyAddress(Long addressKey, String newAddress, String newAddrDetail, String newZipcode) {
+        UserAddress address = new UserAddress();
+        address.setUserAddressKey(addressKey);
+        address.setAddress(newAddress);
+        address.setAddrDetail(newAddrDetail);
+        address.setZipcode(newZipcode);
+        userMapper.updateUserAddress(address);
+    }
+
+    // 대표 주소 변경
+    @Override
+    public void setDefaultAddress(Long userKey, Long addressKey) {
+        userMapper.resetDefaultAddress(userKey);
+        userMapper.setDefaultAddress(addressKey);
+    }
+
+    // 주소 삭제
+    @Override
+    public void deleteAddress(Long addressKey) {
+        userMapper.deleteUserAddress(addressKey);
+    }
+
+    // 프로필 이미지 저장
     private String saveProfileImage(MultipartFile file) {
         String uploadDir = "src/main/resources/static/user/images/uploads/";
         String originalFilename = file.getOriginalFilename();
@@ -114,6 +193,6 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
 
-        return "/user/images/uploads/" + uniqueFilename;
+        return "../user/images/uploads/" + uniqueFilename;
     }
 }

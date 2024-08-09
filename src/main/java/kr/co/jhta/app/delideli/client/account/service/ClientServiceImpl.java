@@ -23,6 +23,7 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private EmailService emailService;
 
+    //회원가입
     @Override
     public void registerClient(ClientDTO clientDTO) {
         ClientAccount client = new ClientAccount();
@@ -38,6 +39,7 @@ public class ClientServiceImpl implements ClientService {
         clientMapper.insertClient(client);
     }
 
+    // 비밀번호 변경
     @Override
     public void updatePassword(String clientId, String newPassword) {
         ClientAccount clientAccount = findClientById(clientId);
@@ -45,28 +47,33 @@ public class ClientServiceImpl implements ClientService {
         clientMapper.updatePwClient(clientAccount);
     }
 
+    // 계정 승인여부 확인
     @Override
     public boolean checkAccessAccount(String clientId, String password) {
         ClientAccount clientAccount = findClientById(clientId);
         return clientMapper.checkAccessAccount(clientAccount);
     }
 
+    // 아이디 중복 확인
     @Override
     public boolean checkClientIdExists(String clientId) {
         return clientMapper.selectClientById(clientId).isPresent();
     }
 
+    // 이메일 중복 확인
     @Override
     public boolean checkClientEmailExists(String email) {
         return clientMapper.selectClientByEmail(email).isPresent();
     }
 
+    // 해당 아이디 정보 받아오기
     @Override
     public ClientAccount findClientById(String clientId) {
         return clientMapper.selectClientById(clientId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with clientname: " + clientId));
     }
 
+    // 이메일로 아이디 전송
     @Override
     public boolean findIdAndSendEmail(String clientEID, String clientName) {
         Optional<ClientAccount> clientOpt = clientMapper.selectClientByEIDAndName(clientEID, clientName);
@@ -78,6 +85,7 @@ public class ClientServiceImpl implements ClientService {
         return false;
     }
 
+    // 사업자번호, 아이디, 사장명이 일치하는 계정의 정보 가져오기
     @Override
     public Optional<ClientAccount> validateClient(String clientId, String clientEID, String clientName) {
         return clientMapper.selectClientByIdAndEIDAndName(clientId, clientEID, clientName);

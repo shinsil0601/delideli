@@ -1,0 +1,21 @@
+#header {
+    padding: 2rem 4rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+.header__profile {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    gap: 2rem;
+}
+.header__profile--name {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.header__profile--img {
+    width: 6.4rem;
+    height: 6.4rem;
+    background: no-repeat center/cover #000;
+    border-radius: 100%;
+}

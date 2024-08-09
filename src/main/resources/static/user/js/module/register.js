@@ -117,4 +117,17 @@ $(document).ready(function() {
             $("#registerForm")[0].submit();
         }
     });
+
+    // 프로필 이미지 미리보기
+    $("#userProfile").change(function() {
+        var input = this;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $("#profilePreview").attr("src", e.target.result).show();
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
 });
+

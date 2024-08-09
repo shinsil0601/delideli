@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 비밀번호 변경(로그인시)</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <a href="/user/myAddress">주소관리</a><br>
+            <a href="/user/checkAccount">내 정보 수정</a><br>
+            <a href="/user/updatePw">비밀번호 변경</a><br>
+            <a href="/user/myOrder">주문내역</a><br>
+            <a href="/user/myReview">내 리뷰관리</a><br>
+            <a href="/user/myLike">찜목록</a><br>
+            <a href="/user/myCart">장바구니</a><br>
+            <a href="/user/myAsk">내 문의확인</a><br>
+            <a href="/user/withdrawal">회원탈퇴</a><br>
+            <form method="post" action="/user/updatePassword">
+                <input type="hidden" name="userId" th:value="${user.userId}">
+                <input type="hidden" name="currentUserPw" th:value="${user.userPw}">
+                <label for="userPw">현재 비밀번호:</label>
+                <input type="password" id="userPw" name="userPw" required>
+                <br>
+                <label for="newUserPw">새 비밀번호:</label>
+                <input type="password" id="newUserPw" name="newPassword" required>
+                <br>
+                <label for="checkUserPw">새 비밀번호 확인:</label>
+                <input type="password" id="checkUserPw" name="confirmPassword" required>
+                <br>
+                <span id="passwordMessage"></span>
+                <br>
+                <button type="submit">비밀번호 변경</button>
+            </form>
+            <div id="errorMessage" style="color: red;" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+            <script src="/user/js/module/updatePw.js"></script>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

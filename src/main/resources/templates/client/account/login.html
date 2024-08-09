@@ -15,37 +15,70 @@
 
     </head>
     <body>
-        <div class="client-wrap">
-            <!-- Start:Aside -->
-            <th:block th:include="inc/client/aside :: clientAside"></th:block>
-            <!-- End:Aside -->
-
-            <!-- Start:Main -->
-            <main id="mainpage__wrap">
-                <!-- Start:Header -->
-                <th:block th:include="inc/client/header :: clientHeader"></th:block>
-                <!-- End:Header -->
-
-                <!-- Start:Contents -->
-                <section class="contents">
-                    <form method="post" action="/client/loginProc">
-                        <label for="clientId">아이디:</label>
-                        <input type="text" id="clientId" name="clientId" required>
-                        <br>
-                        <label for="password">비밀번호:</label>
-                        <input type="password" id="password" name="password" required>
-                        <br>
-                        <button type="submit">로그인</button>
-                        <li><a href="/client/register">사장 회원가입</a></li>
-                        <li><a href="/client/findId">사장 아이디 찾기</a></li>
-                        <li><a href="/client/findPw">사장 비밀번호 찾기</a></li>
-                        <li><a href="/">뒤로가기</a></li>
+        <div class="client-account__wrap">
+            <section class="client-account__left">
+                <div class="client-account__form-box">
+                    <div class="client-account__form-top">
+                        <h1 class="client-account__logo">
+                            <img src="/client/images/logo-blue.png" alt="딜리델리파랑색로고">
+                        </h1>
+                        <p class="client-account__label">
+                            사장님 로그인
+                        </p>
+                    </div>
+                    <!-- Start:Form -->
+                    <form method="post" action="/client/loginProc" class="client-account__form">
+                        <div class="account__input-wrap">
+                            <div class="account__input-box">
+                                <label for="clientId">아이디</label>
+                                <input type="text" name="clientId" id="clientId">
+                            </div>
+                            <div class="account__input-box">
+                                <label for="password">비밀번호</label>
+                                <input type="password" name="password" id="password">
+                            </div>
+                            <div class="validation-msg validation-msg--account" th:if="${param.error}" th:text="${param.error}"></div>
+                        </div>
+                        <div class="account__btn-wrap">
+                            <button type="submit" class="client-btn--blue">로그인</button>
+                            <button type="button" class="client-btn--default" th:onclick="'location.href=\'' + @{/} + '\''">뒤로가기</button>
+                        </div>
+                        <ul class="account__links">
+                            <li>
+                                <a href="/client/register">회원가입</a>
+                            </li>
+                            <li>
+                                <a href="/client/findId">아이디찾기</a>
+                            </li>
+                            <li>
+                                <a href="/client/findPw">비밀번호 찾기</a>
+                            </li>
+                        </ul>
                     </form>
-                    <div style="color: red;" th:if="${param.error}" th:text="${param.error}"></div>
-                </section>
-                <!-- End:Contents -->
-            </main>
-            <!-- End:Main -->
+                    <!-- End:Form -->
+                </div>
+                <p class="client-account__copyright">
+                    delideli ⓒ All right reserved.
+                </p>
+            </section>
+            <section class="client-account__right">
+                <div class="client-account__text-box">
+                    <h2 class="client-account__title">
+                        가게관리의 모든 것을 사장님 서비스에서 체험해보세요!
+                    </h2>
+                    <p class="client-account__desc">
+                        어디서나 손쉽게 접근 가능한 온라인 플랫폼입니다.
+                        <br>
+                        언제든지 가게 상황을 실시간으로 확인하고, 필요한 조치를 취할 수 있습니다.
+                        <br>
+                        이제 사장님 서비스와 함께 스마트하게 가게를 관리하고, 더 많은 시간을 고객과의 소통에 투자해보세요.
+                        <br>
+                        성공적인 비즈니스를 위한 첫걸음, 사장님 서비스에서 시작됩니다.
+                        <br>
+                        delideli에 입점한 후 이용할 수 있습니다.
+                    </p>
+                </div>
+            </section>
         </div>
     </body>
 </html>

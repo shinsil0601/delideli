@@ -34,6 +34,7 @@ public class AdminController {
         return "admin/account/login";
     }
 
+    // 로그인 처리
     @PostMapping("/login")
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
@@ -55,11 +56,13 @@ public class AdminController {
         }
     }
 
+    // 관리자 OVERVIEW로 이동
     @GetMapping("/overview")
     public String overview(Model model) {
         return "admin/overview/overview";
     }
 
+    // 로그아웃
     @GetMapping("/logout")
     public String logout(HttpSession session, HttpServletResponse response) {
         SecurityContextHolder.clearContext();
