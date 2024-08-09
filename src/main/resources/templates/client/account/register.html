@@ -15,69 +15,42 @@
 
     </head>
     <body>
-        <div class="client-wrap">
-            <!-- Start:Aside -->
-            <th:block th:include="inc/client/aside :: clientAside"></th:block>
-            <!-- End:Aside -->
-
-            <!-- Start:Main -->
-            <main id="mainpage__wrap">
-                <!-- Start:Header -->
-                <th:block th:include="inc/client/header :: clientHeader"></th:block>
-                <!-- End:Header -->
-
-                <!-- Start:Contents -->
-                <section class="contents">
-                    <form id="registerForm" action="/client/register" method="post">
-                        <label for="clientEID">사업자 등록번호:</label>
-                        <input type="text" id="clientEID" name="clientEID" required>
-                        <button type="button" id="checkEID">사업자 등록 번호 확인</button>
-                        <span id="clientEIDMessage" class="error-message"></span>
+        <div class="client-account__wrap">
+            <section class="client-account__left">
+                <div class="client-account__form-box">
+                    <div class="client-account__form-top">
+                        <h1 class="client-account__logo">
+                            <img src="/client/images/logo-blue.png" alt="딜리델리파랑색로고">
+                        </h1>
+                        <p class="client-account__label">
+                            회원가입
+                        </p>
+                    </div>
+                    <!-- Start:Form -->
+                    <!-- End:Form -->
+                </div>
+                <p class="client-account__copyright">
+                    delideli ⓒ All right reserved.
+                </p>
+            </section>
+            <section class="client-account__right">
+                <div class="client-account__text-box">
+                    <h2 class="client-account__title">
+                        가게관리의 모든 것을 사장님 서비스에서 체험해보세요!
+                    </h2>
+                    <p class="client-account__desc">
+                        어디서나 손쉽게 접근 가능한 온라인 플랫폼입니다.
                         <br>
-                        <label for="clientName">이름:</label>
-                        <input type="text" id="clientName" name="clientName" required>
+                        언제든지 가게 상황을 실시간으로 확인하고, 필요한 조치를 취할 수 있습니다.
                         <br>
-                        <label for="clientPhone">전화번호:</label>
-                        <input type="text" id="clientPhone" name="clientPhone" required>
+                        이제 사장님 서비스와 함께 스마트하게 가게를 관리하고, 더 많은 시간을 고객과의 소통에 투자해보세요.
                         <br>
-                        <label for="clientId">사장님 ID:</label>
-                        <input type="text" id="clientId" name="clientId" required>
-                        <button type="button" id="checkClientIdButton">아이디 중복 확인</button>
-                        <span id="clientIdMessage" class="error-message"></span>
+                        성공적인 비즈니스를 위한 첫걸음, 사장님 서비스에서 시작됩니다.
                         <br>
-                        <label for="clientPw">비밀번호:</label>
-                        <input type="password" id="clientPw" name="clientPw" required>
-                        <br>
-                        <label for="checkClientPw">비밀번호 확인:</label>
-                        <input type="password" id="checkClientPw" name="checkClientPw" required>
-                        <span id="passwordMessage" class="error-message"></span>
-                        <br>
-                        <label for="clientEmail">이메일:</label>
-                        <input type="email" id="clientEmail" name="clientEmail" required>
-                        <span id="clientEmailMessage" class="error-message"></span>
-                        <button type="button" id="sendCodeButton">인증 코드 전송</button>
-                        <br>
-                        <label for="verificationCode">인증 코드:</label>
-                        <input type="text" id="verificationCode" name="verificationCode" required>
-                        <button type="button" id="verifyCodeButton">인증 코드 확인</button>
-                        <br>
-                        <label for="bankName">은행 이름:</label>
-                        <input type="text" id="bankName" name="bankName" required>
-                        <br>
-                        <label for="bankAccount">은행 계좌:</label>
-                        <input type="text" id="bankAccount" name="bankAccount" required>
-                        <br>
-                        <button type="submit" id="registerButton" disabled>등록</button>
-                        <li><a href="/">뒤로가기</a></li>
-                    </form>
-                    <div id="message" class="success-message"></div>
-                    <div id="errorMessage" class="error-message"></div>
-
-                    <script src="/client/js/module/register.js"></script>
-                </section>
-                <!-- End:Contents -->
-            </main>
-            <!-- End:Main -->
+                        delideli에 입점한 후 이용할 수 있습니다.
+                    </p>
+                </div>
+            </section>
         </div>
     </body>
 </html>
