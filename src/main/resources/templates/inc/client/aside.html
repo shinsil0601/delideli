@@ -1,3 +1,81 @@
 <th:block th:fragment="clientAside">
-    <aside id="aside"></aside>
+    <aside id="aside">
+        <h1 class="aside__logo">
+            <a href="#none">
+                <img src="/client/images/logo-white.png" alt="딜리델리흰색로고">
+            </a>
+        </h1>
+        <div class="aside__nav">
+            <ul class="aside__nav--depth1">
+                <li>
+                    <a href="#none" class="on">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-store"></i>
+                            가게목록
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-user"></i>
+                            마이페이지
+                        </span>
+                        <span class="aside__nav--arrow">
+                            <i class="fa-solid fa-caret-down"></i>
+                        </span>
+                    </a>
+                    <ul class="aside__nav--depth2">
+                        <li>
+                            <a href="#none" class="active">내 정보수정</a>
+                        </li>
+                        <li>
+                            <a href="#none">비밀번호 변경</a>
+                        </li>
+                        <li>
+                            <a href="#none">탈퇴 신청</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#none">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-utensils"></i>
+                            메뉴
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            리뷰
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-chart-pie"></i>
+                            가계부
+                        </span>
+                        <span class="aside__nav--arrow">
+                            <i class="fa-solid fa-caret-down"></i>
+                        </span>
+                    </a>
+                    <ul class="aside__nav--depth2">
+                        <li>
+                            <a href="#none" class="active">매장별 가계부</a>
+                        </li>
+                        <li>
+                            <a href="#none">날짜별 가계부</a>
+                        </li>
+                        <li>
+                            <a href="#none">정산</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </aside>
 </th:block>
