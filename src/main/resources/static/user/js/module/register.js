@@ -117,9 +117,6 @@ $(document).ready(function() {
             $("#registerForm")[0].submit();
         }
     });
-<<<<<<< HEAD
-});
-=======
 
     // 프로필 이미지 미리보기
     $("#userProfile").change(function() {
@@ -133,4 +130,4 @@ $(document).ready(function() {
         }
     });
 });
->>>>>>> 50262eee1813a5901bf4222c5f2a642f70836d66
+
