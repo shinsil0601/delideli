@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 가게 목록</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+        <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <!-- 로그인 상태 확인 -->
+            <div th:if="${user != null}">
+                <!-- 로그인한 경우 -->
+                <div th:each="address : ${addressList}" th:if="${address.defaultAddress}">
+                    <h2>대표주소지</h2>
+                    <p th:text="${address.address} + ' ' + ${address.addrDetail}"></p>
+                    <button onclick="toggleAddressList()">주소 변경</button>
+                </div>
+            </div>
+
+            <div th:if="${user == null}">
+                <!-- 로그인하지 않은 경우 -->
+                <div id="guestAddressDisplay">
+                    <h2>대표주소지</h2>
+                    <p id="displayedGuestAddress" th:text="${selectedAddress != null ? selectedAddress : '현재 입력된 주소가 없습니다.'}"></p>
+                    <button onclick="showGuestAddressModal()">주소 입력</button>
+                </div>
+
+                <!-- 주소 입력 모달창 -->
+                <div id="guestAddressModal" style="display: none;">
+                    <h2>주소 입력</h2>
+                    <form id="guestAddressForm">
+                        <label for="guestAddress">주소:</label>
+                        <input type="text" id="guestAddress" name="guestAddress" readonly required>
+                        <button type="button" onclick="execDaumPostcodeForGuest()">주소 찾기</button>
+                        <br>
+                        <label for="guestAddrDetail">상세 주소:</label>
+                        <input type="text" id="guestAddrDetail" name="guestAddrDetail">
+                        <br>
+                        <button type="button" onclick="applyGuestAddress()">적용</button>
+                        <button type="button" onclick="closeGuestAddressModal()">취소</button>
+                    </form>
+                </div>
+            </div>
+            <br><br><br>
+
+            <!-- 주소 리스트 박스 -->
+            <div id="addressListBox" style="display: none;">
+                <select id="addressSelect" onchange="selectAddress()">
+                    <option value="" disabled selected>주소를 선택하세요</option>
+                    <option th:each="address : ${addressList}"
+                            th:value="${address.userAddressKey}"
+                            th:text="${address.address} + ' ' + ${address.addrDetail}">
+                    </option>
+                </select>
+                <button onclick="showAddAddressModal()">주소 추가</button>
+            </div>
+            <br><br><br>
+
+            <!-- 주소 추가 모달창 -->
+            <div id="addAddressModal" style="display: none;">
+                <h2>주소 추가</h2>
+                <form id="addressForm">
+                    <label for="newAddress">주소:</label>
+                    <input type="text" id="newAddress" name="newAddress" readonly required>
+                    <button type="button" onclick="execDaumPostcode()">주소 찾기</button>
+                    <br>
+                    <label for="newAddrDetail">상세 주소:</label>
+                    <input type="text" id="newAddrDetail" name="newAddrDetail" required>
+                    <br>
+                    <label for="newZipcode">우편번호:</label>
+                    <input type="text" id="newZipcode" name="newZipcode" readonly required>
+                    <br>
+                    <button type="button" onclick="saveAddress()">저장</button>
+                    <button type="button" onclick="closeAddAddressModal()">취소</button>
+                </form>
+            </div>
+
+            <!-- 가게 목록 검색창 -->
+            <div>
+                <input type="text" id="storeSearchInput" placeholder="가게명을 입력하세요" />
+                <button id="searchButton" onclick="searchStores()">검색</button>
+            </div>
+
+
+            <!-- 로그인시 카테고리 -->
+            <div th:if="${user != null}">
+                <h3>카테고리 목록</h3>
+                <ul>
+                    <li>
+                        <a href="/user/category/0">ALL</a>
+                    </li>
+                    <li th:each="category : ${categoryList}">
+                        <a th:href="@{'/user/category/' + ${category.categoryKey}}" th:text="${category.categoryName}"></a>
+                    </li>
+                </ul>
+            </div>
+            <br><br><br>
+
+            <!-- 비로그인시 카테고리 -->
+            <div th:if="${user == null}">
+                <h3>카테고리 목록</h3>
+                <ul>
+                    <li>
+                        <a href="#" class="category-link" data-base-url="/user/category/0">ALL</a>
+                    </li>
+                    <li th:each="category : ${categoryList}">
+                        <a href="#"
+                           th:data-base-url="@{'/user/category/' + ${category.categoryKey}}"
+                           th:text="${category.categoryName}"
+                           class="category-link"></a>
+                    </li>
+                </ul>
+            </div>
+            <br><br><br>
+
+            <!-- 가게 목록 -->
+            <div id="storeList">
+                <h3>가게 목록</h3>
+                <div th:each="store : ${storeList}">
+                    <div>
+                        <a th:href="@{'/user/storedetail/' + ${store.storeInfoKey}}">
+                            <p th:text="${store.storeName}"></p>
+                            <p th:text="${store.storeAddress}"></p>
+                            <p th:text="${store.storePhone}"></p>
+                        </a>
+                    </div>
+                    <br>===============<br>
+                </div>
+            </div>
+            <br><br><br>
+
+            <!-- 페이지네이션 -->
+            <div>
+                <ul>
+                    <li th:if="${currentPage > 1}">
+                        <a th:href="@{'/user/category/' + ${categoryId} + '?page=' + ${currentPage - 1} + '&pageSize=' + ${pageSize}}">이전</a>
+                    </li>
+                    <li th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
+                        <a th:href="@{'/user/category/' + ${categoryId} + '?page=' + ${pageNum} + '&pageSize=' + ${pageSize}}"
+                           th:text="${pageNum}"></a>
+                    </li>
+                    <li th:if="${currentPage < totalPages}">
+                        <a th:href="@{'/user/category/' + ${categoryId} + '?page=' + ${currentPage + 1} + '&pageSize=' + ${pageSize}}">다음</a>
+                    </li>
+                </ul>
+            </div>
+
+            <script src="/user/js/module/store.js"></script>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>
