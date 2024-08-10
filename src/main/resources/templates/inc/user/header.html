@@ -3,12 +3,7 @@
     <header id="header">
         <div class="inner">
             <div class="header__top">
-                <h1 class="header__logo" th:if="${user == null}">
-                    <a href="/">
-                        <img src="/user/images/logo-color.png" alt="딜리델리컬러로고">
-                    </a>
-                </h1>
-                <h1 class="header__logo" th:if="${user != null}">
+                <h1 class="header__logo">
                     <a href="/user/home">
                         <img src="/user/images/logo-color.png" alt="딜리델리컬러로고">
                     </a>
@@ -58,19 +53,17 @@
                 <ul class="header__bot-menu">
                     <!-- 카테고리 -->
                     <li>
-                        <a href="#none">
+                        <a href="/user/category/0">
                             <i class="fa-solid fa-bars"></i>
                             카테고리
                         </a>
                         <ul class="header__ctg">
                             <li>
-                                <a href="#none">전체보기</a>
+                                <a href="/user/category/0">전체보기</a>
                             </li>
-                            <li>
-                                <a href="#none">category1</a>
-                            </li>
-                            <li>
-                                <a href="#none">category2</a>
+                            <li th:each="category : ${categoryList}">
+                                <a th:href="@{'/user/category/' + ${category.categoryKey}}"
+                                   th:text="${category.categoryName}"></a>
                             </li>
                         </ul>
                     </li>
