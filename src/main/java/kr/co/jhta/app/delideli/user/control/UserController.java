@@ -54,7 +54,7 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
 
 
-    @GetMapping("home")
+    @GetMapping("/home")
     public String home(@AuthenticationPrincipal User user, Model model) {
         if (user != null) {
             log.info("User is authenticated: {}", user.getUsername());
@@ -279,7 +279,7 @@ public class UserController {
         model.addAttribute("user", userAccount);
         return "user/mypage/modifyUser";
     }
-    
+
     // 내 정보 수정
     @PostMapping("/modifyUser")
     public String modifyUser(@ModelAttribute UserDTO userDTO, Model model) {

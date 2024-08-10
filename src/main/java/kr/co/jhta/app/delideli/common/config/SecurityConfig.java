@@ -37,8 +37,9 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "home", "/error",
+                        .requestMatchers("/", "/user/home", "/error",
                                 "/user/login","/user/register", "/user/loginProc", "/user/findId", "/user/findPw", "/user/sendResetLink", "/user/userChangePw", "/user/changePassword", "/user/checkUserId", "/user/checkUserEmail", "/user/sendVerificationCode", "/user/verifyCode",
+                                "/user/category/**", "/user/filterStoresByAddress", "/user/search",
                                 "/client/login", "/client/register", "client/loginProc", "/client/findId", "/client/findPw", "/client/sendResetLink", "/client/clientChangePw", "/client/changePassword", "client/checkClientId", "client/checkClientEmail", "/client/sendVerificationCode", "/client/verifyCode",
                                 "/admin/login", "admin/loginProc" ).permitAll()
                         .requestMatchers("/user/**").hasRole("USER")

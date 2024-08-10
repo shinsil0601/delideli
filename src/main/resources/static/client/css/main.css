@@ -1,0 +1,62 @@
+.client-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 4rem;
+    background: var(--blue-900);
+    display: grid;
+    grid-template-columns: 36rem 1fr;
+    gap: 4rem;
+}
+#mainpage__wrap {
+    background: var(--whiteColor);
+    border-radius: 2rem;
+    overflow: hidden;
+}
+.contents {
+    padding: 6rem 4rem;
+}
+.contents__title {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+/* Form Style */
+input {
+    border: 1px solid var(--gray-200);
+    padding: 1.6rem 0.8rem;
+    border-radius: 0.8rem;
+}
+input:focus {
+    outline-color: var(--blue-600);
+}
+button {
+    border: none;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    font-weight: 700;
+}
+.client-btn--blue {
+    background: var(--blue-700);
+    color: var(--whiteColor);
+    transition: .3s;
+}
+.client-btn--blue:hover {
+    background: var(--blue-500);
+}
+.client-btn--default {
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    color: var(--blue-500);
+    transition: 0.3s;
+}
+.client-btn--default:hover {
+    background: var(--gray-100);
+}
+.validation-msg {
+    font-size: var(--font-size-12);
+    color: var(--failedColor);
+}
+.validation-msg--account {
+    text-align: center;
+}
