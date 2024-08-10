@@ -279,7 +279,7 @@ public class UserController {
         model.addAttribute("user", userAccount);
         return "user/mypage/modifyUser";
     }
-    
+
     // 내 정보 수정
     @PostMapping("/modifyUser")
     public String modifyUser(@ModelAttribute UserDTO userDTO, Model model) {

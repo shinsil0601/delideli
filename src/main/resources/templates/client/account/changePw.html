@@ -15,38 +15,42 @@
 
     </head>
     <body>
-        <div class="client-wrap">
-            <!-- Start:Aside -->
-            <th:block th:include="inc/client/aside :: clientAside"></th:block>
-            <!-- End:Aside -->
-
-            <!-- Start:Main -->
-            <main id="mainpage__wrap">
-                <!-- Start:Header -->
-                <th:block th:include="inc/client/header :: clientHeader"></th:block>
-                <!-- End:Header -->
-
-                <!-- Start:Contents -->
-                <section class="contents">
-                    <form method="post" action="/client/changePassword">
-                        <input type="hidden" name="clientId" th:value="${clientId}">
-                        <label for="clientPw">새 비밀번호:</label>
-                        <input type="password" id="clientPw" name="newPassword" required>
+        <div class="client-account__wrap">
+            <section class="client-account__left">
+                <div class="client-account__form-box">
+                    <div class="client-account__form-top">
+                        <h1 class="client-account__logo">
+                            <img src="/client/images/logo-blue.png" alt="딜리델리파랑색로고">
+                        </h1>
+                        <p class="client-account__label">
+                            비밀번호 변경
+                        </p>
+                    </div>
+                    <!-- Start:Form -->
+                    <!-- End:Form -->
+                </div>
+                <p class="client-account__copyright">
+                    delideli ⓒ All right reserved.
+                </p>
+            </section>
+            <section class="client-account__right">
+                <div class="client-account__text-box">
+                    <h2 class="client-account__title">
+                        가게관리의 모든 것을 사장님 서비스에서 체험해보세요!
+                    </h2>
+                    <p class="client-account__desc">
+                        어디서나 손쉽게 접근 가능한 온라인 플랫폼입니다.
                         <br>
-                        <label for="checkClientPw">새 비밀번호 확인:</label>
-                        <input type="password" id="checkClientPw" name="confirmPassword" required>
+                        언제든지 가게 상황을 실시간으로 확인하고, 필요한 조치를 취할 수 있습니다.
                         <br>
-                        <span id="passwordMessage"></span>
+                        이제 사장님 서비스와 함께 스마트하게 가게를 관리하고, 더 많은 시간을 고객과의 소통에 투자해보세요.
                         <br>
-                        <button type="submit">비밀번호 변경</button>
-                    </form>
-                    <div id="errorMessage" style="color: red;" th:if="${errorMessage}" th:text="${errorMessage}"></div>
-
-                    <script src="/client/js/module/chagePw.js"></script>
-                </section>
-                <!-- End:Contents -->
-            </main>
-            <!-- End:Main -->
+                        성공적인 비즈니스를 위한 첫걸음, 사장님 서비스에서 시작됩니다.
+                        <br>
+                        delideli에 입점한 후 이용할 수 있습니다.
+                    </p>
+                </div>
+            </section>
         </div>
     </body>
 </html>
