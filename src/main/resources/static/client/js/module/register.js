@@ -21,18 +21,21 @@ $(document).ready(function () {
     /* 등록 버튼 */
     const registerButton = $("#registerButton");
 
+    /* 아이디 중복체크 버튼 */
+    const checkIdButton = $("#checkClientIdButton");
+
     /* 유효성 검사 */
     function validateForm() {
         const allFilled = inputEID.val() && inputName.val() && inputPhone.val() &&
-                          inputId.val() && inputPw.val() && inputChkPw.val() &&
-                          inputEmail.val() && inputEmailCode.val() &&
-                          inputBank.val() && inputBankAccount.val();
+            inputId.val() && inputPw.val() && inputChkPw.val() &&
+            inputEmail.val() && inputEmailCode.val() &&
+            inputBank.val() && inputBankAccount.val();
 
         const allSuccess = clientEIDMessage.hasClass('success-message') &&
-                           clientIdMessage.hasClass('success-message') &&
-                           passwordMessage.hasClass('success-message') &&
-                           clientEmailMessage.hasClass('success-message') &&
-                           clientEmailChkMsg.hasClass('success-message');
+            clientIdMessage.hasClass('success-message') &&
+            passwordMessage.hasClass('success-message') &&
+            clientEmailMessage.hasClass('success-message') &&
+            clientEmailChkMsg.hasClass('success-message');
 
         if (allFilled && allSuccess) {
             registerButton.prop('disabled', false);
@@ -41,13 +44,13 @@ $(document).ready(function () {
         }
     }
 
-    /* 사업자번호 */
-    // 숫자만 입력
+    /* 사업자번호 - 양식 */
     inputEID.on('input', function(){
         $(this).val($(this).val().replace(/[^0-9]/g, ''));
         validateForm();
     });
-    // 사업자번호 조회
+
+    /* api를 이용한 사업자번호 조회 */
     $("#checkEID").click(function () {
         let clientEID = inputEID.val();
         clientEIDMessage.text("");
@@ -65,10 +68,10 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.data[0].b_stt_cd === "01") {
                     clientEIDMessage.text("유효한 사업자 등록번호입니다.")
-                    .removeClass('error-message').addClass('success-message').show();
+                        .removeClass('error-message').addClass('success-message').show();
                 } else {
                     clientEIDMessage.text("유효하지 않은 사업자 등록번호입니다.")
-                    .removeClass('success-message').addClass('error-message').show();
+                        .removeClass('success-message').addClass('error-message').show();
                 }
                 validateForm();
             },
@@ -79,8 +82,7 @@ $(document).ready(function () {
         });
     });
 
-    /* 휴대폰번호 */
-    // '000-0000-0000' 양식
+    /* 휴대폰번호 - 양식 */
     inputPhone.on('input', function(){
         let input = $(this).val().replace(/[^0-9]/g, '');
 
@@ -94,8 +96,7 @@ $(document).ready(function () {
         validateForm();
     });
 
-    /* 아이디 */
-    // 버튼 활성화
+    /* 아이디 - 버튼활성화 */
     inputId.on('input', function() {
         let clientId = $(this).val();
 
@@ -107,9 +108,7 @@ $(document).ready(function () {
         validateForm();
     });
 
-    // 아이디 중복체크
-    const checkIdButton = $("#checkClientIdButton");
-
+    /* 아이디 - 중복조회 */
     checkIdButton.click(function () {
         let clientId = inputId.val();
         clientIdMessage.text("");
@@ -117,10 +116,10 @@ $(document).ready(function () {
         $.post("/client/checkClientId", { clientId: clientId }, function (data) {
             if (data) {
                 clientIdMessage.text("사용할 수 없는 아이디입니다.")
-                .removeClass('success-message').addClass('error-message').show();
+                    .removeClass('success-message').addClass('error-message').show();
             } else {
                 clientIdMessage.text("사용할 수 있는 아이디입니다.")
-                .removeClass('error-message').addClass('success-message').show();
+                    .removeClass('error-message').addClass('success-message').show();
             }
             validateForm();
         }).fail(function () {
@@ -129,8 +128,7 @@ $(document).ready(function () {
         });
     });
 
-    /* 비밀번호 */
-    // 비밀번호 확인
+    /* 비밀번호 - 비밀번호확인 */
     inputChkPw.keyup(function () {
         let password = inputPw.val();
         let checkPassword = inputChkPw.val();
@@ -138,16 +136,15 @@ $(document).ready(function () {
 
         if (password !== checkPassword) {
             passwordMessage.text("비밀번호가 일치하지 않습니다.")
-            .removeClass('success-message').addClass('error-message').show();
+                .removeClass('success-message').addClass('error-message').show();
         } else {
             passwordMessage.text("비밀번호가 일치합니다.")
-            .removeClass('error-message').addClass('success-message').show();
+                .removeClass('error-message').addClass('success-message').show();
         }
         validateForm();
     });
 
-    /* 이메일 */
-    // 이메일 유효성 검사
+    /* 이메일 - 양식 */
     inputEmail.keyup(function () {
         let email = inputEmail.val();
         clientEmailMessage.text("");
@@ -155,7 +152,7 @@ $(document).ready(function () {
         if (email.includes('@')) {
             sendCodeButton.prop('disabled', false);
             clientEmailMessage.text("사용할 수 있는 이메일입니다.")
-            .removeClass('error-message').addClass('success-message').show();
+                .removeClass('error-message').addClass('success-message').show();
 
             $.ajax({
                 url: "/client/checkClientEmail",
@@ -164,11 +161,11 @@ $(document).ready(function () {
                 success: function (data) {
                     if (data) {
                         clientEmailMessage.text("사용할 수 없는 이메일입니다.")
-                        .removeClass('success-message').addClass('error-message').show();
+                            .removeClass('success-message').addClass('error-message').show();
                         sendCodeButton.prop('disabled', true);
                     } else {
                         clientEmailMessage.text("사용할 수 있는 이메일입니다.")
-                        .removeClass('error-message').addClass('success-message').show();
+                            .removeClass('error-message').addClass('success-message').show();
                     }
                     validateForm();
                 },
@@ -180,27 +177,26 @@ $(document).ready(function () {
         } else {
             sendCodeButton.prop('disabled', true);
             clientEmailMessage.text("사용할 수 없는 이메일입니다.")
-            .removeClass('success-message').addClass('error-message').show();
+                .removeClass('success-message').addClass('error-message').show();
             validateForm();
         }
     });
 
-    // 인증코드 msg 출력
+    /* 이메일 - 인증코드 */
     const sendCodeButton = $("#sendCodeButton");
-
     sendCodeButton.click(function() {
         let email = inputEmail.val();
 
         $.post("/client/sendVerificationCode", { email: email }, function(data) {
             alert("인증코드가 전송되었습니다.");
-            validateForm(); 
+            validateForm();
         }).fail(function() {
             alert("인증코드 전송 실패");
             validateForm();
         });
     });
 
-    // 인증코드 확인
+    /* 이메일 - 인증코드확인 */
     $("#verifyCodeButton").click(function() {
         let email = inputEmail.val();
         let code = inputEmailCode.val();
@@ -209,18 +205,29 @@ $(document).ready(function () {
         $.post("/user/verifyCode", { email: email, code: code }, function(data) {
             if (data.valid) {
                 clientEmailChkMsg.text("이메일 인증이 완료되었습니다.")
-                .removeClass('error-message').addClass('success-message').show();
+                    .removeClass('error-message').addClass('success-message').show();
             } else {
                 clientEmailChkMsg.text("인증 코드가 일치하지 않습니다.")
-                .removeClass('success-message').addClass('error-message').show();
+                    .removeClass('success-message').addClass('error-message').show();
             }
             validateForm();
         }).fail(function () {
             clientEmailChkMsg.text("인증 코드 확인에 실패했습니다.")
-            .removeClass('success-message').addClass('error-message').show();
-            validateForm(); 
+                .removeClass('success-message').addClass('error-message').show();
+            validateForm();
         });
     });
 
+    /* 은행명 */
+    inputBank.on('input', function(){
+        validateForm();
+    });
+
+    /* 계좌번호 */
+    inputBankAccount.on('input', function(){
+        validateForm();
+    });
+
+    /* 초기 유효성 검사 호출 */
     validateForm();
 });
