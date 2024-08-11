@@ -27,30 +27,48 @@
                         </p>
                     </div>
                     <!-- Start:Form -->
+                    <form action="/client/changePassword" method="POST" id="registerForm" class="client-account__form">
+                        <!-- 아이디 -->
+                        <input type="hidden" name="clientId" th:value="${clientId}">
+                        <div class="account__input-wrap">
+                            <!-- 비밀번호 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="clientPw">비밀번호</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="password" id="clientPw" name="newPassword">
+                            </div>
+                            <!-- 비밀번호확인 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="checkClientPw">비밀번호 확인</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="password" id="checkClientPw" name="confirmPassword">
+                                <span id="passwordMessage" class="error-message" style="display: none;"></span>
+                            </div>
+                        </div>
+                        <div class="account__btn-wrap">
+                            <button type="submit" id="registerButton" class="client-btn--blue" disabed>변경하기</button>
+                        </div>
+                        <script src="/client/js/module/chagePw.js"></script>
+                    </form>
                     <!-- End:Form -->
                 </div>
                 <p class="client-account__copyright">
                     delideli ⓒ All right reserved.
                 </p>
             </section>
-            <section class="client-account__right">
-                <div class="client-account__text-box">
-                    <h2 class="client-account__title">
-                        가게관리의 모든 것을 사장님 서비스에서 체험해보세요!
-                    </h2>
-                    <p class="client-account__desc">
-                        어디서나 손쉽게 접근 가능한 온라인 플랫폼입니다.
-                        <br>
-                        언제든지 가게 상황을 실시간으로 확인하고, 필요한 조치를 취할 수 있습니다.
-                        <br>
-                        이제 사장님 서비스와 함께 스마트하게 가게를 관리하고, 더 많은 시간을 고객과의 소통에 투자해보세요.
-                        <br>
-                        성공적인 비즈니스를 위한 첫걸음, 사장님 서비스에서 시작됩니다.
-                        <br>
-                        delideli에 입점한 후 이용할 수 있습니다.
-                    </p>
-                </div>
-            </section>
+            <!-- Start:Right -->
+            <th:block th:include="inc/client/account-right :: clientAccountRight"></th:block>
+            <!-- End:Right -->
         </div>
     </body>
 </html>

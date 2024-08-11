@@ -26,6 +26,7 @@ input {
     border: 1px solid var(--gray-200);
     padding: 1.6rem 0.8rem;
     border-radius: 0.8rem;
+    line-height: 1;
 }
 input:focus {
     outline-color: var(--blue-600);
@@ -35,6 +36,16 @@ button {
     border-radius: 0.8rem;
     cursor: pointer;
     font-weight: 700;
+}
+button:disabled {
+    background: var(--gray-400);
+    color: var(--gray-900);
+    cursor: default;
+}
+button:disabled:hover {
+    background: var(--gray-400);
+    color: var(--gray-900);
+    cursor: default;
 }
 .client-btn--blue {
     background: var(--blue-700);
@@ -55,8 +66,19 @@ button {
 }
 .validation-msg {
     font-size: var(--font-size-12);
+    font-weight: 500;
     color: var(--failedColor);
 }
 .validation-msg--account {
     text-align: center;
+}
+.error-message {
+    font-size: var(--font-size-12);
+    font-weight: 700;
+    color: var(--failedColor);
+}
+.success-message {
+    font-size: var(--font-size-12);
+    font-weight: 700;
+    color: var(--teal-500);
 }

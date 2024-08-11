@@ -1,9 +1,38 @@
-var isClientEIDValid = false; // 사업자 등록번호 유효성 변수
+$(document).ready(function () {
+    /* 필드 */
+    const inputId = $("#clientId"); // 아이디
+    const inputEID = $("#clientEID"); // 사업자등록번호
+    const inputName = $("#clientName"); // 이름
 
-$(document).ready(function() {
+    /* 유효성메시지 */
+    const clientEIDMessage = $("#clientEIDMessage");
+
+    /* 비밀번호 찾기 버튼 */
+    const sendResetLinkButton = $("#sendResetLinkButton");
+
+    /* 유효성 검사 */
+    function validateForm() {
+        const allFilled = inputId.val() && inputEID.val() && inputName.val();
+        const allSuccess = clientEIDMessage.hasClass('success-message');
+
+        if (allFilled && allSuccess) {
+            sendResetLinkButton.prop('disabled', false);
+        } else {
+            sendResetLinkButton.prop('disabled', true);
+        }
+    }
+
+    /* 사업자번호 입력 */
+    inputEID.on('input', function(){
+        $(this).val($(this).val().replace(/[^0-9]/g, ''));
+        validateForm();
+    });
+
+    /* api를 이용한 사업자번호 조회 */
     $("#checkEID").click(function () {
-        var clientEID = $("#clientEID").val();
-        $("#clientEIDMessage").text("");  // 이전 메세지 제거
+        let clientEID = inputEID.val();
+        clientEIDMessage.text("");
+
         $.ajax({
             url: "https://api.odcloud.kr/api/nts-businessman/v1/status",
             type: "POST",
@@ -12,46 +41,44 @@ $(document).ready(function() {
                 b_no: [clientEID]
             }),
             beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Infuser " + "XUXRe+FdFMkLRnaf0Lk4O3Y8FtaOkNX6UlFup4nZKTVo/RIHRFFTW56jFW7dGllnJq2XXGUYdSqnr+lBk/5nxw==");
+                xhr.setRequestHeader("Authorization", "Infuser XUXRe+FdFMkLRnaf0Lk4O3Y8FtaOkNX6UlFup4nZKTVo/RIHRFFTW56jFW7dGllnJq2XXGUYdSqnr+lBk/5nxw==");
             },
             success: function (response) {
                 if (response.data[0].b_stt_cd === "01") {
-                    $("#clientEIDMessage").text("유효한 사업자 등록번호입니다.").removeClass('error-message').addClass('success-message');
-                    isClientEIDValid = true;
+                    clientEIDMessage.text("유효한 사업자 등록번호입니다.")
+                        .removeClass('error-message').addClass('success-message').show();
                 } else {
-                    $("#clientEIDMessage").text("유효하지 않은 사업자 등록번호입니다.").removeClass('success-message').addClass('error-message');
-                    isClientEIDValid = false;
+                    clientEIDMessage.text("유효하지 않은 사업자 등록번호입니다.")
+                        .removeClass('success-message').addClass('error-message').show();
                 }
-                findPwFormValidity();
+                validateForm();
             },
             error: function () {
-                $("#clientEIDMessage").text("사업자 등록번호 확인에 실패했습니다.");
-                isClientEIDValid = false;
-                findPwFormValidity();
+                clientEIDMessage.text("사업자 등록번호 확인에 실패했습니다.").show();
+                validateForm();
             }
         });
     });
 
-    function findPwFormValidity() {
-        if (isClientEIDValid) {
-            $("#sendResetLinkButton").prop("disabled", false);
-        } else {
-            $("#sendResetLinkButton").prop("disabled", true);
-        }
-    }
+    /* 폼 제출 */
+    $("#findPwForm").submit(function(event) {
+        event.preventDefault();
 
-    $("#sendResetLinkButton").click(function() {
-        var clientId = $("#clientId").val();
-        var clientEID = $("#clientEID").val();
-        var clientName = $("#clientName").val();
+        const clientId = inputId.val();
+        const clientEID = inputEID.val();
+        const clientName = inputName.val();
+
         $.post("/client/sendResetLink", { clientId: clientId, clientEID: clientEID, clientName: clientName }, function(data) {
             if (data.message) {
-                $("#message").text(data.message);
+                alert(data.message);
             } else {
-                $("#errorMessage").text(data.error);
+                alert(data.error);
             }
         }).fail(function() {
-            $("#errorMessage").text("비밀번호 변경 링크 전송에 실패했습니다.");
+            alert("비밀번호 변경 링크 전송에 실패했습니다.");
         });
     });
+
+    /* 초기 유효성 검사 호출 */
+    validateForm();
 });
