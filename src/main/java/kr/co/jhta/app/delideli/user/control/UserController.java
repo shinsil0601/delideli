@@ -54,7 +54,7 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
 
 
-    @GetMapping("home")
+    @GetMapping("/home")
     public String home(@AuthenticationPrincipal User user, Model model) {
         if (user != null) {
             log.info("User is authenticated: {}", user.getUsername());
