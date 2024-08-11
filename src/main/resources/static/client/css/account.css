@@ -1,13 +1,16 @@
 .client-account__wrap {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 100%;
+    min-height: 100vh;
     display: grid;
     grid-template-columns: 76.8rem 1fr;
 }
 .client-account__right {
-    position: relative;
-    width: 100%;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: calc(100% - 76.8rem);
     height: 100%;
     background: url(/client/images/client_account_bg.png) no-repeat center/cover;
     display: flex;
@@ -25,6 +28,10 @@
     background: rgba(0,0,0, 0.2);
 }
 .client-account__text-box {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
     color: var(--whiteColor);
 }
@@ -41,6 +48,11 @@
     position: relative;
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    background: var(--whiteColor);
 }
 .client-account__copyright {
     position: absolute;
@@ -50,10 +62,10 @@
     text-align: center;
 }
 .client-account__form-box {
-    position: absolute;
+    /* position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
     padding: 6rem 7rem;
 }
 .client-account__logo {
@@ -67,7 +79,7 @@
     text-align: center;
 }
 .client-account__form {
-    padding-top: 4rem;
+    padding: 4rem 0;
 }
 .account__input-wrap {
     display: grid;
@@ -102,4 +114,30 @@
 }
 .account__links > li > a {
     font-size: var(--font-size-14);
+}
+.account__input-btn {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 24rem 1fr;
+}
+.account__label-box {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+.account__input-btn input {
+    width: 24rem;
+}
+.account__input-btn button {
+    background: var(--blue-500);
+    color: var(--whiteColor);
+}
+.account-essential {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--blue-500);
+    line-height: 1;
 }
