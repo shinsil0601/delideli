@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AdminController {
 
     private static final String ADMIN_ID = "admin";
-    private static final String ADMIN_PW = "123";
+    private static final String ADMIN_PW = "1234";
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -36,14 +36,14 @@ public class AdminController {
 
     // 로그인 처리
     @PostMapping("/login")
-    public String login(@RequestParam("username") String username,
-                        @RequestParam("password") String password,
+    public String login(@RequestParam("userId") String userId,
+                        @RequestParam("userPw") String userPw,
                         HttpSession session,
                         HttpServletResponse response,
                         Model model) {
-        if (ADMIN_ID.equals(username) && ADMIN_PW.equals(password)) {
+        if (ADMIN_ID.equals(userId) && ADMIN_PW.equals(userPw)) {
             // 인증 성공 시 JWT 토큰 생성
-            String token = jwtTokenProvider.generateToken(username, "ROLE_ADMIN", 604800000L);
+            String token = jwtTokenProvider.generateToken(userId, "ROLE_ADMIN", 604800000L);
             Cookie cookie = jwtTokenProvider.createCookie(token);
             response.addCookie(cookie);
 

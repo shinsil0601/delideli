@@ -5,6 +5,7 @@ import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Optional;
 
 @Mapper
@@ -47,4 +48,7 @@ public interface UserMapper {
 
     // 사용자 주소를 삭제
     void deleteUserAddress(Long addressKey);
+  
+    //사용자 포인트충전
+    void chargeUserPoint(Map<String, Integer> map);
 }

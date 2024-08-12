@@ -25,7 +25,10 @@
                     <!-- 사용자프로필 -->
                     <li>
                         <a href="/user/myPage" class="header__profile">
-                            <img src="/user/images/profile-default.png" alt="사용자프로필">
+                            <!-- 프로필 X : default Img -->
+                            <img src="/user/images/profile-default.png" alt="사용자프로필" th:if="${user.userProfile == ''}">
+                            <!-- 프로필 O : userProfile Img -->
+                            <img th:src="${user.userProfile}" alt="사용자프로필" th:if="${user.userProfile !=  ''}">
                         </a>
                     </li>
                     <!-- 장바구니 -->
@@ -43,7 +46,7 @@
                     <!-- 로그아웃 -->
                     <li>
                         <a href="/user/logout">
-                            로그아웃
+                            <i class="fa-solid fa-right-from-bracket"></i>
                         </a>
                     </li>
                 </ul>
