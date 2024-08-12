@@ -1,3 +1,46 @@
+/* Form Style */
+input {
+    border: 1px solid var(--gray-200);
+    padding: 1.6rem 0.8rem;
+    border-radius: 0.8rem;
+    line-height: 1;
+}
+input:focus {
+    outline-color: var(--violet-600);
+}
+button {
+    border: none;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    font-weight: 700;
+}
+button:disabled {
+    background: var(--gray-400);
+    color: var(--gray-900);
+    cursor: default;
+}
+button:disabled:hover {
+    background: var(--gray-400);
+    color: var(--gray-900);
+    cursor: default;
+}
+.admin-btn--violet {
+    background: var(--violet-700);
+    color: var(--whiteColor);
+    transition: .3s;
+}
+.admin-btn--violet:hover {
+    background: var(--violet-500);
+}
+.validation-msg {
+    font-size: var(--font-size-12);
+    font-weight: 500;
+    color: var(--failedColor);
+}
+.validation-msg--account {
+    text-align: center;
+}
+
 .admin-wrap {
     position: relative;
     width: 100%;
