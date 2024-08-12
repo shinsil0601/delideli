@@ -120,17 +120,17 @@
     gap: 2rem;
     grid-template-columns: 24rem 1fr;
 }
-.account__label-box {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-}
 .account__input-btn input {
     width: 24rem;
 }
 .account__input-btn button {
     background: var(--blue-500);
     color: var(--whiteColor);
+}
+.account__label-box {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
 }
 .account-essential {
     display: flex;
