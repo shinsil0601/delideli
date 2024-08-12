@@ -5,6 +5,8 @@ import kr.co.jhta.app.delideli.user.account.domain.UserAccount;
 import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
 import kr.co.jhta.app.delideli.user.dto.UserDTO;
 import kr.co.jhta.app.delideli.user.account.mapper.UserMapper;
+import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
+import kr.co.jhta.app.delideli.user.store.mapper.StoreMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,8 @@ public class UserServiceImpl implements UserService {
     private final EmailService emailService;
     @Autowired
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private final StoreMapper storeMapper;
 
     // 회원가입
     @Override
@@ -125,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
     // 주소 목록
     @Override
-    public ArrayList<UserAddress> userAddressList(Long userKey) {
+    public ArrayList<UserAddress> userAddressList(int userKey) {
         return userMapper.selectUserAddressList(userKey);
     }
 
@@ -143,7 +147,7 @@ public class UserServiceImpl implements UserService {
 
     // 주소 추가
     @Override
-    public void addAddress(Long userKey, String newAddress, String newAddrDetail, String newZipcode) {
+    public void addAddress(int userKey, String newAddress, String newAddrDetail, String newZipcode) {
         UserAddress address = new UserAddress();
         address.setUserKey(userKey);
         address.setAddress(newAddress);
@@ -155,7 +159,7 @@ public class UserServiceImpl implements UserService {
 
     // 주소 수정
     @Override
-    public void modifyAddress(Long addressKey, String newAddress, String newAddrDetail, String newZipcode) {
+    public void modifyAddress(int addressKey, String newAddress, String newAddrDetail, String newZipcode) {
         UserAddress address = new UserAddress();
         address.setUserAddressKey(addressKey);
         address.setAddress(newAddress);
@@ -166,15 +170,20 @@ public class UserServiceImpl implements UserService {
 
     // 대표 주소 변경
     @Override
-    public void setDefaultAddress(Long userKey, Long addressKey) {
+    public void setDefaultAddress(int userKey, int addressKey) {
         userMapper.resetDefaultAddress(userKey);
         userMapper.setDefaultAddress(addressKey);
     }
 
     // 주소 삭제
     @Override
-    public void deleteAddress(Long addressKey) {
+    public void deleteAddress(int addressKey) {
         userMapper.deleteUserAddress(addressKey);
+    }
+
+    @Override
+    public ArrayList<StoreInfo> getLikedStores(int userKey) {
+        return storeMapper.getLikedStores(userKey);
     }
 
     // 프로필 이미지 저장

@@ -25,12 +25,13 @@
                     <!-- 사용자프로필 -->
                     <li>
                         <a href="/user/myPage" class="header__profile">
-                            <img src="/user/images/profile-default.png" alt="사용자프로필">
+                            <img src="/user/images/profile-default.png" alt="사용자프로필" th:if="${user.userProfile == ''}">
+                            <img th:src="${user.userProfile}" alt="사용자프로필" th:if="${user.userProfile !=  ''}">
                         </a>
                     </li>
                     <!-- 장바구니 -->
                     <li>
-                        <a href="#none">
+                        <a href="/user/myCart">
                             <i class="fa-solid fa-cart-shopping"></i>
                         </a>
                     </li>

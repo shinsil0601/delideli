@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 찜 목록</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <a href="/user/myAddress">주소관리</a><br>
+            <a href="/user/checkAccount">내 정보 수정</a><br>
+            <a href="/user/updatePw">비밀번호 변경</a><br>
+            <a href="/user/myOrder">주문내역</a><br>
+            <a href="/user/myReview">내 리뷰관리</a><br>
+            <a href="/user/myLike">찜목록</a><br>
+            <a href="/user/myCart">장바구니</a><br>
+            <a href="/user/myAsk">내 문의확인</a><br>
+            <a href="/user/withdrawal">회원탈퇴</a>
+            <br><br><br>
+            <div class="store-list">
+                <div th:each="store : ${storeList}">
+                    <div class="store-item">
+                        <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}">
+                            <img th:src="${store.storeProfileImg}" alt="가게 이미지">
+                            <p th:text="${store.storeName}"></p>
+                            <p th:text="'평점: ' + ${store.averageRating} + '⭐'"></p>
+                            <p th:text="'최소주문금액: ' + ${store.minOrderAmount} + '원'"></p>
+                            <p th:text="'배달비: ' + ${store.deliveryAmount1} + '원'"></p>
+                        </a>
+                    </div>
+                    <br><br>
+                </div>
+            </div>
+
+            <!-- 페이지네이션 -->
+            <div class="pagination">
+                <ul>
+                    <li th:if="${currentPage > 1}">
+                        <a th:href="@{'/user/myLike?page=' + (${currentPage} - 1)}">이전</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(1, totalPages)}">
+                        <a th:href="@{'/user/myLike?page=' + ${i}}"
+                           th:text="${i}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
+                    </li>
+                    <li th:if="${currentPage < totalPages}">
+                        <a th:href="@{'/user/myLike?page=' + (${currentPage} + 1)}">다음</a>
+                    </li>
+                </ul>
+            </div>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

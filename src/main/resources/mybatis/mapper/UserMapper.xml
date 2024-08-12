@@ -94,7 +94,7 @@
     </update>
 
     <!-- 사용자 키로 주소 목록을 조회 -->
-    <select id="selectUserAddressList" parameterType="Long" resultMap="UserAddressResultMap">
+    <select id="selectUserAddressList" parameterType="int" resultMap="UserAddressResultMap">
         SELECT * FROM user_address WHERE user_key = #{userKey}
     </select>
 
@@ -109,21 +109,21 @@
     </update>
 
     <!-- 기본 주소를 초기화 -->
-    <update id="resetDefaultAddress" parameterType="long">
+    <update id="resetDefaultAddress" parameterType="int">
         UPDATE user_address
         SET default_address = false
         WHERE user_key = #{userKey}
     </update>
 
     <!-- 기본 주소를 설정 -->
-    <update id="setDefaultAddress" parameterType="long">
+    <update id="setDefaultAddress" parameterType="int">
         UPDATE user_address
         SET default_address = true
         WHERE user_address_key = #{addressKey}
     </update>
 
     <!-- 사용자 주소를 삭제 -->
-    <delete id="deleteUserAddress" parameterType="long">
+    <delete id="deleteUserAddress" parameterType="int">
         DELETE FROM user_address
         WHERE user_address_key = #{addressKey}
     </delete>
