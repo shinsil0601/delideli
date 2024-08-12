@@ -216,6 +216,6 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
 
-        return "../user/images/uploads/" + uniqueFilename;
+        return "/user/images/uploads/" + uniqueFilename;
     }
 }
