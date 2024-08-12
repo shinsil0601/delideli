@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace의 명이 DAO의 패키지명과 일치해야함-->
+<mapper namespace="kr.co.jhta.app.delideli.user.board.repository.UserRepository">
+    <!-- 공지사항 전체 목록 -->
+    <select id="getAll" resultType="BoardDTO" parameterType="hashmap">
+        SELECT board_key as boardKey, board_type as boardType, board_status as boardStatus, board_progress_status as boardProgressStatus, board_title as boardTitle, board_write as boardWrite,
+            board_contents as boardContents, board_thumbnail as boardThumbnail, board_comment as boardComment, board_comment_status as boardCommentStatus, board_start_date as boardStartDate,
+            board_end_date as boardEndDate, board_regdate as boardRegdate, board_comment_date as boardCommentDate, board_update as boardUpdate,
+            file_attach1 as fileAttach1, file_attach2 as fileAttach2, file_attach3 as fileAttach3, file_attach4 as fileAttach4, board_hits as boardHits
+        FROM board
+        WHERE board_type = "공지"
+        ORDER BY board_key DESC
+        LIMIT #{endNo} OFFSET #{startNo}
+    </select>
+    
+    <!--  공지사항 검색  -->
+    <select id="getAllKeyword" resultType="BoardDTO" parameterType="hashmap">
+        SELECT board_key as boardKey, board_type as boardType, board_status as boardStatus, board_progress_status as boardProgressStatus, board_title as boardTitle, board_write as boardWrite,
+        board_contents as boardContents, board_thumbnail as boardThumbnail, board_comment as boardComment, board_comment_status as boardCommentStatus, board_start_date as boardStartDate,
+        board_end_date as boardEndDate, board_regdate as boardRegdate, board_comment_date as boardCommentDate, board_update as boardUpdate,
+        file_attach1 as fileAttach1, file_attach2 as fileAttach2, file_attach3 as fileAttach3, file_attach4 as fileAttach4, board_hits as boardHits
+        FROM board
+        WHERE board_type = "공지" AND
+        board_title LIKE CONCAT('%', #{keyword}, '%')
+        OR board_contents LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY board_key DESC
+        LIMIT #{endNo} OFFSET #{startNo}
+    </select>
+
+    <!--공지사항 총개시물수-->
+    <select id="getTotalNotice" resultType="int">
+        SELECT COUNT(*) cnt
+        FROM board
+        WHERE board_type = "공지"
+    </select>
+
+    <!--공지사항 검색 총게시글수-->
+    <select id="getTotalKeyword" resultType="int">
+        SELECT COUNT(*) cnt
+        FROM board
+        WHERE board_title LIKE CONCAT('%', #{keyword}, '%')
+        OR board_contents LIKE CONCAT('%', #{keyword}, '%')
+        AND board_type = "공지"
+    </select>
+
+    <!--  공지사항 상세  -->
+    <select id="getOneNotice" resultType="BoardDTO" parameterType="int">
+        SELECT board_key as boardKey, board_type as boardType, board_status as boardStatus, board_progress_status as boardProgressStatus, board_title as boardTitle, board_write as boardWrite,
+        board_contents as boardContents, board_thumbnail as boardThumbnail, board_comment as boardComment, board_comment_status as boardCommentStatus, board_start_date as boardStartDate,
+        board_end_date as boardEndDate, board_regdate as boardRegdate, board_comment_date as boardCommentDate, board_update as boardUpdate,
+        file_attach1 as fileAttach1, file_attach2 as fileAttach2, file_attach3 as fileAttach3, file_attach4 as fileAttach4, board_hits as boardHits
+        FROM board
+        WHERE board_key = #{boardKey}
+    </select>
+
+    <!-- 이벤트 전체리스트 -->
+    <select id="getEventList" resultType="BoardDTO" parameterType="hashmap">
+        SELECT board_key as boardKey, board_type as boardType, board_status as boardStatus, board_progress_status as boardProgressStatus, board_title as boardTitle, board_write as boardWrite,
+        board_contents as boardContents, board_thumbnail as boardThumbnail, board_comment as boardComment, board_comment_status as boardCommentStatus, board_start_date as boardStartDate,
+        board_end_date as boardEndDate, board_regdate as boardRegdate, board_comment_date as boardCommentDate, board_update as boardUpdate,
+        file_attach1 as fileAttach1, file_attach2 as fileAttach2, file_attach3 as fileAttach3, file_attach4 as fileAttach4, board_hits as boardHits
+        FROM board
+        WHERE board_type = "이벤트"
+        ORDER BY board_key DESC
+        LIMIT #{endNo} OFFSET #{startNo}
+    </select>
+
+    <!-- 이벤트 상세 -->
+    <select id="readOneEvent" resultType="BoardDTO" parameterType="int">
+        SELECT board_key as boardKey, board_type as boardType, board_status as boardStatus, board_progress_status as boardProgressStatus, board_title as boardTitle, board_write as boardWrite,
+        board_contents as boardContents, board_thumbnail as boardThumbnail, board_comment as boardComment, board_comment_status as boardCommentStatus, board_start_date as boardStartDate,
+        board_end_date as boardEndDate, board_regdate as boardRegdate, board_comment_date as boardCommentDate, board_update as boardUpdate,
+        file_attach1 as fileAttach1, file_attach2 as fileAttach2, file_attach3 as fileAttach3, file_attach4 as fileAttach4, board_hits as boardHits
+        FROM board
+        WHERE board_key = #{boardKey}
+    </select>
+
+    <!--이벤트 댓글 삽입-->
+    <insert id="addComment" parameterType="CommentDTO">
+        INSERT INTO comment (comment_contents, board_key, user_key)
+        VALUES(#{commentContents}, #{boardKey}, #{userKey})
+    </insert>
+
+    <!--이벤트 댓글 조회-->
+    <select id="getCommentAll" resultType="CommentDTO" parameterType="int">
+        SELECT c.comment_key as commentKey, c.comment_parent as commentParent, c.comment_contents as commentContents, c.comment_regdate as commentRegdate, c.comment_update as commentUpdate,
+        c.comment_deldate as commentDeldate, c.board_key as boardKey, c.user_key as userKey, u.user_nickname as userNickname
+        FROM comment c
+        JOIN user_account u ON c.user_key = u.user_key
+        WHERE c.board_key = #{boardKey}
+    </select>
+
+    <!--이벤트 총개시물수-->
+    <select id="getTotalEvent" resultType="int">
+        SELECT COUNT(*) cnt
+        FROM board
+        WHERE board_type = "이벤트"
+    </select>
+
+    <!--이벤트 검색 총게시글수-->
+   <select id="getTotalKeywordEvent" resultType="int">
+        SELECT COUNT(*) cnt
+        FROM board
+        WHERE board_title LIKE CONCAT('%', #{keyword}, '%')
+        OR board_contents LIKE CONCAT('%', #{keyword}, '%')
+        AND board_type = "이벤트"
+    </select>
+
+    <!--  이벤트 검색  -->
+    <select id="getAllKeywordEvent" resultType="BoardDTO" parameterType="hashmap">
+        SELECT board_key as boardKey, board_type as boardType, board_status as boardStatus, board_progress_status as boardProgressStatus, board_title as boardTitle, board_write as boardWrite,
+        board_contents as boardContents, board_thumbnail as boardThumbnail, board_comment as boardComment, board_comment_status as boardCommentStatus, board_start_date as boardStartDate,
+        board_end_date as boardEndDate, board_regdate as boardRegdate, board_comment_date as boardCommentDate, board_update as boardUpdate,
+        file_attach1 as fileAttach1, file_attach2 as fileAttach2, file_attach3 as fileAttach3, file_attach4 as fileAttach4, board_hits as boardHits
+        FROM board
+        WHERE board_type = "이벤트" AND
+        board_title LIKE CONCAT('%', #{keyword}, '%')
+        OR board_contents LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY board_key DESC
+        LIMIT #{endNo} OFFSET #{startNo}
+    </select>
+
+    <!-- 이벤트 댓글 수정 -->
+    <update id="updateComment" parameterType="CommentDTO">
+        UPDATE comment
+        SET comment_contents = #{commentContents}, comment_update = NOW()
+        WHERE comment_key = #{commentKey}
+    </update>
+
+    <!-- 이벤트 댓글 삭제 -->
+    <delete id="deleteComment" parameterType="int">
+        DELETE FROM comment WHERE comment_key = #{commentKey}
+    </delete>
+
+    <!-- 이벤트 댓글 답글삽입 -->
+    <insert id="insertReplyComment" parameterType="CommentDTO">
+        INSERT INTO comment (comment_contents, comment_parent, comment_regdate, board_key, user_key)
+        VALUES (#{commentContents}, #{commentParent}, NOW(), #{boardKey}, #{userKey})
+    </insert>
+</mapper>

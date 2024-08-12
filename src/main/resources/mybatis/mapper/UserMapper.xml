@@ -128,4 +128,11 @@
         WHERE user_address_key = #{addressKey}
     </delete>
 
+    <!-- 사용자 포인트 충전 -->
+    <update id="chargeUserPoint" parameterType="map">
+        UPDATE user_account
+        SET user_point = user_point + #{amount}
+        WHERE user_key = #{userKey}
+    </update>
+  
 </mapper>

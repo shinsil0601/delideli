@@ -1,0 +1,9 @@
+diff a/src/main/java/kr/co/jhta/app/delideli/user/category/controller/UserCategoryController.java b/src/main/java/kr/co/jhta/app/delideli/user/category/controller/UserCategoryController.java	(rejected hunks)
+@@ -27,7 +27,6 @@
+     public String categoryMain(Model model) {
+         List<CategoryDTO> list = userCategoryService.getCategoryAllList();
+         model.addAttribute("list", list);
+-        return "userCategory";
+         return "user/category/userCategory";
+     }
+ 
