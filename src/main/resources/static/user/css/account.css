@@ -1,0 +1,159 @@
+.user-account__wrap{
+    position: relative;
+    padding: 6rem 0 12rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.user-account__form-box {
+    position: relative;
+    padding: 6rem 4rem;
+    border-radius: 2rem;
+    box-shadow: var(--box-shadow-100);
+    background: var(--whiteColor);
+}
+.user-account__form-top {
+    text-align: center;
+}
+.user-account__label {
+    padding-top: 2rem;
+    font-size: var(--font-size-32);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.user-account__form {
+    padding-top: 4rem;
+}
+.account__input-wrap {
+    display: grid;
+    gap: 2rem;
+}
+.account__input-box {
+    display: grid;
+    gap: 0.8rem;
+}
+.account__input-box label {
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.account__input-box input {
+    width: 65rem;
+}
+.account__btn-wrap {
+    padding-top: 4rem;
+}
+.account__btn-wrap button {
+    width: 65rem;
+    padding: 1.6rem;
+}
+.account__btn-wrap--a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+.account__btn-wrap--a button {
+    width: 14rem;
+}
+.account__user-btn--a {
+    background: var(--gray-400);
+    color: var(--whiteColor);
+}
+.account__user-btn--b {
+    background: var(--subColor);
+    color: var(--whiteColor);
+}
+.account__sns-wrap {
+    padding-top: 4rem;
+}
+.account__sns-title {
+    text-align: center;
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.account__sns-list {
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+.account__links {
+    padding-top: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.4rem;
+}
+.account__links > li > a {
+    font-size: var(--font-size-14);
+}
+.account__input-btn {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 49rem 1fr;
+}
+.account__input-btn input {
+    width: 49rem;
+}
+.account__input-btn button {
+    width: 14rem;
+    background: var(--mainColor);
+    color: var(--whiteColor);
+}
+.account__label-box {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+.account-essential {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--teal-500);
+    line-height: 1;
+}
+.account__profile-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1.2rem 0;
+}
+.account__profile-img span {
+    display: block;
+    width: 12rem;
+    height: 12rem;
+    background: no-repeat center/cover;
+    overflow: hidden;
+    border-radius: 100%;
+}
+.account-guide__msg {
+    font-size: var(--font-size-12);
+    color: var(--gray-400);
+}
+.regUpload-file-btn {
+    border-radius: 0.8rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: .3s;
+    width: 14rem;
+    background: var(--mainColor);
+    color: var(--whiteColor) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.regUpload-file-btn:hover {
+    opacity: 0.8;
+}
+.regUpload-file--hidden {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}

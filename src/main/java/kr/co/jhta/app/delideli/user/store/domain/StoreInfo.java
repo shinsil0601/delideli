@@ -30,4 +30,14 @@ public class StoreInfo {
     private boolean storeDelete;
     private LocalDateTime storeRegdate;
     private LocalDateTime storeUpdate;
+
+    private Integer deliveryTime; // 배달 시간 (분 단위)
+    private Double averageRating; // 평균 리뷰 점수
+    private int reviewCount;      // 리뷰 개수
+    private Menu firstMenu;       // 첫 번째 메뉴 정보
+
+    // 추가된 필드들
+    private String clientName;       // 대표자명
+    private String clientPhone;           // 사업장 전화번호
+    private String clientEID;  // 사업자 등록번호
 }

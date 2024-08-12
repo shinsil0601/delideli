@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class UserAddress {
-    private Long userAddressKey;
-    private Long userKey;
+    private int userAddressKey;
+    private int userKey;
     private String address;
     private String zipcode;
     private String addrDetail;

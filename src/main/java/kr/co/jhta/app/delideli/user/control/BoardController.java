@@ -36,7 +36,11 @@ public class BoardController {
     @GetMapping("/notice")
     public String notice(Model model,
                          @RequestParam(name = "keyword", defaultValue = "none") String keyword,
-                         @RequestParam(name = "page", defaultValue = "1") int page) {
+                         @RequestParam(name = "page", defaultValue = "1") int page, @AuthenticationPrincipal User user) {
+        if (user != null) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+        }
         int totalNumber = 0;
         int recordPerPage = 5;
         Map<String, Object> map;
@@ -65,7 +69,11 @@ public class BoardController {
 
     // 공지사항 상세보기
     @GetMapping("/detail/{num}")
-    public String detail(@PathVariable int num, Model model) {
+    public String detail(@PathVariable int num, @AuthenticationPrincipal User user, Model model) {
+        if (user != null) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+        }
         Board board = boardService.readOneNotice(num);
         model.addAttribute("board", board);
         return "/user/board/noticeDetail";
@@ -74,7 +82,11 @@ public class BoardController {
     // 이벤트 목록
     @GetMapping("/event")
     public String event(Model model, @RequestParam(name = "keyword", defaultValue = "none") String keyword,
-                        @RequestParam(name = "page", defaultValue = "1") int page) {
+                        @RequestParam(name = "page", defaultValue = "1") int page,@AuthenticationPrincipal User user) {
+        if (user != null) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+        }
         int totalNumber = 0;
         int recordPerPage = 5;
         Map<String, Object> map;
@@ -113,7 +125,11 @@ public class BoardController {
 
     // 댓글 삽입
     @PostMapping("/eventDetail/comment/write")
-    public String insertComment(@ModelAttribute Comment comment) {
+    public String insertComment(@ModelAttribute Comment comment, @AuthenticationPrincipal User user, Model model) {
+        if (user != null) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+        }
         commentService.getCommentsByBoardKey(comment);
         return "redirect:/user/eventDetail/" + comment.getBoardKey();
     }
@@ -121,7 +137,11 @@ public class BoardController {
     // 댓글 조회 ajax 처리
     @GetMapping("/getCommentList")
     @ResponseBody
-    public List<Comment> getCommentList(@RequestParam("boardKey") int boardKey) {
+    public List<Comment> getCommentList(@RequestParam("boardKey") int boardKey, @AuthenticationPrincipal User user, Model model) {
+        if (user != null) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+        }
         return commentService.getCommentAll(boardKey);
     }
 

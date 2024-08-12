@@ -1,4 +1,7 @@
 $(document).ready(function(){
+    // AOS
+    AOS.init();
+
     /* aside drop-down */
     $('.aside__nav--depth1 > li').click(
         function() {

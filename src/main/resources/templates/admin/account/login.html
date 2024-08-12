@@ -35,6 +35,7 @@
                             <label for="userPw">비밀번호</label>
                             <input type="password" id="userPw" name="userPw">
                         </div>
+                        <!-- 유효성 메시지 -->
                         <span th:if="${errorMessage}" th:text="${errorMessage}" class="validation-msg validation-msg--account"></span>
                     </div>
                     <div class="account__btn-wrap">
