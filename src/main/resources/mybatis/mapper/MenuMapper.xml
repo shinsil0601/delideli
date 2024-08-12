@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.user.store.mapper.MenuMapper">
+
+    <!-- 메뉴 그룹 정보를 매핑할 resultMap -->
+    <resultMap id="MenuGroupResultMap" type="kr.co.jhta.app.delideli.user.store.domain.MenuGroup">
+        <id property="menuGroupKey" column="menu_group_key"/>
+        <result property="menuGroupName" column="menu_group_name"/>
+        <result property="menuGroupRegdate" column="menu_group_regdate"/>
+        <result property="menuGroupUpdate" column="menu_group_update"/>
+    </resultMap>
+
+    <!-- 옵션 정보를 매핑할 resultMap -->
+    <resultMap id="OptionResultMap" type="kr.co.jhta.app.delideli.user.store.domain.Option">
+        <id property="optionKey" column="option_key"/>
+        <result property="optionGroupKey" column="option_group_key"/>
+        <result property="optionName" column="option_name"/>
+        <result property="optionPrice" column="option_price"/>
+        <result property="optionStatus" column="option_status"/>
+        <result property="optionRegdate" column="option_regdate"/>
+        <result property="optionUpdate" column="option_update"/>
+    </resultMap>
+
+    <!-- 옵션 그룹 정보를 매핑할 resultMap, Option과 연결 -->
+    <resultMap id="OptionGroupResultMap" type="kr.co.jhta.app.delideli.user.store.domain.OptionGroup">
+        <id property="optionGroupKey" column="option_group_key"/>
+        <result property="menuKey" column="menu_key"/>
+        <result property="optionGroupName" column="option_group_name"/>
+        <result property="required" column="required"/>
+        <result property="maxSelectOption" column="max_select_option"/>
+        <result property="optionGroupRegdate" column="option_group_regdate"/>
+        <result property="optionGroupUpdate" column="option_group_update"/>
+        <collection property="options" ofType="kr.co.jhta.app.delideli.user.store.domain.Option" resultMap="OptionResultMap" column="option_group_key" javaType="ArrayList"/>
+    </resultMap>
+
+    <!-- 메뉴 정보를 매핑할 resultMap, MenuGroup과 연결 -->
+    <resultMap id="MenuResultMap" type="kr.co.jhta.app.delideli.user.store.domain.Menu">
+        <id property="menuKey" column="menu_key"/>
+        <result property="storeInfoKey" column="storeInfo_key"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="menuPrice" column="menu_price"/>
+        <result property="menuImg" column="menu_img"/>
+        <result property="menuStatus" column="menu_status"/>
+        <result property="menuRegdate" column="menu_regdate"/>
+        <result property="menuUpdate" column="menu_update"/>
+        <association property="menuGroup" column="menu_group_key" javaType="kr.co.jhta.app.delideli.user.store.domain.MenuGroup" resultMap="MenuGroupResultMap"/>
+    </resultMap>
+
+    <!-- 특정 가게의 첫 번째 메뉴를 가져옴 -->
+    <select id="getFirstMenuForStore" resultMap="MenuResultMap" parameterType="int">
+        SELECT *
+        FROM menu
+        WHERE storeInfo_key = #{storeInfoKey}
+        ORDER BY menu_regdate ASC
+            LIMIT 1
+    </select>
+
+    <!-- 가게 메뉴들을 가져옴 -->
+    <select id="getMenuListByStore" parameterType="int" resultMap="MenuResultMap">
+        SELECT m.*, mg.menu_group_name, mg.menu_group_regdate, mg.menu_group_update
+        FROM menu m
+                 LEFT JOIN menu_group mg ON m.menu_group_key = mg.menu_group_key
+        WHERE m.storeInfo_key = #{storeInfoKey}
+    </select>
+
+    <!-- 메뉴 상세 정보를 가져옴 -->
+    <select id="getMenuById" parameterType="int" resultMap="MenuResultMap">
+        SELECT *
+        FROM menu
+        WHERE menu_key = #{menuKey}
+    </select>
+
+    <!-- 특정 메뉴의 옵션 그룹 및 옵션 정보를 가져옴 -->
+    <select id="getOptionGroupsByMenuId" parameterType="int" resultMap="OptionGroupResultMap">
+        SELECT og.*, o.option_key, o.option_name, o.option_price, o.option_status, o.option_regdate, o.option_update
+        FROM option_group og
+                 LEFT JOIN `option` o ON og.option_group_key = o.option_group_key
+        WHERE og.menu_key = #{menuKey}
+    </select>
+
+</mapper>

@@ -15,33 +15,33 @@
 
     </head>
     <body>
-        <div class="admin-wrap">
-            <!-- Start:Aside -->
-            <th:block th:include="inc/admin/aside :: adminAside"></th:block>
-            <!-- End:Aside -->
-
-            <!-- Start:Main -->
-            <main id="mainpage__wrap">
-                <!-- Start:Header -->
-                <th:block th:include="inc/admin/header :: adminHeader"></th:block>
-                <!-- End:Header -->
-
-                <!-- Start:Contents -->
-                <section class="contents">
-                    <form action="/admin/login" method="post">
-                        <label for="username">아이디:</label>
-                        <input type="text" id="username" name="username" required><br>
-
-                        <label for="password">비밀번호:</label>
-                        <input type="password" id="password" name="password" required><br>
-
-                        <button type="submit">로그인</button>
-                    </form>
-                    <div style="color: red;" th:if="${errorMessage}" th:text="${errorMessage}"></div>
-                </section>
-                <!-- End:Contents -->
-            </main>
-            <!-- End:Main -->
+        <div class="admin-account__wrap">
+            <div class="admin-account__form-box">
+                <div class="admin-account__top">
+                    <h1 class="admin-account__logo">
+                        <img src="/admin/images/logo-black.png" alt="모자란남매들검정로고">
+                    </h1>
+                    <p class="admin-account__title">관리자 로그인</p>
+                </div>
+                <form action="/admin/login" method="post">
+                    <div class="account--input-wrap">
+                        <!-- 아이디 -->
+                        <div class="account__input-box">
+                            <label for="userId">아이디</label>
+                            <input type="text" id="userId" name="userId">
+                        </div>
+                        <!-- 비밀번호 -->
+                        <div class="account__input-box">
+                            <label for="userPw">비밀번호</label>
+                            <input type="password" id="userPw" name="userPw">
+                        </div>
+                        <span th:if="${errorMessage}" th:text="${errorMessage}" class="validation-msg validation-msg--account"></span>
+                    </div>
+                    <div class="account__btn-wrap">
+                        <button type="submit" class="admin-btn--violet">로그인</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </body>
 </html>

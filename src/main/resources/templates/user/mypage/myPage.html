@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사용자 - 마이페이지</title>
-    <!-- Include:공통 CSS -->
-    <th:block th:include="inc/common/common-css :: commonCss"></th:block>
-    <!-- Include:User CSS -->
-    <th:block th:include="inc/user/user-css :: userCss"></th:block>
-    <!-- Include:공통 JS -->
-    <th:block th:include="inc/common/common-js :: commonJs"></th:block>
-    <!-- Include:User JS -->
-    <th:block th:include="inc/user/user-js :: userJs"></th:block>
-</head>
-<body>
-<!-- Start:Header -->
-<th:block th:include="inc/user/header :: userHeader"></th:block>
-<!-- End:Header -->
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 마이페이지</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
 
-<!-- Start:Main -->
-<main id="mainpage__wrap">
-    <p>사용자 프로필: <img th:src="@{${user.userProfile}}" alt="User Profile"></p>
-    <p><span th:text="${user.userNickname}"></span> 님</p>
-    <p>회원 등급: <span th:text="${user.userRank}"></span> 등급</p>
-    <p>My Point: <span th:text="${user.userPoint}"></span> 원</p>
-    <a href="/user/charge">충전하기</a><br>
-    <a href="/user/myCoupon">내 쿠폰확인</a><br>
-    <a href="/user/myAddress">주소관리</a><br>
-    <a href="/user/checkAccount">내 정보 수정</a><br>
-    <a href="/user/updatePw">비밀번호 변경</a><br>
-    <a href="/user/myOrder">주문내역</a><br>
-    <a href="/user/myReview">내 리뷰관리</a><br>
-    <a href="/user/myLike">찜목록</a><br>
-    <a href="/user/myCart">장바구니</a><br>
-    <a href="/user/myAsk">내 문의확인</a><br>
-    <a href="/user/withdrawal">회원탈퇴</a><br>
-</main>
-<!-- End:Main -->
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <p>사용자 프로필: <img th:src="@{${user.userProfile}}" alt="User Profile"></p>
+            <p><span th:text="${user.userNickname}"></span> 님</p>
+            <p>회원 등급: <span th:text="${user.userRank}"></span> 등급</p>
+            <p>My Point: <span th:text="${user.userPoint}"></span> 원</p>
+            <a href="/user/charge">충전하기</a><br>
+            <a href="/user/myCoupon">내 쿠폰확인</a><br>
+            <a href="/user/myAddress">주소관리</a><br>
+            <a href="/user/checkAccount">내 정보 수정</a><br>
+            <a href="/user/updatePw">비밀번호 변경</a><br>
+            <a href="/user/myOrder">주문내역</a><br>
+            <a href="/user/myReview">내 리뷰관리</a><br>
+            <a href="/user/myLike">찜목록</a><br>
+            <a href="/user/myCart">장바구니</a><br>
+            <a href="/user/myAsk">내 문의확인</a><br>
+            <a href="/user/withdrawal">회원탈퇴</a><br>
+        </main>
+        <!-- End:Main -->
 
-<!-- Start:Footer -->
-<th:block th:include="inc/user/footer :: userFooter"></th:block>
-<!-- End:Footer -->
-</body>
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
 </html>

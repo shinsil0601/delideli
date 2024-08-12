@@ -9,13 +9,14 @@ public interface BoardService {
     List<Board> getBoardList(int startNo, int endNo);
     //공지사항 검색 목록
     List<Board> getAllKeyword(int startNo, int endNo, String keyword);
+  
     //공지사항 총갯수
     int getTotalNotice();
     //공지사항 검색키워드 총갯수
     int getTotalKeyword(String keyword);
     //공지사항 상세보기
     Board readOneNotice(int num);
-
+  
     //이벤트 목록
     List<Board> getEventList(int startNo, int endNo);
     //이벤트 상세보기

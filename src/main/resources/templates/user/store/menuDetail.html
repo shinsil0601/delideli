@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>메뉴 상세 정보</title>
+    </head>
+    <body>
+        <div id="menuDetailContainer" th:data-is-logged-in="${isLoggedIn}" th:data-menu-key="${menu.menuKey}">
+            <h2 th:text="${menu.menuName}">메뉴 이름</h2>
+            <img th:src="@{${menu.menuImg}}" alt="메뉴 이미지">
+            <p id="basePrice" th:data-price="${menu.menuPrice}" th:text="${menu.menuPrice} + '원'">메뉴 가격</p>
+
+            <!-- 옵션 그룹과 옵션들을 보여주는 부분 -->
+            <div th:if="${optionGroups != null}">
+                <h3>옵션 선택</h3>
+                <div th:each="group : ${optionGroups}">
+                    <p class="option-group-header" th:text="${group.optionGroupName}">옵션 그룹 이름</p>
+                    <div style="display: block;">
+                        <div th:each="option : ${group.options}">
+                            <label>
+                                <input type="checkbox" class="option-checkbox" th:data-price="${option.optionPrice}" th:value="${option.optionKey}">
+                                <span th:text="${option.optionName}">옵션 이름</span>
+                                <span th:text="'+' + ${option.optionPrice} + '원'">옵션 가격</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>수량</h3>
+            <input type="number" id="quantity" name="quantity" value="1" min="1">
+            <p>총 금액: <span id="totalPrice" th:text="${menu.menuPrice} + '원'">0원</span></p>
+
+            <!-- 장바구니에 추가 버튼 -->
+            <button id="addToCartButton">장바구니에 추가</button>
+
+            <script src="/user/js/module/menuDetail.js"></script>
+        </div>
+    </body>
+</html>
