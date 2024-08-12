@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 내 장바구니</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <a href="/user/myAddress">주소관리</a><br>
+            <a href="/user/checkAccount">내 정보 수정</a><br>
+            <a href="/user/updatePw">비밀번호 변경</a><br>
+            <a href="/user/myOrder">주문내역</a><br>
+            <a href="/user/myReview">내 리뷰관리</a><br>
+            <a href="/user/myLike">찜목록</a><br>
+            <a href="/user/myCart">장바구니</a><br>
+            <a href="/user/myAsk">내 문의확인</a><br>
+            <a href="/user/withdrawal">회원탈퇴</a>
+            <br><br><br>
+
+            <div>
+                <h2>장바구니</h2>
+                <!-- 각 가게별로 그룹화된 장바구니 아이템을 출력 -->
+                <div th:each="entry : ${groupedCartItems}">
+                    <h3 th:text="${entry.key.storeName}">가게 이름</h3>
+
+                    <div th:each="cartItem : ${entry.value}">
+                        <div>
+                            <img th:src="@{${cartItem.menu.menuImg}}" alt="메뉴 이미지">
+                            <p th:text="'메뉴: ' + ${cartItem.menu.menuName}">Menu Title</p>
+                            <p th:each="option : ${cartItem.cartOptions}" th:text="'옵션: ' + ${option.optionName}">Option Title</p>
+                            <p th:text="'수량: ' + ${cartItem.quantity}"></p>
+                            <p th:text="'가격: ' + ${cartItem.totalPrice} + '원'">Price</p>
+                            <button th:onclick="'openEditCartItemWindow(' + ${cartItem.cartKey} + '); return false;'" class="edit-button">
+                                수정하기
+                            </button>
+                            <button th:onclick="'deleteCartItem(' + ${cartItem.cartKey} + '); return false;'" class="delete-button">
+                                삭제하기
+                            </button>
+                        </div>
+                        <br><br>
+                    </div>
+                    <a th:href="@{/user/storeDetail/{storeKey}(storeKey=${entry.key.storeInfoKey})}">메뉴 추가하러가기</a>
+                    <button>결제하기</button>
+                    <br><br>
+                    <h3>======================================</h3>
+                </div>
+            </div>
+
+            <script src="/user/js/module/myCart.js"></script>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

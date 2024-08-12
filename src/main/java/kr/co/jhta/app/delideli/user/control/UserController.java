@@ -8,12 +8,21 @@ import kr.co.jhta.app.delideli.common.service.EmailService;
 import kr.co.jhta.app.delideli.common.service.EmailVerificationService;
 import kr.co.jhta.app.delideli.user.account.domain.UserAccount;
 import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
+import kr.co.jhta.app.delideli.user.cart.domain.Cart;
+import kr.co.jhta.app.delideli.user.cart.domain.CartOptions;
+import kr.co.jhta.app.delideli.user.cart.service.CartService;
+import kr.co.jhta.app.delideli.user.dto.CartDTO;
 import kr.co.jhta.app.delideli.user.dto.UserDTO;
 import kr.co.jhta.app.delideli.user.account.exception.DuplicateUserIdException;
 import kr.co.jhta.app.delideli.user.account.service.UserService;
+import kr.co.jhta.app.delideli.user.store.domain.Menu;
+import kr.co.jhta.app.delideli.user.store.domain.OptionGroup;
+import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
+import kr.co.jhta.app.delideli.user.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +30,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -30,10 +38,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -52,6 +58,10 @@ public class UserController {
     private final JwtTokenProvider jwtTokenProvider;
     @Autowired
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private final StoreService storeService;
+    @Autowired
+    private final CartService cartService;
 
 
     @GetMapping("/home")
@@ -60,6 +70,7 @@ public class UserController {
             log.info("User is authenticated: {}", user.getUsername());
             UserAccount userAccount = userService.findUserById(user.getUsername());
             model.addAttribute("user", userAccount);
+            log.info("프로필 이미지 : " + userAccount.getUserProfile());
         } else {
             log.info("User is not authenticated");
         }
@@ -282,7 +293,11 @@ public class UserController {
 
     // 내 정보 수정
     @PostMapping("/modifyUser")
-    public String modifyUser(@ModelAttribute UserDTO userDTO, Model model) {
+    public String modifyUser(@ModelAttribute UserDTO userDTO, @AuthenticationPrincipal User user, Model model) {
+        if (user != null) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+        }
         userService.modifyUser(userDTO);
         return "redirect:/user/myPage";
     }
@@ -333,7 +348,7 @@ public class UserController {
     // 주소 수정
     @PostMapping("/modifyAddress")
     @ResponseBody
-    public ResponseEntity<?> modifyAddress(@RequestParam Long addressKey, @RequestParam String newAddress, @RequestParam String newAddrDetail, @RequestParam String newZipcode) {
+    public ResponseEntity<?> modifyAddress(@RequestParam int addressKey, @RequestParam String newAddress, @RequestParam String newAddrDetail, @RequestParam String newZipcode) {
         userService.modifyAddress(addressKey, newAddress, newAddrDetail, newZipcode);
         return ResponseEntity.ok().build();
     }
@@ -341,7 +356,7 @@ public class UserController {
     // 대표 주소 설정
     @PostMapping("/setDefaultAddress")
     @ResponseBody
-    public ResponseEntity<?> setDefaultAddress(@RequestParam Long addressKey, @AuthenticationPrincipal User user) {
+    public ResponseEntity<?> setDefaultAddress(@RequestParam int addressKey, @AuthenticationPrincipal User user) {
         UserAccount userAccount = userService.findUserById(user.getUsername());
         userService.setDefaultAddress(userAccount.getUserKey(), addressKey);
         return ResponseEntity.ok().build();
@@ -350,10 +365,189 @@ public class UserController {
     // 주소 삭제
     @PostMapping("/deleteAddress")
     @ResponseBody
-    public ResponseEntity<?> deleteAddress(@RequestParam Long addressKey) {
+    public ResponseEntity<?> deleteAddress(@RequestParam int addressKey) {
         userService.deleteAddress(addressKey);
         return ResponseEntity.ok().build();
     }
 
+    // 찜 목록 조회
+    @GetMapping("/myLike")
+    public String myLike(@AuthenticationPrincipal User user,
+                         @RequestParam(value = "page", defaultValue = "1") int page,
+                         @RequestParam(value = "pageSize", defaultValue = "12") int pageSize,
+                         Model model) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        int userKey = userAccount.getUserKey();
 
+        // 찜한 가게 목록 가져오기
+        ArrayList<StoreInfo> likedStores = userService.getLikedStores(userKey);
+
+        // 각 가게의 추가 정보 (평점, 리뷰 개수 등) 가져오기
+        for (StoreInfo store : likedStores) {
+            Double averageRating = storeService.getAverageRatingForStore(store.getStoreInfoKey());
+            store.setAverageRating(averageRating != null ? averageRating : 0.0);
+
+            int reviewCount = storeService.getReviewCountForStore(store.getStoreInfoKey());
+            store.setReviewCount(reviewCount);
+        }
+
+        // 페이지네이션 적용
+        int totalStores = likedStores.size();
+        int totalPages = (int) Math.ceil((double) totalStores / pageSize);
+        ArrayList<StoreInfo> storeList = paginateStores(likedStores, page, pageSize);
+
+        // 모델에 데이터 추가
+        model.addAttribute("user", userAccount);
+        model.addAttribute("storeList", storeList);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", page);
+
+        return "user/mypage/myLike";
+    }
+
+    // 장바구니 추가
+    @PostMapping("/addToCart")
+    @ResponseBody
+    public Map<String, Object> addToCart(@RequestBody Map<String, Object> cartRequest,
+                                         @AuthenticationPrincipal User user) {
+        Map<String, Object> response = new HashMap<>();
+        if (user == null) {
+            response.put("success", false);
+            response.put("message", "로그인이 필요합니다.");
+            return response;
+        }
+
+        try {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+
+            // 문자열로 받은 데이터들을 적절한 타입으로 변환
+            int menuKey = Integer.parseInt(cartRequest.get("menuKey").toString());
+            int quantity = Integer.parseInt(cartRequest.get("quantity").toString());
+
+            // ArrayList로 변환
+            ArrayList<Integer> selectedOptions = new ArrayList<>();
+            for (Object option : (ArrayList<?>) cartRequest.get("selectedOptionKeys")) {
+                selectedOptions.add(Integer.parseInt(option.toString()));
+            }
+
+            // 장바구니에 항목 추가
+            cartService.addItemToCart(userAccount.getUserKey(), menuKey, quantity, selectedOptions);
+
+            response.put("success", true);
+        } catch (Exception e) {
+            log.error("장바구니 추가 중 오류 발생", e);
+            response.put("success", false);
+            response.put("message", "오류가 발생했습니다. 다시 시도해 주세요.");
+        }
+
+        return response;
+    }
+
+    // 장바구니 페이지
+    @GetMapping("/myCart")
+    public String myCartPage(@AuthenticationPrincipal User user, Model model) {
+        if (user != null) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+
+            ArrayList<Cart> cartItems = new ArrayList<>(cartService.getCartItemsByUser(userAccount.getUserKey()));
+
+            Map<StoreInfo, ArrayList<Cart>> groupedItems = new HashMap<>();
+
+            for (Cart cartItem : cartItems) {
+                int totalOptionPrice = cartItem.getCartOptions().stream()
+                        .map(option -> Optional.ofNullable(option.getOptionPrice()).orElse(0))
+                        .mapToInt(Integer::intValue)
+                        .sum();
+
+                // 총 가격 계산
+                int totalPrice = (cartItem.getMenu().getMenuPrice() + totalOptionPrice) * cartItem.getQuantity();
+                cartItem.setTotalPrice(totalPrice);
+
+                // 가게 정보에 따라 그룹화
+                StoreInfo storeInfo = cartItem.getStoreInfo();
+                groupedItems.computeIfAbsent(storeInfo, k -> new ArrayList<>()).add(cartItem);
+            }
+
+            model.addAttribute("groupedCartItems", groupedItems);
+        }
+        return "user/mypage/myCart";
+    }
+
+    // 장바구니 아이템 수정 페이지로 이동
+    @GetMapping("/editCartItem/{cartKey}")
+    public String editCartItemPage(@PathVariable("cartKey") int cartKey, Model model) {
+        // 장바구니 아이템 정보 가져오기
+        Cart cartItem = cartService.getCartItemById(cartKey);
+
+        // 해당 메뉴의 정보와 옵션 그룹을 가져오기
+        Menu menu = storeService.getMenuById(cartItem.getMenuKey());
+        ArrayList<OptionGroup> optionGroups = storeService.getOptionGroupsByMenuId(cartItem.getMenuKey());
+
+        // 선택된 옵션 키 가져오기
+        List<Integer> selectedOptionKeys = cartItem.getCartOptions().stream()
+                .map(CartOptions::getOptionKey)
+                .collect(Collectors.toList());
+
+        // 모델에 필요한 데이터 추가
+        model.addAttribute("menu", menu);
+        model.addAttribute("optionGroups", optionGroups);
+        model.addAttribute("selectedOptionKeys", selectedOptionKeys);  // 선택된 옵션 키들
+        model.addAttribute("cartItem", cartItem);
+
+        // 장바구니 아이템 수정 페이지로 이동
+        return "user/mypage/updateCartItem";
+    }
+
+    // 장바구니 아이템 수정 처리
+    @PostMapping("/updateCartItem")
+    public ResponseEntity<Map<String, Object>> updateCartItem(@RequestBody CartDTO cartDTO) {
+        try {
+            System.out.println("Updating cart with cartKey: " + cartDTO.getCartKey());
+
+            cartService.updateCartItem(cartDTO.getCartKey(),
+                    cartDTO.getQuantity(),
+                    cartDTO.getSelectedOptionKeys());
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // 여기서 예외 메시지를 로깅합니다.
+            e.printStackTrace(); // 또는 Logger를 사용할 수도 있습니다.
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", e.getMessage()); // 사용자에게 예외 메시지를 반환하는 대신, 로그에만 남기도록 처리할 수도 있습니다.
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    // 장바구니 아이템 삭제 처리
+    @PostMapping("/deleteCartItem")
+    public ResponseEntity<Map<String, Object>> deleteCartItem(@RequestBody Map<String, Integer> request) {
+        int cartKey = request.get("cartKey");
+
+        try {
+            cartService.deleteCartItem(cartKey);
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    // 페이지네이션 처리 메서드
+    private ArrayList<StoreInfo> paginateStores(ArrayList<StoreInfo> allStores, int page, int pageSize) {
+        int fromIndex = (page - 1) * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, allStores.size());
+
+        if (fromIndex > toIndex) {
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>(allStores.subList(fromIndex, toIndex));
+    }
 }
