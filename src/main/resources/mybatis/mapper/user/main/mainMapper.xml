@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace의 명이 DAO의 패키지명과 일치해야함-->
+<mapper namespace="kr.co.jhta.app.delideli.user.main.repository.UserCategoryRepository">
+
+    <!-- 카테고리 전체 목록 가져오기 -->
+    <select id="getCategoryAllList" parameterType="CategoryDTO" resultType="CategoryDTO">
+        SELECT category_key as categoryKey, category_name as categoryName, category_img as categoryImg,
+        category_regdate as categoryRegdate, category_update as categoryUpdate
+        FROM category
+    </select>
+
+    <!-- 카테고리와 상점 정보 가져오기 -->
+    <select id="selectCategoryStoreInfo" resultType="CategoryStoreInfoDTO" parameterType="int">
+        SELECT
+        c.category_key as categoryKey,
+        c.category_name as categoryName,
+        c.category_img as categoryImg,
+        c.category_regdate as categoryRegdate,
+        c.category_update as categoryUpdate,
+        si.storeInfo_key as storeInfoKey,
+        si.client_key as clientKey,
+        si.store_name as storeName,
+        si.store_address as storeAddress,
+        si.store_zipcode as storeZipcode,
+        si.store_addrs_detail as storeAddrsDetail,
+        si.store_phone as storePhone,
+        si.min_order_amount as minOrderAmount,
+        si.order_amount1 as orderAmount1,
+        si.delivery_amount1 as deliveryAmount1
+        <!-- 필요한 추가 필드들을 여기에 추가-->
+        FROM category c
+        JOIN store_category sc ON c.category_key = sc.category_key
+        JOIN storeInfo si ON sc.storeInfo_key = si.storeInfo_key
+        WHERE c.category_key = #{categoryKey}
+    </select>
+
+    <!-- 전체 상점 정보 가져오기 -->
+    <select id="findAllStores" resultType="CategoryStoreInfoDTO" parameterType="CategoryStoreInfoDTO">
+        SELECT
+        NULL AS categoryKey,
+        NULL AS categoryName,
+        NULL AS categoryImg,
+        NULL AS categoryRegdate,
+        NULL AS categoryUpdate,
+        si.storeInfo_key as storeInfoKey,
+        si.client_key as clientKey,
+        si.store_name as storeName,
+        si.store_address as storeAddress,
+        si.store_zipcode as storeZipcode,
+        si.store_addrs_detail as storeAddrsDetail,
+        si.store_phone as storePhone,
+        si.min_order_amount as minOrderAmount,
+        si.order_amount1 as orderAmount1,
+        si.delivery_amount1 as deliveryAmount1
+        <!--필요한 추가 필드들을 여기에 추가 -->
+        FROM storeInfo si
+    </select>
+
+
+
+</mapper>

@@ -48,4 +48,7 @@ public interface UserService {
 
     // 주소 삭제
     void deleteAddress(Long addressKey);
+
+    //포인트 충전
+    void chargePoint(String userKey, int amount);
 }
