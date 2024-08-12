@@ -31,21 +31,34 @@
         <result property="storeDelete" column="store_delete"/>
         <result property="storeRegdate" column="store_regdate"/>
         <result property="storeUpdate" column="store_update"/>
+
+        <!-- 사업자 정보 -->
+        <result property="clientName" column="client_name"/>
+        <result property="clientPhone" column="client_phone"/>
+        <result property="clientEID" column="client_EID"/>
     </resultMap>
 
     <!-- 지역에 따른 모든 가게 목록을 가져옴 -->
     <select id="getAllStoresInRegion" resultMap="StoreInfoResultMap" parameterType="string">
-        SELECT *
-        FROM storeInfo
-        WHERE store_address LIKE CONCAT('%', #{region}, '%')
-          AND store_delete = 0
+        SELECT si.*,
+               ca.client_name AS business_owner_name,
+               ca.client_phone AS business_phone,
+               ca.client_EID AS business_registration_no
+        FROM storeInfo si
+                 JOIN client_account ca ON si.client_key = ca.client_key
+        WHERE si.store_address LIKE CONCAT('%', #{region}, '%')
+          AND si.store_delete = 0
     </select>
 
     <!-- 카테고리와 지역에 따른 모든 가게 목록을 가져옴 -->
     <select id="getAllStoresByCategoryAndRegion" resultMap="StoreInfoResultMap" parameterType="map">
-        SELECT si.*
+        SELECT si.*,
+               ca.client_name AS business_owner_name,
+               ca.client_phone AS business_phone,
+               ca.client_EID AS business_registration_no
         FROM storeInfo si
                  JOIN store_category sc ON si.storeInfo_key = sc.storeInfo_key
+                 JOIN client_account ca ON si.client_key = ca.client_key
         WHERE sc.category_key = #{categoryId}
           AND si.store_address LIKE CONCAT('%', #{region}, '%')
           AND si.store_delete = 0
@@ -53,11 +66,40 @@
 
     <!-- 검색어와 지역에 따른 모든 가게 목록을 가져옴 -->
     <select id="searchAllStoresByNameAndRegion" resultMap="StoreInfoResultMap" parameterType="map">
-        SELECT *
-        FROM storeInfo
-        WHERE store_name LIKE CONCAT('%', #{query}, '%')
-          AND store_address LIKE CONCAT('%', #{region}, '%')
-          AND store_delete = 0
+        SELECT si.*,
+               ca.client_name AS business_owner_name,
+               ca.client_phone AS business_phone,
+               ca.client_EID AS business_registration_no
+        FROM storeInfo si
+                 JOIN client_account ca ON si.client_key = ca.client_key
+        WHERE si.store_name LIKE CONCAT('%', #{query}, '%')
+          AND si.store_address LIKE CONCAT('%', #{region}, '%')
+          AND si.store_delete = 0
+    </select>
+
+    <!-- 특정 가게 정보를 가져옴 -->
+    <select id="getStoreInfoById" parameterType="int" resultMap="StoreInfoResultMap">
+        SELECT
+            si.*,
+            ca.client_name,
+            ca.client_phone,
+            ca.client_EID
+        FROM
+            storeInfo si
+                JOIN
+            client_account ca
+            ON
+                si.client_key = ca.client_key
+        WHERE
+            si.storeInfo_key = #{storeInfoKey}
+    </select>
+
+    <select id="getLikedStores" parameterType="int" resultMap="StoreInfoResultMap">
+        SELECT si.*
+        FROM storeInfo si
+                 JOIN `like` l ON si.storeInfo_key = l.storeInfo_key
+        WHERE l.user_key = #{userKey}
+          AND l.like_status = 1
     </select>
 
 </mapper>

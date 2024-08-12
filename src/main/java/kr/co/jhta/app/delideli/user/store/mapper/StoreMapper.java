@@ -16,4 +16,8 @@ public interface StoreMapper {
     ArrayList<StoreInfo> getAllStoresByCategoryAndRegion(int categoryId, String region);
 
     ArrayList<StoreInfo> searchAllStoresByNameAndRegion(String query, String region);
+
+    StoreInfo getStoreInfoById(int storeInfoKey);
+
+    ArrayList<StoreInfo> getLikedStores(int userKey);
 }

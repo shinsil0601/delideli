@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.user.review.mapper.ReviewMapper">
+
+    <!-- 리뷰 정보를 매핑할 resultMap -->
+    <resultMap id="ReviewResultMap" type="kr.co.jhta.app.delideli.user.review.domain.Review">
+        <id property="reviewKey" column="review_key"/>
+        <result property="userKey" column="user_key"/>
+        <result property="clientKey" column="client_key"/>
+        <result property="storeInfoKey" column="storeInfo_key"/>
+        <result property="orderKey" column="order_key"/>
+        <result property="reviewRating" column="review_rating"/>
+        <result property="reviewDesc" column="review_desc"/>
+        <result property="reviewPhoto1" column="review_photo1"/>
+        <result property="reviewPhoto2" column="review_photo2"/>
+        <result property="reviewRegdate" column="review_regdate"/>
+        <result property="reviewComment" column="review_comment"/>
+        <result property="reportReview" column="report_review"/>
+        <result property="commentRegdate" column="comment_regdate"/>
+        <result property="commentUpdate" column="comment_update"/>
+        <result property="reviewStatus" column="review_status"/>
+    </resultMap>
+
+    <!-- 특정 가게의 평균 리뷰 점수를 가져옴 -->
+    <select id="getAverageRatingForStore" resultType="java.lang.Double" parameterType="int">
+        SELECT AVG(review_rating)
+        FROM review
+        WHERE storeInfo_key = #{storeInfoKey}
+    </select>
+
+    <!-- 리뷰 개수를 가져옴 -->
+    <select id="getReviewCountForStore" resultType="int" parameterType="int">
+        SELECT COUNT(*)
+        FROM review
+        WHERE storeInfo_key = #{storeInfoKey}
+    </select>
+
+    <!-- 해당 가게의 리뷰목록을 가져옴 -->
+    <select id="getReviewListByStore" parameterType="int" resultMap="ReviewResultMap">
+        SELECT * FROM review WHERE storeInfo_key = #{storeInfoKey} ORDER BY review_regdate DESC
+    </select>
+
+</mapper>

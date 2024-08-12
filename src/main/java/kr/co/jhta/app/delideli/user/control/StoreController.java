@@ -3,9 +3,11 @@ package kr.co.jhta.app.delideli.user.control;
 import kr.co.jhta.app.delideli.user.account.domain.UserAccount;
 import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
 import kr.co.jhta.app.delideli.user.account.service.UserService;
-import kr.co.jhta.app.delideli.user.store.domain.Category;
-import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
+import kr.co.jhta.app.delideli.user.like.domain.Like;
+import kr.co.jhta.app.delideli.user.review.domain.Review;
+import kr.co.jhta.app.delideli.user.store.domain.*;
 import kr.co.jhta.app.delideli.user.store.service.CategoryService;
+import kr.co.jhta.app.delideli.user.like.service.LikeService;
 import kr.co.jhta.app.delideli.user.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +16,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +35,8 @@ public class StoreController {
     private final CategoryService categoryService;
     @Autowired
     private final StoreService storeService;
+    @Autowired
+    private final LikeService likeService;
 
     // 가게 목록
     @GetMapping("/category/{categoryId}")
@@ -88,6 +90,16 @@ public class StoreController {
             allStores = storeService.getAllStoresByCategoryAndRegion(categoryId, region);
         }
 
+        // 각 가게에 메뉴와 리뷰 정보를 추가
+        for (StoreInfo store : allStores) {
+            Menu firstMenu = storeService.getFirstMenuForStore(store.getStoreInfoKey());
+            Double averageRating = storeService.getAverageRatingForStore(store.getStoreInfoKey());
+
+            store.setFirstMenu(firstMenu);  // 첫 번째 메뉴 설정
+            store.setAverageRating(averageRating != null ? averageRating : 0.0);  // 평균 리뷰 점수 설정
+            store.setReviewCount(storeService.getReviewCountForStore(store.getStoreInfoKey()));  // 리뷰 개수 설정
+        }
+
         totalStores = allStores.size();
         int totalPages = (int) Math.ceil((double) totalStores / pageSize);
 
@@ -104,12 +116,26 @@ public class StoreController {
 
     // 지역별 가게목록 추출
     @GetMapping("/filterStoresByAddress")
-    public String filterStoresByAddress(@RequestParam("address") String address, Model model) {
+    public String filterStoresByAddress(@RequestParam("address") String address, @AuthenticationPrincipal User user, Model model) {
+        if (user != null) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+        }
         // 주소에서 지역 정보를 추출
         String region = extractRegion(address);
 
         // 해당 지역의 가게 목록을 가져옴
         ArrayList<StoreInfo> allStores = storeService.getAllStoresInRegion(region);
+
+        // 각 가게에 메뉴와 리뷰 정보를 추가
+        for (StoreInfo store : allStores) {
+            Menu firstMenu = storeService.getFirstMenuForStore(store.getStoreInfoKey());
+            Double averageRating = storeService.getAverageRatingForStore(store.getStoreInfoKey());
+
+            store.setFirstMenu(firstMenu);  // 첫 번째 메뉴 설정
+            store.setAverageRating(averageRating != null ? averageRating : 0.0);  // 평균 리뷰 점수 설정
+            store.setReviewCount(storeService.getReviewCountForStore(store.getStoreInfoKey()));  // 리뷰 개수 설정
+        }
 
         // 페이지네이션 처리
         ArrayList<StoreInfo> storeList = paginateStores(allStores, 1, 8);
@@ -169,6 +195,16 @@ public class StoreController {
             allStores = storeService.searchAllStoresByNameAndRegion(query, region);
         }
 
+        // 각 가게에 메뉴와 리뷰 정보를 추가
+        for (StoreInfo store : allStores) {
+            Menu firstMenu = storeService.getFirstMenuForStore(store.getStoreInfoKey());
+            Double averageRating = storeService.getAverageRatingForStore(store.getStoreInfoKey());
+
+            store.setFirstMenu(firstMenu);  // 첫 번째 메뉴 설정
+            store.setAverageRating(averageRating != null ? averageRating : 0.0);  // 평균 리뷰 점수 설정
+            store.setReviewCount(storeService.getReviewCountForStore(store.getStoreInfoKey()));  // 리뷰 개수 설정
+        }
+
         int totalStores = allStores.size();
         int totalPages = (int) Math.ceil((double) totalStores / pageSize);
 
@@ -184,7 +220,6 @@ public class StoreController {
         // user/store/store.html 페이지를 반환
         return "user/store/store";
     }
-
 
     // 주소에서 구, 동, 읍 등의 지역 정보를 추출하는 메서드
     private String extractRegion(String address) {
@@ -207,6 +242,78 @@ public class StoreController {
             }
         }
         return null;  // 매칭되지 않는 경우
+    }
+
+    // 가게 상세 정보
+    @GetMapping("/storeDetail/{storeInfoKey}")
+    public String storeDetailPage(@AuthenticationPrincipal User user,
+                                  @PathVariable("storeInfoKey") int storeInfoKey,
+                                  @RequestParam(value = "tab", defaultValue = "menu") String tab, Model model) {
+        // 가게 정보 가져오기
+        StoreInfo store = storeService.getStoreInfoById(storeInfoKey);
+
+        if (user != null) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+
+            // 찜 상태 확인
+            Like like = likeService.findLikeByUserAndStore(userAccount.getUserKey(), storeInfoKey);
+            model.addAttribute("isLiked", like != null && like.getLikeStatus() == 1);
+        }
+
+        Map<MenuGroup, ArrayList<Menu>> groupedMenus = storeService.getMenuGroupedByMenuGroup(storeInfoKey);
+        ArrayList<Review> reviewList = storeService.getReviewListByStore(storeInfoKey);
+
+        Double averageRating = storeService.getAverageRatingForStore(store.getStoreInfoKey());
+        store.setAverageRating(averageRating != null ? averageRating : 0.0);  // 평균 리뷰 점수 설정
+        store.setReviewCount(storeService.getReviewCountForStore(store.getStoreInfoKey()));  // 리뷰 개수 설정
+
+        // 모델에 데이터 추가
+        model.addAttribute("store", store);
+        model.addAttribute("groupedMenus", groupedMenus);
+        model.addAttribute("reviewList", reviewList);
+        model.addAttribute("tab", tab);
+
+        return "user/store/storeDetail";  // 상세 페이지로 이동
+    }
+
+    // 찜하기/취소 기능
+    @PostMapping("/toggleLike")
+    @ResponseBody
+    public String toggleLike(@RequestParam int storeInfoKey, @AuthenticationPrincipal User user) {
+        if (user == null) {
+            return "not_logged_in";
+        }
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        likeService.toggleLike(userAccount.getUserKey(), storeInfoKey);
+        return "success";
+    }
+
+    // 메뉴 상세정보
+    @GetMapping("/menuDetail/{menuKey}")
+    public String getMenuDetail(@PathVariable int menuKey,
+                                @AuthenticationPrincipal User user,
+                                Model model) {
+        // 메뉴 정보 및 옵션 그룹을 가져옴
+        Menu menu = storeService.getMenuById(menuKey);
+        ArrayList<OptionGroup> optionGroups = storeService.getOptionGroupsByMenuId(menuKey);
+
+        // 사용자 정보가 null이 아니라면 로그인된 상태
+        boolean isLoggedIn = (user != null);
+
+        // 로그인된 상태일 경우, 사용자 정보를 모델에 추가
+        if (isLoggedIn) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+        }
+
+        // 모델에 필요한 데이터 추가
+        model.addAttribute("menu", menu);
+        model.addAttribute("optionGroups", optionGroups);
+        model.addAttribute("isLoggedIn", isLoggedIn);  // 로그인 상태를 모델에 추가
+
+        // 메뉴 상세 페이지로 이동
+        return "user/store/menuDetail";
     }
 
     // 페이지네이션 처리 메서드
