@@ -52,4 +52,7 @@ public interface UserService {
 
     // 찜 목록 조회
     ArrayList<StoreInfo> getLikedStores(int userKey);
+
+    //포인트 충전
+    void chargePoint(String userKey, int amount);
 }

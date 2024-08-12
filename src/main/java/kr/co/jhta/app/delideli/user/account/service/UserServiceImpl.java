@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -184,6 +185,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public ArrayList<StoreInfo> getLikedStores(int userKey) {
         return storeMapper.getLikedStores(userKey);
+    }
+
+    //포인트 충전
+    @Override
+    public void chargePoint(String userKey, int amount) {
+        System.out.println("serviceImp userKey: " + userKey+ " amount: " + amount);
+        Map<String, Integer> map = new HashMap<>();
+
+        map.put("userKey", Integer.valueOf(userKey));
+        System.out.println(Integer.valueOf(userKey));
+        map.put("amount", amount);
+        System.out.println("map: " + map);
+        userMapper.chargeUserPoint(map);
     }
 
     // 프로필 이미지 저장
