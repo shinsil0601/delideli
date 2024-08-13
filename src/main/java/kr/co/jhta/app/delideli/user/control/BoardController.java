@@ -192,7 +192,7 @@ public class BoardController {
         log.info("userKey>>>>>>>>>!!! " + userAccount.getUserKey());
         List<Board> list;
 
-        list = boardService.getMyAskList(userAccount.getUserKey());
+        list = boardService.getMyAskList((long)userAccount.getUserKey());
         model.addAttribute("list", list);
 
         return "/user/mypage/myAsk";
@@ -210,7 +210,7 @@ public class BoardController {
     @PostMapping("/myAskWrite")
     public String myAskWrite(@AuthenticationPrincipal User user, @ModelAttribute Board board) {
         UserAccount userAccount = userService.findUserById(user.getUsername());
-        board.setUserKey(userAccount.getUserKey().intValue());  // Long 타입을 int 타입으로 변환
+        board.setUserKey(userAccount.getUserKey());  // Long 타입을 int 타입으로 변환
         boardService.myAskWrite(board);  // Board 객체를 매개변수로 전달
 
         return "redirect:/user/myAsk";
