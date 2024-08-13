@@ -1,5 +1,6 @@
 package kr.co.jhta.app.delideli.user.board.service;
 
+
 import kr.co.jhta.app.delideli.user.board.domain.Board;
 import kr.co.jhta.app.delideli.user.board.mapper.BoardMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
 
+  
     private final BoardMapper boardMapper;
 
     // 공지사항 목록
@@ -23,6 +25,7 @@ public class BoardServiceImpl implements BoardService {
         map.put("startNo", startNo);
         map.put("endNo", endNo);
         List<Board> list = boardMapper.getAll(map);
+      
         return list;
     }
 
@@ -33,6 +36,7 @@ public class BoardServiceImpl implements BoardService {
         map.put("keyword", keyword);
         map.put("startNo", startNo);
         map.put("endNo", endNo);
+      
         List<Board> list = boardMapper.getAllKeyword(map);
         return list;
     }
@@ -94,5 +98,29 @@ public class BoardServiceImpl implements BoardService {
         map.put("endNo", endNo);
         List<Board> list = boardMapper.getAllKeywordEvent(map);
         return list;
+    }
+
+    //내문의 목록
+    @Override
+    public List<Board> getMyAskList(Long userKey) {
+        List<Board> list =boardMapper.getMyAskList(userKey);
+        return list;
+    }
+
+    //내문의 작성
+    @Override
+    public void myAskWrite(Board board) {
+        boardMapper.myAskWrite(board);
+    }
+    //내문의 상세보기
+    @Override
+    public Board myAskDetail(int boardKey) {
+        Board board = boardMapper.myAskDetail(boardKey);
+        return board;
+    }
+
+    @Override
+    public void myAskDelete(int boardKey) {
+        boardMapper.myAskDelete(boardKey);
     }
 }

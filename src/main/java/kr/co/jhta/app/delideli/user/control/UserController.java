@@ -8,6 +8,7 @@ import kr.co.jhta.app.delideli.common.service.EmailService;
 import kr.co.jhta.app.delideli.common.service.EmailVerificationService;
 import kr.co.jhta.app.delideli.user.account.domain.UserAccount;
 import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
+import kr.co.jhta.app.delideli.user.board.domain.Board;
 import kr.co.jhta.app.delideli.user.cart.domain.Cart;
 import kr.co.jhta.app.delideli.user.cart.domain.CartOptions;
 import kr.co.jhta.app.delideli.user.cart.service.CartService;
@@ -550,4 +551,5 @@ public class UserController {
 
         return new ArrayList<>(allStores.subList(fromIndex, toIndex));
     }
+  
 }
