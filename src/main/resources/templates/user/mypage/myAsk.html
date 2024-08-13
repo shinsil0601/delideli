@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사용자 - 내문의페이지</title>
+  <!-- Include:공통 CSS -->
+  <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+  <!-- Include:User CSS -->
+  <th:block th:include="inc/user/user-css :: userCss"></th:block>
+  <!-- Include:공통 JS -->
+  <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+  <!-- Include:User JS -->
+  <th:block th:include="inc/user/user-js :: userJs"></th:block>
+</head>
+<body>
+  <!-- Start:Header -->
+  <th:block th:include="inc/user/header :: userHeader"></th:block>
+  <!-- End:Header -->
+
+  <!-- Start:Main -->
+  <main id="mainpage__wrap">
+    <h3>내문의 목록</h3>
+    <p><span th:text="${user.userNickname}"></span></p>
+    <table>
+      <tr>
+        <th>제목1</th>
+        <th>날짜</th>
+        <th>답변상태</th>
+      </tr>
+      <tr th:each="board : ${list}">
+        <td><a th:href="@{myAskDetail/{boardKey}(boardKey=${board.boardKey})}" th:text="${board.boardTitle}"></a></td>
+        <td th:text="${board.boardRegdate}"></td>
+        <td>
+          <span th:if="${board.boardCommentStatus == 1}" style="margin-left: 10px; color: green;">답변완료</span>
+          <span th:if="${board.boardCommentStatus == 0}" style="margin-left: 10px; color: red;">미완료</span>
+        </td>
+      </tr>
+    </table>
+    <a href="/user/myAskWrite">글작성</a>
+  </main>
+  <!-- End:Main -->
+
+  <!-- Start:Footer -->
+  <th:block th:include="inc/user/footer :: userFooter"></th:block>
+  <!-- End:Footer -->
+</body>
+</html>

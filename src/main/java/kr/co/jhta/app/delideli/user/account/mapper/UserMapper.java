@@ -51,5 +51,5 @@ public interface UserMapper {
   
     //사용자 포인트충전
     void chargeUserPoint(Map<String, Integer> map);
-
+  
 }

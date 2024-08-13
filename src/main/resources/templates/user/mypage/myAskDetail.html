@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용자 - 내문의 상세보기</title>
+    <!-- Include:공통 CSS -->
+    <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+    <!-- Include:User CSS -->
+    <th:block th:include="inc/user/user-css :: userCss"></th:block>
+    <!-- Include:공통 JS -->
+    <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+    <!-- Include:User JS -->
+    <th:block th:include="inc/user/user-js :: userJs"></th:block>
+</head>
+<body>
+    <!-- Start:Header -->
+    <th:block th:include="inc/user/header :: userHeader"></th:block>
+    <!-- End:Header -->
+
+    <!-- Start:Main -->
+    <main id="mainpage__wrap">
+        <h3>내문의 상세보기</h3>
+        <table>
+            <tr>
+                <th colspan="2">
+                    <span th:text="${board.boardTitle}"></span>
+                    <span th:if="${board.boardCommentStatus == 1}" style="margin-left: 10px; color: green;">답변완료</span>
+                    <span th:if="${board.boardCommentStatus == 0}" style="margin-left: 10px; color: red;">미완료</span>
+                </th>
+            </tr>
+            <tr>
+                <td></td>
+                <td th:text="${board.boardRegdate}"></td>
+            </tr>
+            <tr>
+                <td colspan="2" th:text="${board.boardContents}"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a th:href="@{/user/myAskDelete/{boardKey}(boardKey=${board.boardKey})}">삭제</a>
+                </td>
+            </tr>
+        </table>
+        <hr>
+        <table th:if="${board.boardCommentStatus == 1}">
+            <tr>
+                <th>관리자</th>
+            </tr>
+            <tr>
+                <td th:text="${board.boardComment}"></td>
+            </tr>
+        </table>
+    </main>
+    <!-- End:Main -->
+
+    <!-- Start:Footer -->
+    <th:block th:include="inc/user/footer :: userFooter"></th:block>
+    <!-- End:Footer -->
+</body>
+</html>

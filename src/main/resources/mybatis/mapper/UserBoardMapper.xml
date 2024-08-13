@@ -179,11 +179,46 @@
         DELETE FROM comment WHERE comment_key = #{commentKey}
     </delete>
 
-
     <!-- 이벤트 댓글 답글삽입 -->
     <insert id="insertReplyComment" parameterType="kr.co.jhta.app.delideli.user.board.domain.Comment">
         INSERT INTO comment (comment_contents, comment_parent, comment_regdate, board_key, user_key)
         VALUES (#{commentContents}, #{commentParent}, NOW(), #{boardKey}, #{userKey})
     </insert>
+
+    <!-- 내문의 글목록 -->
+    <select id="getMyAskList" parameterType="long" resultMap="BoardResultMap">
+        SELECT board_key, user_key, board_type, board_status, board_progress_status, board_title, board_write,
+        board_contents, board_thumbnail, board_comment, board_comment_status, board_start_date,
+        board_end_date, board_regdate, board_comment_date, board_update,
+        file_attach1, file_attach2, file_attach3, file_attach4, board_hits
+        FROM board
+        WHERE board_type = "문의"
+        AND user_key = ${userKey}
+        ORDER BY board_key DESC
+    </select>
+
+    <!-- 내문의 글작성 -->
+    <insert id="myAskWrite" parameterType="kr.co.jhta.app.delideli.user.board.domain.Board">
+        INSERT INTO board (user_key, board_type, board_status, board_progress_status, board_title, board_write, board_contents)
+        VALUES (#{userKey}, '문의', '문의', '대기중', #{boardTitle}, '사용자', #{boardContents})
+    </insert>
+
+    <!-- 내문의 상세보기 -->
+    <select id="myAskDetail" parameterType="int" resultMap="BoardResultMap">
+        SELECT board_key, user_key, board_type, board_status, board_progress_status, board_title, board_write,
+        board_contents, board_thumbnail, board_comment, board_comment_status, board_start_date,
+        board_end_date, board_regdate, board_comment_date, board_update,
+        file_attach1, file_attach2, file_attach3, file_attach4, board_hits
+        FROM board
+        WHERE board_type = "문의"
+        AND board_key = ${boardKey}
+        ORDER BY board_key DESC
+    </select>
+
+    <!-- 내문의 글삭제 -->
+    <delete id="myAskDelete" parameterType="int">
+        DELETE FROM board WHERE board_key = #{boardKey}
+    </delete>
+
 
 </mapper>
