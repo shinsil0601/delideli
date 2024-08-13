@@ -26,9 +26,9 @@
                     <li>
                         <a href="/user/myPage" class="header__profile">
                             <!-- 프로필 X : default Img -->
-                            <img src="/user/images/profile-default.png" alt="사용자프로필" th:if="${user.userProfile == ''}">
+                            <img src="/user/images/profile-default.png" alt="사용자프로필" th:if="${user.userProfile == '' or user.userProfile == NULL}">
                             <!-- 프로필 O : userProfile Img -->
-                            <img th:src="${user.userProfile}" alt="사용자프로필" th:if="${user.userProfile !=  ''}">
+                            <img th:src="${user.userProfile}" alt="사용자프로필" th:if="${user.userProfile !=  '' and user.userProfile != NULL}">
                         </a>
                     </li>
                     <!-- 장바구니 -->
