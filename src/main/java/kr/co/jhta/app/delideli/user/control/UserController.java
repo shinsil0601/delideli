@@ -197,7 +197,6 @@ public class UserController {
     @PostMapping("/changePassword")
     public String changePassword(@RequestParam String userId, @RequestParam String newPassword, @RequestParam String confirmPassword, Model model) {
         if (!newPassword.equals(confirmPassword)) {
-            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
             model.addAttribute("userId", userId);
             return "user/account/changePw";
         }

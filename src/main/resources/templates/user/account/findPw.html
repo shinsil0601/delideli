@@ -20,20 +20,50 @@
 
         <!-- Start:Main -->
         <main id="mainpage__wrap">
-            <form id="findPwForm">
-                <label for="userId">사용자 ID:</label>
-                <input type="text" id="userId" name="userId" required>
-                <br>
-                <label for="userEmail">이메일:</label>
-                <input type="email" id="userEmail" name="userEmail" required>
-                <br>
-                <button type="button" id="sendResetLinkButton">비밀번호 변경 링크 전송</button>
-                <li><a href="/user/login">유저 로그인</a></li>
-            </form>
-            <div id="message" style="color: green;"></div>
-            <div id="errorMessage" style="color: red;"></div>
-
-            <script src="/user/js/module/findPw.js"></script>
+            <section class="user-account__wrap">
+                <div class="user-account__form-box">
+                    <div class="user-account__form-top">
+                        <h2 class="user-account__logo">
+                            <img src="/user/images/logo-color.png" alt="딜리델리노랑색로고">
+                        </h2>
+                        <p class="user-account__label">
+                            비밀번호 찾기
+                        </p>
+                    </div>
+                    <form id="findPwForm" class="user-account__form">
+                        <div class="account__input-wrap">
+                            <!-- 아이디 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userId">아이디</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="text" id="userId" name="userId">
+                            </div>
+                            <!-- 이메일 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userEmail">이메일</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="text" id="userEmail" name="userEmail">
+                                <span id="userEmailMessage" class="error-message" style="display: none;"></span>
+                            </div>
+                        </div>
+                        <div class="account__btn-wrap account__btn-wrap--a">
+                            <button type="button" class="account__user-btn--a" th:onclick="'location.href=\'' + @{/user/login} + '\''">로그인</button>
+                            <button type="button" id="sendResetLinkButton" class="account__user-btn--b">비밀번호 찾기</button>
+                        </div>
+                    </form>
+                    <script src="/user/js/module/findPw.js"></script>
+                </div>
+            </section>
         </main>
         <!-- End:Main -->
 
