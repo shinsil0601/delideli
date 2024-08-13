@@ -20,20 +20,50 @@
 
         <!-- Start:Main -->
         <main id="mainpage__wrap">
-            <form id="findIdForm">
-                <label for="userName">이름:</label>
-                <input type="text" id="userName" name="userName" required>
-                <br>
-                <label for="userEmail">이메일:</label>
-                <input type="email" id="userEmail" name="userEmail" required>
-                <br>
-                <button type="submit">아이디 찾기</button>
-                <li><a href="/user/login">유저 로그인</a></li>
-            </form>
-            <div id="message" class="success-message"></div>
-            <div id="errorMessage" class="error-message"></div>
-
-            <script src="/user/js/module/findId.js"></script>
+            <section class="user-account__wrap">
+                <div class="user-account__form-box">
+                    <div class="user-account__form-top">
+                        <h2 class="user-account__logo">
+                            <img src="/user/images/logo-color.png" alt="딜리델리노랑색로고">
+                        </h2>
+                        <p class="user-account__label">
+                            아이디 찾기
+                        </p>
+                    </div>
+                    <form id="findIdForm" class="user-account__form">
+                        <div class="account__input-wrap">
+                            <!-- 이름 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userName">이름</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="text" id="userName" name="userName">
+                            </div>
+                            <!-- 이메일 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userEmail">이메일</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="text" id="userEmail" name="userEmail">
+                                <span id="userEmailMessage" class="error-message" style="display: none;"></span>
+                            </div>
+                        </div>
+                        <div class="account__btn-wrap account__btn-wrap--a">
+                            <button type="button" class="account__user-btn--a" th:onclick="'location.href=\'' + @{/user/login} + '\''">로그인</button>
+                            <button type="submit" class="account__user-btn--b">아이디 찾기</button>
+                        </div>
+                    </form>
+                    <script src="/user/js/module/findId.js"></script>
+                </div>
+            </section>
         </main>
         <!-- End:Main -->
 

@@ -72,6 +72,27 @@ $(document).ready(function () {
             userEmailMessage.hasClass('success-message') &&
             userEmailChkMsg.hasClass('success-message');
 
+        console.log({
+            allFilled: allFilled,
+            allSuccess: allSuccess,
+            userIdMessageClass: userIdMessage.attr('class'),
+            passwordMessageClass: passwordMessage.attr('class'),
+            userEmailMessageClass: userEmailMessage.attr('class'),
+            userEmailChkMsgClass: userEmailChkMsg.attr('class'),
+            inputIdVal: inputId.val(),
+            inputNameVal: inputName.val(),
+            inputNicknameVal: inputNickname.val(),
+            inputPwVal: inputPw.val(),
+            inputChkPwVal: inputChkPw.val(),
+            inputBirthVal: inputBirth.val(),
+            inputPhoneVal: inputPhone.val(),
+            inputEmailVal: inputEmail.val(),
+            inputEmailCodeVal: inputEmailCode.val(),
+            inputZipcodeVal: inputZipcode.val(),
+            inputAddressVal: inputAddress.val(),
+            inputAddrDetailVal: inputAddrDetail.val(),
+        });
+
         if (allFilled && allSuccess) {
             registerButton.prop('disabled', false);
         } else {
@@ -231,6 +252,11 @@ $(document).ready(function () {
         execDaumPostcode();
     });
 
+    /* 우편번호, 기본주소, 상세주소 - 유효성 검사 호출 */
+    inputZipcode.on('input', validateForm);
+    inputAddress.on('input', validateForm);
+    inputAddrDetail.on('input', validateForm);
+
     /* 프로필사진 - 업로드 및 미리보기 */
     inputProfile.on('change', function () {
         const fileName = inputProfile.val();
@@ -246,7 +272,6 @@ $(document).ready(function () {
         } else {
             $('#profilePreview').css('background-image', `url('/user/images/profile-default.png')`);
         }
-        validateForm();
     });
 
     /* 초기 유효성 검사 호출 */

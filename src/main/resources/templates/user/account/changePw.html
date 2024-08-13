@@ -20,21 +20,51 @@
 
         <!-- Start:Main -->
         <main id="mainpage__wrap">
-            <form method="post" action="/user/changePassword">
-                <input type="hidden" name="userId" th:value="${userId}">
-                <label for="userPw">새 비밀번호:</label>
-                <input type="password" id="userPw" name="newPassword" required>
-                <br>
-                <label for="checkUserPw">새 비밀번호 확인:</label>
-                <input type="password" id="checkUserPw" name="confirmPassword" required>
-                <br>
-                <span id="passwordMessage"></span>
-                <br>
-                <button type="submit">비밀번호 변경</button>
-            </form>
-            <div id="errorMessage" style="color: red;" th:if="${errorMessage}" th:text="${errorMessage}"></div>
-
-            <script src="/user/js/module/changePw.js"></script>
+            <section class="user-account__wrap">
+                <div class="user-account__form-box">
+                    <div class="user-account__form-top">
+                        <h2 class="user-account__logo">
+                            <img src="/user/images/logo-color.png" alt="딜리델리노랑색로고">
+                        </h2>
+                        <p class="user-account__label">
+                            비밀번호 변경
+                        </p>
+                    </div>
+                    <form method="post" action="/user/changePassword" class="user-account__form">
+                        <input type="hidden" name="userId" th:value="${userId}">
+                        <div class="account__input-wrap">
+                            <!-- 비밀번호 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userPw">비밀번호</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="password" id="userPw" name="newPassword">
+                            </div>
+                            <!-- 비밀번호 확인 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="checkUserPw">비밀번호 확인</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="password" id="checkUserPw" name="confirmPassword">
+                                <span id="passwordMessage" class="error-message" style="display: none;"></span>
+                            </div>
+                        </div>
+                        <div class="account__btn-wrap account__btn-wrap--a">
+                            <button type="button" class="account__user-btn--a" th:onclick="'location.href=\'' + @{/user/login} + '\''">취소하기</button>
+                            <button type="submit" class="account__user-btn--b">변경하기</button>
+                        </div>
+                    </form>
+                    <script src="/user/js/module/changePw.js"></script>
+                </div>
+            </section>
         </main>
         <!-- End:Main -->
 
