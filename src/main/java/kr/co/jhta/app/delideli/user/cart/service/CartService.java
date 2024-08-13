@@ -16,4 +16,6 @@ public interface CartService {
     void updateCartItem(int cartKey, int quantity, ArrayList<Integer> selectedOptionKeys);
 
     void deleteCartItem(int cartKey);
+
+    ArrayList<Cart> getCartItemsByStoreInfoKey(int userKey, int storeInfoKey);
 }
