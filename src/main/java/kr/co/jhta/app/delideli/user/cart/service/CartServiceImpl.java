@@ -83,4 +83,9 @@ public class CartServiceImpl implements CartService {
     public void deleteCartItem(int cartKey) {
         cartMapper.deleteCartItem(cartKey);
     }
+
+    @Override
+    public ArrayList<Cart> getCartItemsByStoreInfoKey(int storeInfoKey) {
+        return null;
+    }
 }
