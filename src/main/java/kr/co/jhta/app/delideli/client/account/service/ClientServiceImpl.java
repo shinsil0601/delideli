@@ -4,18 +4,24 @@ import kr.co.jhta.app.delideli.client.account.domain.ClientAccount;
 import kr.co.jhta.app.delideli.client.dto.ClientDTO;
 import kr.co.jhta.app.delideli.client.account.mapper.ClientMapper;
 import kr.co.jhta.app.delideli.common.service.EmailService;
+import kr.co.jhta.app.delideli.user.account.domain.UserAccount;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
+    private static final Logger log = LoggerFactory.getLogger(ClientServiceImpl.class);
     @Autowired
     private final ClientMapper clientMapper;
     @Autowired
@@ -54,6 +60,12 @@ public class ClientServiceImpl implements ClientService {
         return clientMapper.checkAccessAccount(clientAccount);
     }
 
+    //사장님 내정보 수정
+    @Override
+    public void modifyClient(ClientDTO clientDTO) {
+        clientMapper.modifyClient(clientDTO);
+    }
+
     // 아이디 중복 확인
     @Override
     public boolean checkClientIdExists(String clientId) {
@@ -90,4 +102,14 @@ public class ClientServiceImpl implements ClientService {
     public Optional<ClientAccount> validateClient(String clientId, String clientEID, String clientName) {
         return clientMapper.selectClientByIdAndEIDAndName(clientId, clientEID, clientName);
     }
+
+    //비밀번호변경(로그인)
+    @Override
+    public void changePwLogin(String clientId, String newPw1) {
+        log.info("clientId: {}, newPw1!!!!!!!!!!!!!! {}", clientId, newPw1);
+        ClientAccount clientAccount = findClientById(clientId);
+        clientAccount.setClientPw(passwordEncoder.encode(newPw1));
+        clientMapper.changePwLogin(clientAccount);
+    }
+
 }

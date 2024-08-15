@@ -20,9 +20,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -45,6 +47,8 @@ public class ClientController {
     private final AuthenticationManager authenticationManager;
     @Autowired
     private final JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // 로그인창 이동
     @GetMapping("/login")
@@ -244,5 +248,55 @@ public class ClientController {
         model.addAttribute("client", clientAccount);
         return "client/mypage/myPage";
     }
+
+    //마이페이지(내정보 수정 창이동)
+    @GetMapping("/infoUpdate")
+    public String clientInfoUpdate(@AuthenticationPrincipal User user, Model model) {
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
+        return "client/mypage/infoUpdate";
+    }
+
+    //마이페이지(내정보 수정)
+    @PostMapping("infoUpdate")
+    public String clientInfoUpdate(@AuthenticationPrincipal User user, @ModelAttribute ClientDTO clientDTO, Model model){
+        if (user != null){
+            ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+            model.addAttribute("client", clientAccount);
+            clientDTO.setClientId(clientAccount.getClientId());
+        }
+        clientService.modifyClient(clientDTO);
+        return "redirect:/client/infoUpdate";
+    }
+
+    //마이페이지(비밀번호변경 창이동)
+    @GetMapping("changePwLogin")
+    public String changePwLogin(@AuthenticationPrincipal User user, Model model) {
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
+        return "/client/myPage/changePwLogin";
+    }
+
+    // 마이페이지(비밀번호변경)
+    @PostMapping("changePwLogin")
+    public String changePwLogin(@AuthenticationPrincipal User user, @ModelAttribute ClientDTO clientDTO,
+                                @RequestParam String clientId, @RequestParam String clientPw1, @RequestParam String newPw1,
+                                Model model, RedirectAttributes redirectAttributes) {
+        // 기존 비밀번호와 입력한 비밀번호가 일치하지 않으면 리턴
+        if (!passwordEncoder.matches(clientPw1, clientService.findClientById(clientId).getClientPw())) {
+            ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+            clientDTO.setClientId(clientAccount.getClientId());
+            model.addAttribute("client", clientAccount);
+            redirectAttributes.addFlashAttribute("message", "기존 비밀번호가 일치하지 않습니다.");
+            return "redirect:/client/changePwLogin";
+        }
+        clientService.changePwLogin(clientId, newPw1);
+        redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
+        return "redirect:/client/infoUpdate";
+    }
+
+
+
+
 }
 

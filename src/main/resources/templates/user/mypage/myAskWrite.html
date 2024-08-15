@@ -12,10 +12,6 @@
     <th:block th:include="inc/common/common-js :: commonJs"></th:block>
     <!-- Include:User JS -->
     <th:block th:include="inc/user/user-js :: userJs"></th:block>
-    <!-- include summernote css/js -->
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-    <script type="text/javascript" src="../js/summernote-ko-KR.js"></script>
 </head>
 <body>
     <!-- Start:Header -->
@@ -29,12 +25,11 @@
             <span>제목 : </span>
             <input type="text" name="boardTitle" id=""> <br>
             <span>내용 : </span>
-            <textarea class="summernote" name="boardContents" id="" cols="30" rows="10"></textarea><br>
+            <textarea name="boardContents" id="" cols="30" rows="10"></textarea><br>
 
             <button type="submit">작성완료</button>
         </form>
         <a href="/user/myAsk">목록으로</a>
-        <script src="/user/js/module/summernote.js"></script>
     </main>
     <!-- End:Main -->
 

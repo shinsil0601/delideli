@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사장님 - 비밀번호변경</title>
+    <!-- Include:공통 CSS -->
+    <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+    <!-- Include:Client CSS -->
+    <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+    <!-- Include:공통 JS -->
+    <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+    <!-- Include:Client JS -->
+    <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+    <style>
+        .success-message {
+            color: green;
+        }
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="client-wrap">
+    <!-- Start:Aside -->
+    <th:block th:include="inc/client/aside :: clientAside"></th:block>
+    <!-- End:Aside -->
+
+    <!-- Start:Main -->
+    <main id="mainpage__wrap">
+        <!-- Start:Header -->
+        <th:block th:include="inc/client/header :: clientHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Contents -->
+        <section class="contents">
+            <h3>사장님 - 비밀번호변경</h3>
+            <form action="/client/changePwLogin" method="post">
+                <p>기존 비밀번호</p> <input type="text" name="clientPw1">
+                <input type="hidden" name="clientId" th:value="${client.clientId}">
+                <p>변경할 비밀번호</p> <input type="text" name="newPw1">
+                <p>변경할 비밀번호 확인</p> <input type="text" name="newPw2">
+                <p id="passwordMessage"></p> <!-- 비밀번호 확인 메시지 -->
+                <button type="submit">변경하기</button>
+            </form>
+            <input type="hidden" id="flashMessage" th:value="${message}" />
+            <script src="/client/js/module/changePwLogin.js"></script>
+            <script src="/client/js/module/infoUpdate.js"></script>
+        </section>
+        <!-- End:Contents -->
+    </main>
+    <!-- End:Main -->
+</div>
+</body>
+</html>

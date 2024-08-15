@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사장님 - 내정보 수정</title>
+    <!-- Include:공통 CSS -->
+    <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+    <!-- Include:Client CSS -->
+    <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+    <!-- Include:공통 JS -->
+    <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+    <!-- Include:Client JS -->
+    <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+
+</head>
+<body>
+<div class="client-wrap">
+    <!-- Start:Aside -->
+    <th:block th:include="inc/client/aside :: clientAside"></th:block>
+    <!-- End:Aside -->
+
+    <!-- Start:Main -->
+    <main id="mainpage__wrap">
+        <!-- Start:Header -->
+        <th:block th:include="inc/client/header :: clientHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Contents -->
+        <section class="contents">
+            <form action="/client/infoUpdate" method="post">
+                <p>사장 아이디: <span th:text="${client.clientId}" data-field="clientId"></span></p>
+                <p>사장 이름: <span th:text="${client.clientName}" data-field="clientName"></span> <button type="button" onclick="enableEdit(this)">수정</button></p>
+                <p>사장 EID: <span th:text="${client.clientEID}" data-field="clientEID"></span></p>
+                <p>사장 전화번호: <span th:text="${client.clientPhone}" data-field="clientPhone"></span> <button type="button" onclick="enableEdit(this)">수정</button></p>
+                <p>사장 이메일: <span th:text="${client.clientEmail}" data-field="clientEmail"></span> <button type="button" onclick="enableEdit(this)">수정</button></p>
+                <p>사장 계좌: <span th:text="${client.getBankName()}" data-field="bankName"></span></p>
+                <p>사장 은행: <span th:text="${client.getBankAccount()}" data-field="bankAccount"></span></p>
+                <button type="submit">수정완료</button>
+            </form>
+            <input type="hidden" id="flashMessage" th:value="${message}" />
+            <script src="/client/js/module/infoUpdate.js"></script>
+        </section>
+        <!-- End:Contents -->
+    </main>
+    <!-- End:Main -->
+</div>
+</body>
+</html>
