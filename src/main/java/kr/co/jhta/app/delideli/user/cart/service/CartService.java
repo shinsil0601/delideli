@@ -17,5 +17,5 @@ public interface CartService {
 
     void deleteCartItem(int cartKey);
 
-    ArrayList<Cart> getCartItemsByStoreInfoKey(int storeInfoKey);
+    ArrayList<Cart> getCartItemsByStoreInfoKey(int userKey, int storeInfoKey);
 }

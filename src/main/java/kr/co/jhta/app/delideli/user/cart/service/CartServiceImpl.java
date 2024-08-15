@@ -9,6 +9,8 @@ import kr.co.jhta.app.delideli.user.store.service.OptionService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -85,7 +87,10 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ArrayList<Cart> getCartItemsByStoreInfoKey(int storeInfoKey) {
-        return null;
+    public ArrayList<Cart> getCartItemsByStoreInfoKey(int userKey, int storeInfoKey) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("userKey", userKey);
+        map.put("storeInfoKey", storeInfoKey);
+        return cartMapper.findByStoreInfoKey(map);
     }
 }
