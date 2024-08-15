@@ -190,7 +190,7 @@ public class BoardController {
         UserAccount userAccount = userService.findUserById(user.getUsername());
         model.addAttribute("user", userAccount);
         log.info("userKey>>>>>>>>>!!! " + userAccount.getUserKey());
-        List<Board> list;
+        List<Board> list = boardService.getMyAskList((long) userAccount.getUserKey());
         model.addAttribute("list", list);
 
         return "/user/mypage/myAsk";
