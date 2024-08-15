@@ -51,7 +51,6 @@ button:disabled:hover {
     font-weight: 700;
     color: var(--teal-500);
 }
-
 /* mainBanner */
 .mainBanner__wrap {
     position: relative;
