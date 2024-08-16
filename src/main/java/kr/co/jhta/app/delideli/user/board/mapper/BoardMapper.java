@@ -44,4 +44,13 @@ public interface BoardMapper {
     void deleteChildComments(int commentKey);
     // 이벤트 댓글 답글삽입
     void insertReplyComment(Comment comment);
+
+    //내문의 글목록
+    List<Board> getMyAskList(int userKey);
+    //내문의 글작성
+    void myAskWrite(Board board);
+    //내문의 상세보기
+    Board myAskDetail(int boardKey);
+    //내문의 글삭제
+    void myAskDelete(int boardKey);
 }

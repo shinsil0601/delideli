@@ -29,4 +29,10 @@ public interface ClientService {
 
     // 계정 승인여부 확인
     boolean checkAccessAccount(String clientId, String password);
+
+    //내정보 수정
+    void modifyClient(ClientDTO clientDTO);
+
+    //비밀번호 변경(로그인)
+    void changePwLogin(String clientId, String newPw1);
 }

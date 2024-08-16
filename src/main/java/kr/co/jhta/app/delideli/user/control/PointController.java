@@ -28,21 +28,21 @@ public class PointController {
     public String charge(@AuthenticationPrincipal User user, Model model) {
         UserAccount userAccount = userService.findUserById(user.getUsername());
         model.addAttribute("user", userAccount);
-        return "/user/mypage/mypoint";
+        return "/user/mypage/myPoint";
     }
 
     //포인트 충전
     @PostMapping("/charge")
     @ResponseBody
     public Map<String, Object> chargePoint(@AuthenticationPrincipal User user, @RequestParam("amount") int amount, @RequestParam("userKey") String userKey) {
-        log.info("Received userKey: {}", userKey); // 여기서 userKey를 출력합니다.
+        //log.info("Received userKey: {}", userKey); // 여기서 userKey를 출력합니다.
 
         Map<String, Object> response = new HashMap<>();
         try {
             // 포인트 충전 로직 추가
             userService.chargePoint(userKey, amount);
-            log.info("Successfully charged userKey: {}", userKey);
-            log.info("Successfully charged amount: {}", amount);
+            //log.info("Successfully charged userKey: {}", userKey);
+            //log.info("Successfully charged amount: {}", amount);
             // 충전 후 사용자 정보를 다시 가져와서 응답에 추가
             UserAccount userAccount = userService.findUserById(user.getUsername());
             response.put("success", true);

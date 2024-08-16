@@ -133,8 +133,8 @@
                 <div th:each="store : ${storeList}">
                     <!-- 전체 카드를 클릭할 수 있도록 a 태그로 감쌈 -->
                     <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}" class="store-card" style="text-decoration: none; color: inherit;">
-                        <div class="store-image">
-                            <img th:src="${store.firstMenu.menuImg}" alt="메뉴 이미지" />
+                        <div th:if="${store != null}">
+                            <img th:if="${store.firstMenu != null}" th:src="@{${store.firstMenu.menuImg}}" alt="Menu Image">
                         </div>
                         <div class="store-info">
                             <h2 th:text="${store.storeName}">가게 이름</h2>
@@ -143,7 +143,7 @@
                                 <span th:text="'⭐ ' + ${store.averageRating}">4.5</span>
                                 <span th:text="'리뷰 ' + ${store.reviewCount}">리뷰 150</span>
                             </p>
-                            <p>메뉴: <span th:text="${store.firstMenu.menuName}">메뉴 이름</span></p>
+                            <p th:if="${store.firstMenu != null}">메뉴: <span th:text="${store.firstMenu.menuName}">메뉴 이름</span></p>
                             <!-- 배달비 및 배달 시간 정보 -->
                             <p th:text="'배달비: ' + ${store.deliveryAmount1} + ' ~ ' + ${store.deliveryAmount3}"></p>
                             <p th:text="'오픈시간 : ' + ${store.openTime}"></p>

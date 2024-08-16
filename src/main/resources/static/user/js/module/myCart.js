@@ -32,3 +32,29 @@ function deleteCartItem(cartKey) {
             });
     }
 }
+
+// 결제 버튼 클릭 처리
+function processPayment(storeInfoKey, minOrderAmount) {
+    const totalPriceElement = document.getElementById('storeTotalPrice-' + storeInfoKey);
+
+    // 요소가 존재하는지 확인
+    if (!totalPriceElement) {
+        console.error('총 금액 요소를 찾을 수 없습니다:', 'storeTotalPrice-' + storeInfoKey);
+        return;
+    }
+
+    const storeTotalPrice = parseInt(totalPriceElement.textContent.replace('총 금액: ', '').replace('원', '').replace(/,/g, ''));
+
+    if (isNaN(storeTotalPrice)) {
+        console.error('총 금액을 파싱할 수 없습니다:', totalPriceElement.textContent);
+        return;
+    }
+
+    if (storeTotalPrice < minOrderAmount) {
+        alert('최소 주문 금액을 충족하지 못했습니다.');
+    } else {
+        // 결제 페이지로 이동
+        window.location.href = '/user/order?storeInfoKey=' + storeInfoKey;
+    }
+}
+

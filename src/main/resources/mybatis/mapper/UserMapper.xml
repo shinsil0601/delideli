@@ -134,5 +134,19 @@
         SET user_point = user_point + #{amount}
         WHERE user_key = #{userKey}
     </update>
-  
+
+    <!-- 사용자 포인트를 업데이트 -->
+    <update id="updateUserPoint" parameterType="map">
+        UPDATE user_account
+        SET user_point = #{newPoint}
+        WHERE user_key = #{userKey}
+    </update>
+
+    <!-- 사용자 삭제 -->
+    <update id="deleteUserByUserName" parameterType="int">
+        UPDATE user_account
+        SET user_role = 'null'
+        WHERE user_key = #{userKey}
+    </update>
+
 </mapper>

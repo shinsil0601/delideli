@@ -201,7 +201,7 @@ gradle-app.setting
 /.env
 /application-*.yml
 /application-*.properties
-/src/main/resources/application.properties
+/src/main/resources/application-secret.properties
 
 # 로컬 설정 파일 (Spring Boot DevTools)
 /spring-boot-devtools.properties
