@@ -54,9 +54,23 @@
     background: var(--gray-100);
 }
 .notice__table td a {
-    display: block;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+.notice__table td a > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    background: var(--blue-500);
+    border-radius: 0.8rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--whiteColor);
+    line-height: 1;
 }
 .board__pagination {
     display: flex;
