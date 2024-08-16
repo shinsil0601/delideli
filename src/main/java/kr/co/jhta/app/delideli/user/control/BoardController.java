@@ -67,7 +67,7 @@ public class BoardController {
         model.addAttribute("list", list);
         model.addAttribute("map", map);
 
-        return "/user/board/notice";
+        return "/user/board/notice.list";
     }
 
     // 공지사항 상세보기
