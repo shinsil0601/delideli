@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 리뷰 작성</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <form th:action="@{/user/saveReview}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="orderKey" th:value="${order.orderKey}">
+                <input type="hidden" name="storeInfoKey" th:value="${storeInfo.storeInfoKey}">
+                <input type="hidden" name="clientKey" th:value="${storeInfo.clientKey}">
+
+                <div>
+                    <label>가게 이름:</label>
+                    <span th:text="${storeInfo.storeName}"></span>
+                </div>
+
+                <div>
+                    <label>별점:</label>
+                    <input type="number" name="reviewRating" min="1" max="5" required>
+                </div>
+
+                <div>
+                    <label>리뷰 내용:</label>
+                    <textarea name="reviewDesc" required></textarea>
+                </div>
+
+                <div>
+                    <label>사진 업로드:</label>
+                    <input type="file" name="reviewPhoto1">
+                    <input type="file" name="reviewPhoto2">
+                </div>
+
+                <button type="submit">리뷰 등록하기</button>
+            </form>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

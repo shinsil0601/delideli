@@ -28,4 +28,10 @@
         ORDER BY coupon_end_date ASC
     </select>
 
+    <!-- 쿠폰 삭제 -->
+    <delete id="deleteCouponByKeyAndUser" parameterType="map">
+        DELETE FROM coupon
+        WHERE coupon_key = #{couponKey} AND user_key = #{userKey}
+    </delete>
+
 </mapper>

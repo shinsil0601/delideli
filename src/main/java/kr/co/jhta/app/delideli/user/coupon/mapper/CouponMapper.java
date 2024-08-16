@@ -9,4 +9,6 @@ import java.util.ArrayList;
 public interface CouponMapper {
     // 특정 유저의 쿠폰 리스트를 가져오기
     ArrayList<Coupon> getCouponsByUserKey(int userKey);
+
+    void deleteCouponByKeyAndUser(int couponKey, int userKey);
 }

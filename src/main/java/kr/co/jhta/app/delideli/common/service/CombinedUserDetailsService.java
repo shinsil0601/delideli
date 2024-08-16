@@ -26,28 +26,32 @@ public class CombinedUserDetailsService implements UserDetailsService {
     }
 
     public UserDetails loadUserByUsernameAndType(String username, String role) throws UsernameNotFoundException {
-        //log.info("CombinedUserDetailsService - 사용자 이름과 역할로 사용자 정보 로드: {} 역할: {}", username, role);
+        // 유효한 역할인지 확인
+        if (!"ROLE_USER".equals(role) && !"ROLE_CLIENT".equals(role) && !"ROLE_ADMIN".equals(role)) {
+            throw new UsernameNotFoundException("유효하지 않은 역할입니다. 사용자 이름: " + username + ", 역할: " + role);
+        }
 
         if ("ROLE_USER".equals(role)) {
-            UserAccount userAccount = userMapper.selectUserById(username).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다. 사용자 이름: " + username));
+            UserAccount userAccount = userMapper.selectUserById(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다. 사용자 이름: " + username));
             return User.builder()
                     .username(userAccount.getUserId())
                     .password(userAccount.getUserPw())
                     .roles(userAccount.getUserRole())
                     .build();
         } else if ("ROLE_CLIENT".equals(role)) {
-            ClientAccount clientAccount = clientMapper.selectClientById(username).orElseThrow(() -> new UsernameNotFoundException("클라이언트를 찾을 수 없습니다. 클라이언트 이름: " + username));
+            ClientAccount clientAccount = clientMapper.selectClientById(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("클라이언트를 찾을 수 없습니다. 클라이언트 이름: " + username));
             return User.builder()
                     .username(clientAccount.getClientId())
                     .password(clientAccount.getClientPw())
                     .roles(clientAccount.getClientRole())
                     .build();
         } else if ("ROLE_ADMIN".equals(role)) {
-            // admin 사용자 하드코딩
             if ("admin".equals(username)) {
                 return User.builder()
                         .username("admin")
-                        .password("{noop}123") // 비밀번호 암호화 없이 사용
+                        .password("{noop}123")
                         .roles("ADMIN")
                         .build();
             }

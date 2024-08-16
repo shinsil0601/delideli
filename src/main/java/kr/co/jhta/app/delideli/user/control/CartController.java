@@ -7,8 +7,10 @@ import kr.co.jhta.app.delideli.user.cart.domain.CartOptions;
 import kr.co.jhta.app.delideli.user.cart.service.CartService;
 import kr.co.jhta.app.delideli.user.dto.CartDTO;
 import kr.co.jhta.app.delideli.user.store.domain.Menu;
+import kr.co.jhta.app.delideli.user.store.domain.Option;
 import kr.co.jhta.app.delideli.user.store.domain.OptionGroup;
 import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
+import kr.co.jhta.app.delideli.user.store.service.OptionService;
 import kr.co.jhta.app.delideli.user.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,8 @@ public class CartController {
     private final StoreService storeService;
     @Autowired
     private final CartService cartService;
+    @Autowired
+    private final OptionService optionService;
 
     // 장바구니 페이지
     @GetMapping("/myCart")
@@ -73,6 +77,43 @@ public class CartController {
         return "user/mypage/myCart";
     }
 
+    // 장바구니 추가
+    @PostMapping("/addToCart")
+    @ResponseBody
+    public Map<String, Object> addToCart(@RequestBody Map<String, Object> cartRequest,
+                                         @AuthenticationPrincipal User user) {
+        Map<String, Object> response = new HashMap<>();
+        if (user == null) {
+            response.put("success", false);
+            response.put("message", "로그인이 필요합니다.");
+            return response;
+        }
+
+        try {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+
+            // 문자열로 받은 데이터들을 적절한 타입으로 변환
+            int menuKey = Integer.parseInt(cartRequest.get("menuKey").toString());
+            int quantity = Integer.parseInt(cartRequest.get("quantity").toString());
+
+            // ArrayList로 변환
+            ArrayList<Integer> selectedOptions = new ArrayList<>();
+            for (Object option : (ArrayList<?>) cartRequest.get("selectedOptionKeys")) {
+                selectedOptions.add(Integer.parseInt(option.toString()));
+            }
+
+            // 장바구니에 항목 추가
+            cartService.addItemToCart(userAccount.getUserKey(), menuKey, quantity, selectedOptions);
+
+            response.put("success", true);
+        } catch (Exception e) {
+            log.error("장바구니 추가 중 오류 발생", e);
+            response.put("success", false);
+            response.put("message", "오류가 발생했습니다. 다시 시도해 주세요.");
+        }
+
+        return response;
+    }
 
     // 장바구니 아이템 수정 페이지로 이동
     @GetMapping("/editCartItem/{cartKey}")
@@ -138,4 +179,58 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
+    // 같은 메뉴 담기
+    @PostMapping("/addSameMenu")
+    public ResponseEntity<Map<String, Object>> addSameMenu(@RequestBody Map<String, Object> requestData) {
+        try {
+            // 로그로 요청 데이터를 찍어봅니다.
+            log.info("Received request data: {}", requestData);
+
+            // storeInfoKey와 userKey 추출
+            int storeInfoKey = Integer.parseInt(requestData.get("storeInfoKey").toString());
+            int userKey = Integer.parseInt(requestData.get("userKey").toString());
+
+
+            // orderDetails는 리스트 형태로 받습니다.
+            List<Map<String, Object>> orderDetails = (List<Map<String, Object>>) requestData.get("orderDetails");
+
+            // 각 주문 항목에 대해 처리
+            for (Map<String, Object> detail : orderDetails) {
+                String menuName = (String) detail.get("menuName");
+                int quantity = (int) detail.get("quantity");
+                String optionName = (String) detail.get("optionName");
+
+                // MenuService를 이용해 menuKey를 가져옴
+                int menuKey = storeService.getMenuByStoreInfoKeyAndMenuName(storeInfoKey, menuName);
+
+                // cart 테이블에 메뉴 추가
+                int cartKey = cartService.addCart(userKey, menuKey, quantity);
+
+                // OptionService를 이용해 해당 옵션 이름에 대한 optionKey 목록을 가져옴
+                ArrayList<Integer> optionKeys = optionService.getOptionKeysByMenuKeyAndOptionNames(menuKey, optionName);
+
+                // 옵션 키 목록을 반복하면서 cart_options 테이블에 저장
+                for (int optionKey : optionKeys) {
+                    // 옵션 정보 가져오기
+                    Option option = optionService.getOptionById(optionKey);
+                    // cart_options 테이블에 데이터 추가
+                    cartService.addCartOption(cartKey, optionKey, option.getOptionPrice(), option.getOptionName());
+                }
+
+            }
+
+            // 응답 객체를 생성합니다.
+            Map<String, Object> response = Map.of("success", true, "message", "메뉴가 성공적으로 추가되었습니다.");
+
+            // 클라이언트에 응답을 반환합니다.
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Error occurred while processing the request", e);
+            Map<String, Object> errorResponse = Map.of("success", false, "message", "메뉴 추가에 실패했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
 }

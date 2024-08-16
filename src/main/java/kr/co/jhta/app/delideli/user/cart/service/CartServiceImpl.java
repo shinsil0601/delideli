@@ -93,4 +93,36 @@ public class CartServiceImpl implements CartService {
         map.put("storeInfoKey", storeInfoKey);
         return cartMapper.findByStoreInfoKey(map);
     }
+
+    @Override
+    public void removeCartItem(int cartKey) {
+        cartMapper.deleteCartOptions(cartKey);
+        cartMapper.deleteCartItem(cartKey);
+    }
+
+    @Override
+    public int addCart(int userKey, int menuKey, int quantity) {
+        Cart cart = new Cart();
+        cart.setUserKey(userKey);
+        cart.setMenuKey(menuKey);
+        cart.setQuantity(quantity);
+
+        // cart 테이블에 데이터를 삽입
+        cartMapper.insertCartItem(cart);
+
+        // 삽입된 cart_key 반환
+        return cart.getCartKey();
+    }
+
+    @Override
+    public void addCartOption(int cartKey, int optionKey, int optionPrice, String optionName) {
+        CartOptions cartOption = new CartOptions();
+        cartOption.setCartKey(cartKey);
+        cartOption.setOptionKey(optionKey);
+        cartOption.setOptionPrice(optionPrice);
+        cartOption.setOptionName(optionName);
+
+        cartMapper.insertCartOption(cartOption);
+    }
+
 }

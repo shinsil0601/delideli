@@ -24,5 +24,6 @@ public interface CartMapper {
     void deleteCartOptions(int cartKey);
 
     ArrayList<Cart> findByStoreInfoKey(Map<String, Integer> map);
+
 }
 

@@ -32,6 +32,7 @@ const orderAmount1 = parseInt($('#orderAmount1').val());
 const deliveryAmount1 = parseInt($('#deliveryAmount1').val());
 const orderAmount2 = parseInt($('#orderAmount2').val());
 const deliveryAmount2 = parseInt($('#deliveryAmount2').val());
+const orderAmount3 = parseInt($('#orderAmount3').val());
 const deliveryAmount3 = parseInt($('#deliveryAmount3').val());
 
 let totalAmount = parseInt($('#totalAmountText').text().replace(/[^0-9]/g, ''));
@@ -79,7 +80,7 @@ function toggleDeliveryOption(isDelivery) {
 
         if (totalAmount < orderAmount1) {
             deliveryFee = deliveryAmount1;
-        } else if (totalAmount >= orderAmount1) {
+        } else if (totalAmount >= orderAmount1 && totalAmount < orderAmount2) {
             deliveryFee = deliveryAmount2;
         } else if (totalAmount >= orderAmount2) {
             deliveryFee = deliveryAmount3;
@@ -221,7 +222,7 @@ function confirmOrder() {
     const totalPayment = totalAmount + deliveryFee - couponDiscount;
 
     if (totalAmount < minOrderAmount) {
-        alert("최소 주문 금액을 충족하지 못했습니다.")
+        alert("최소 주문 금액을 충족하지 못했습니다.");
         window.location.href = '/user/myCart';
         return;
     }
@@ -231,5 +232,62 @@ function confirmOrder() {
         return;
     }
 
-    alert("주문이 확정되었습니다.");
+    const orderNo = generateOrderNo(); // 주문번호 생성
+
+    // 주문 데이터 서버로 전송
+    const cartItems = [];
+    $('.cart-item').each(function() {
+        const cartKey = $(this).data('cartKey');
+        const menuName = $(this).find('.menu-name').text().trim().replace('메뉴: ', '');
+        const optionName = $(this).find('.option-name').map(function() {
+            return $(this).text().trim();
+        }).get().join(' '); // 옵션을 빈칸으로 구분하여 저장
+        const quantity = parseInt($(this).find('.quantity').text().replace(/[^0-9]/g, '').trim());
+
+        cartItems.push({
+            cartKey: cartKey,
+            menuName: menuName,
+            optionName: optionName,
+            quantity: quantity
+        });
+    });
+
+    const orderData = {
+        storeInfoKey: $('#storeInfoKey').val(),  // storeInfoKey 추가
+        orderNo: orderNo,
+        paymentMethod: paymentMethod,
+        totalPayment: totalPayment,
+        deliveryFee: deliveryFee,
+        couponDiscount: couponDiscount,
+        address: $('#addressInfo p').text().trim(),
+        riderDesc: $('#riderDesc').val(),
+        shopDesc: $('#shopDesc').val(),
+        orderMethod: $('input[name="orderMethod"]:checked').val(), // orderMethod 추가
+        couponKey: $('#couponSelect').val() !== "0" ? $('#couponSelect').val() : null, // couponKey 추가
+        cartItems: cartItems // cartItems 추가
+    };
+
+    $.ajax({
+        url: '/user/confirmOrder',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(orderData),
+        success: function(response) {
+            if (response.success) {
+                alert("주문이 확정되었습니다. 주문번호: " + orderNo);
+                window.location.href = '/user/myOrder';
+            } else {
+                alert("주문에 실패했습니다. 다시 시도해 주세요.");
+            }
+        },
+        error: function(xhr) {
+            const response = JSON.parse(xhr.responseText);
+            alert(response.message || "오류가 발생했습니다. 다시 시도해 주세요.");
+        }
+    });
+}
+
+// 주문번호 생성 함수 (16진수 6자리)
+function generateOrderNo() {
+    return Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0').toUpperCase();
 }

@@ -20,7 +20,7 @@
 
         <!-- Start:Main -->
         <main id="mainpage__wrap">
-
+            <input type="hidden" id="storeInfoKey" th:value="${storeInfo.storeInfoKey}" />
             <!-- 배달과 포장 선택 -->
             <div>
                 <label>
@@ -44,13 +44,13 @@
                 <input type="hidden" id="minOrderAmount" th:value="${storeInfo.minOrderAmount}" />
                 <h2 th:text="'최소 주문 금액 : ' + ${storeInfo.minOrderAmount} + '원'"></h2>
 
-                <div th:each="cartItem : ${cartItems}">
-                    <p th:text="'메뉴: ' + ${cartItem.menu.menuName}">메뉴 이름</p>
-                    <p th:text="'수량: ' + ${cartItem.quantity}">수량</p>
+                <div class="cart-item" th:each="cartItem : ${cartItems}" th:data-cart-key="${cartItem.cartKey}">
+                    <p class="menu-name" th:text="'메뉴: ' + ${cartItem.menu.menuName}">메뉴 이름</p>
+                    <p class="quantity" th:text="'수량: ' + ${cartItem.quantity}">수량</p>
 
                     <!-- 옵션이 있을 경우에만 옵션을 표시 -->
                     <p th:if="${cartItem.cartOptions.size() > 0}">
-                        옵션: <span th:each="option : ${cartItem.cartOptions}"
+                        옵션: <span class="option-name" th:each="option : ${cartItem.cartOptions}"
                                   th:text="${option.optionName} + ${optionStat.index != optionStat.size - 1 ? ', ' : ''}"></span>
                     </p>
 

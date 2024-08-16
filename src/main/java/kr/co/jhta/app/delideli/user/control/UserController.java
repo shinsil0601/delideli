@@ -99,6 +99,19 @@ public class UserController {
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            // 사용자의 역할 가져오기
+            String role = authentication.getAuthorities().stream()
+                    .map(grantedAuthority -> grantedAuthority.getAuthority())
+                    .findFirst()
+                    .orElse("");
+
+            // 유효한 역할인지 확인
+            if (!"ROLE_USER".equals(role)) {
+                log.error("로그인 실패: 유효하지 않은 역할입니다. 사용자 이름: {}, 역할: {}", userId, role);
+                SecurityContextHolder.clearContext();
+                return "redirect:/user/login?error=" + urlEncode("아이디 또는 비밀번호가 일치하지 않습니다.");
+            }
+
             String token = jwtTokenProvider.generateToken(authentication);
             log.info("JWT 토큰 : {}", token);
 
@@ -405,53 +418,38 @@ public class UserController {
         return "user/mypage/myLike";
     }
 
-    // 장바구니 추가
-    @PostMapping("/addToCart")
-    @ResponseBody
-    public Map<String, Object> addToCart(@RequestBody Map<String, Object> cartRequest,
-                                         @AuthenticationPrincipal User user) {
-        Map<String, Object> response = new HashMap<>();
-        if (user == null) {
-            response.put("success", false);
-            response.put("message", "로그인이 필요합니다.");
-            return response;
-        }
+    // 내 정보 확인(회원탈퇴)
+    @GetMapping("/withdrawal")
+    public String withdrawal(@AuthenticationPrincipal User user, Model model) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        model.addAttribute("user", userAccount);
+        return "user/mypage/withdrawal";
+    }
 
-        try {
-            UserAccount userAccount = userService.findUserById(user.getUsername());
+    // 회원 탈퇴
+    @PostMapping("/withdrawal")
+    public String withdrawUser(@AuthenticationPrincipal User user, HttpServletResponse response) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        userService.deleteUserByUserName(userAccount.getUserKey());
+        SecurityContextHolder.clearContext();
 
-            // 문자열로 받은 데이터들을 적절한 타입으로 변환
-            int menuKey = Integer.parseInt(cartRequest.get("menuKey").toString());
-            int quantity = Integer.parseInt(cartRequest.get("quantity").toString());
+        Cookie cookie = new Cookie("JWT", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
 
-            // ArrayList로 변환
-            ArrayList<Integer> selectedOptions = new ArrayList<>();
-            for (Object option : (ArrayList<?>) cartRequest.get("selectedOptionKeys")) {
-                selectedOptions.add(Integer.parseInt(option.toString()));
-            }
-
-            // 장바구니에 항목 추가
-            cartService.addItemToCart(userAccount.getUserKey(), menuKey, quantity, selectedOptions);
-
-            response.put("success", true);
-        } catch (Exception e) {
-            log.error("장바구니 추가 중 오류 발생", e);
-            response.put("success", false);
-            response.put("message", "오류가 발생했습니다. 다시 시도해 주세요.");
-        }
-
-        return response;
+        return "redirect:/";
     }
 
     // 페이지네이션 처리 메서드
     private ArrayList<StoreInfo> paginateStores(ArrayList<StoreInfo> allStores, int page, int pageSize) {
         int fromIndex = (page - 1) * pageSize;
         int toIndex = Math.min(fromIndex + pageSize, allStores.size());
-
         if (fromIndex > toIndex) {
             return new ArrayList<>();
         }
-
         return new ArrayList<>(allStores.subList(fromIndex, toIndex));
     }
   

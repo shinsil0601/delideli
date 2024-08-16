@@ -1,27 +1,38 @@
 package kr.co.jhta.app.delideli.user.order.domain;
 
+import kr.co.jhta.app.delideli.user.review.domain.Review;
+import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Order {
     private int orderKey;
     private int userKey;
-    private int userAddressKey;
     private int storeInfoKey;
-    private int couponKey;
     private String orderNo;
+    private String address;
     private String orderMethod;
-    private int orderPrice;
-    private String orderPayment;
-    private int orderEstimatedTime;
+    private int uorderPrice;
+    private String uorderPayment;
+    private String orderEstimatedTime;
     private String riderDesc;
     private String shopDesc;
     private LocalDateTime orderRegdate;
     private LocalDateTime orderUpdate;
+    private String formattedOrderDate;
+    private String storeName;
+    private String statusMessage;
+    private String expectedArrivalTime;
+    private int remainingDays;
+    private Review review;
+    private StoreInfo storeInfo;
+
+    private ArrayList<OrderDetail> orderDetails;
 }

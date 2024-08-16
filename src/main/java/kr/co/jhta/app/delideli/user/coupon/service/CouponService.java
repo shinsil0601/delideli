@@ -7,4 +7,6 @@ import java.util.ArrayList;
 public interface CouponService {
 
     ArrayList<Coupon> getCouponsByUserKey(int userKey);
+
+    void removeCoupon(int couponKey, int userKey);
 }

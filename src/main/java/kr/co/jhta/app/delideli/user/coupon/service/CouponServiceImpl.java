@@ -19,4 +19,9 @@ public class CouponServiceImpl implements CouponService {
     public ArrayList<Coupon> getCouponsByUserKey(int userKey) {
         return couponMapper.getCouponsByUserKey(userKey);
     }
+
+    @Override
+    public void removeCoupon(int couponKey, int userKey) {
+        couponMapper.deleteCouponByKeyAndUser(couponKey, userKey);
+    }
 }

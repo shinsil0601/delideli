@@ -70,6 +70,18 @@ public class ClientController {
                 Authentication authentication = authenticationManager.authenticate(authenticationToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
+                // 사용자의 역할 가져오기
+                String role = authentication.getAuthorities().stream()
+                        .map(grantedAuthority -> grantedAuthority.getAuthority())
+                        .findFirst()
+                        .orElse("");
+
+                // 유효한 역할인지 확인
+                if (!"ROLE_CLIENT".equals(role)) {
+                    SecurityContextHolder.clearContext();
+                    return "redirect:/client/login?error=" + urlEncode("아이디 또는 비밀번호가 일치하지 않습니다.");
+                }
+
                 String token = jwtTokenProvider.generateToken(authentication);
                 log.info("JWT 토큰 : {}", token);
 

@@ -120,8 +120,10 @@ public class BoardController {
     @GetMapping("/eventDetail/{num}")
     public String eventDetail(@AuthenticationPrincipal User user, @PathVariable int num, Model model) {
         Board board = boardService.readOneEvent(num);
-        UserAccount userAccount = userService.findUserById(user.getUsername());
-        model.addAttribute("user", userAccount);
+        if (user != null) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+        }
         model.addAttribute("board", board);
         return "/user/board/eventDetail";
     }

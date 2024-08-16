@@ -10,7 +10,6 @@ public interface CartService {
 
     ArrayList<Cart> getCartItemsByUser(int userKey);
 
-
     Cart getCartItemById(int cartKey);
 
     void updateCartItem(int cartKey, int quantity, ArrayList<Integer> selectedOptionKeys);
@@ -18,4 +17,10 @@ public interface CartService {
     void deleteCartItem(int cartKey);
 
     ArrayList<Cart> getCartItemsByStoreInfoKey(int userKey, int storeInfoKey);
+
+    void removeCartItem(int cartKey);
+
+    int addCart(int userKey, int menuKey, int quantity);
+
+    void addCartOption(int cartKey, int optionKey, int optionPrice, String optionName);
 }
