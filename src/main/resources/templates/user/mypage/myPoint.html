@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 포인트 충전페이지</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+        <!-- 이니시스 cdn -->
+        <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <!-- 사용자 키를 HTML에 삽입 -->
+            <span id="userKey" style="display:none;" th:text="${user.userKey}"></span>
+            <span id="userName" style="display:none;" th:text="${user.userName}"></span>
+
+                <h3>포인트 조회</h3>
+                <p><span th:text="${user.userNickname}+'님의 포인트 : '"> </span><span id="userPoint" th:text="${user.userPoint}+'원'"></span></p>
+                <p>적립 결재 금액 :
+                    <select name="userMoney">
+                        <option value="1">10,000</option>
+                        <option value="20000">20,000</option>
+                        <option value="30000">30,000</option>
+                        <option value="40000">40,000</option>
+                        <option value="50000">50,000</option>
+                        <option value="60000">60,000</option>
+                        <option value="70000">70,000</option>
+                        <option value="80000">80,000</option>
+                        <option value="90000">90,000</option>
+                        <option value="100000">100,000</option>
+                    </select></p>
+                <br />
+                <input type="button" value="결제하기" onclick="checkform()" />
+                <script src="/user/js/module/myPoint.js"></script>
+            </main>
+            <!-- End:Main -->
+
+            <!-- Start:Footer -->
+            <th:block th:include="inc/user/footer :: userFooter"></th:block>
+            <!-- End:Footer -->
+    </body>
+</html>

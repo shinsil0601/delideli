@@ -36,6 +36,8 @@
                 <!-- 각 가게별로 그룹화된 장바구니 아이템을 출력 -->
                 <div th:each="entry : ${groupedCartItems}">
                     <h3 th:text="${entry.key.storeName}">가게 이름</h3>
+                    <!-- 가게의 최소 주문 금액 표시 -->
+                    <p th:text="'최소 주문 금액: ' + ${entry.key.minOrderAmount} + '원'"></p>
 
                     <div th:each="cartItem : ${entry.value}">
                         <div>
@@ -53,8 +55,11 @@
                         </div>
                         <br><br>
                     </div>
+
+                    <!-- 가게별 총 금액 표시 -->
+                    <p th:id="storeTotalPrice- + ${entry.key.storeInfoKey}" th:text="'총 금액: ' + ${storeTotalPrices[entry.key]} + '원'"></p>
+                    <button th:onclick="'processPayment(' + ${entry.key.storeInfoKey} + ',' + ${entry.key.minOrderAmount} + '); return false;'">결제하기</button>
                     <a th:href="@{/user/storeDetail/{storeKey}(storeKey=${entry.key.storeInfoKey})}">메뉴 추가하러가기</a>
-                    <button>결제하기</button>
                     <br><br>
                     <h3>======================================</h3>
                 </div>

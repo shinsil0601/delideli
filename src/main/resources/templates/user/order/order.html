@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 주문페이지</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <input type="hidden" id="storeInfoKey" th:value="${storeInfo.storeInfoKey}" />
+            <!-- 배달과 포장 선택 -->
+            <div>
+                <label>
+                    <input type="radio" name="orderMethod" value="배달" onclick="toggleDeliveryOption(true)" checked> 배달
+                </label>
+                <label>
+                    <input type="radio" name="orderMethod" value="포장" onclick="toggleDeliveryOption(false)"> 포장
+                </label>
+            </div>
+            <br>
+
+            <input type="hidden" id="userPoint" th:value="${user.userPoint}" />
+            <h1 th:text="${user.userNickname} + '님의 POINT : ' + ${user.userPoint}"></h1>
+            <a href="/user/charge">충전하기</a>
+            <br><br><br>
+
+            <div>
+                <h1 th:text="${storeInfo.storeName}">가게 이름</h1>
+                <h1>==========================================</h1>
+                <h2>주문 내역</h2>
+                <input type="hidden" id="minOrderAmount" th:value="${storeInfo.minOrderAmount}" />
+                <h2 th:text="'최소 주문 금액 : ' + ${storeInfo.minOrderAmount} + '원'"></h2>
+
+                <div class="cart-item" th:each="cartItem : ${cartItems}" th:data-cart-key="${cartItem.cartKey}">
+                    <p class="menu-name" th:text="'메뉴: ' + ${cartItem.menu.menuName}">메뉴 이름</p>
+                    <p class="quantity" th:text="'수량: ' + ${cartItem.quantity}">수량</p>
+
+                    <!-- 옵션이 있을 경우에만 옵션을 표시 -->
+                    <p th:if="${cartItem.cartOptions.size() > 0}">
+                        옵션: <span class="option-name" th:each="option : ${cartItem.cartOptions}"
+                                  th:text="${option.optionName} + ${optionStat.index != optionStat.size - 1 ? ', ' : ''}"></span>
+                    </p>
+
+                    <p th:text="'가격: ' + ${cartItem.totalPrice} + '원'">가격</p>
+                    <button th:onclick="'deleteCartItem(' + ${cartItem.cartKey} + '); return false;'" class="delete-button">
+                        삭제하기
+                    </button>
+                    <br>
+                </div>
+
+                <br>
+                <p>==========================================</p>
+
+                <!-- 주소 정보 -->
+                <input type="hidden" id="storeAddress" th:value="${storeInfo.storeAddress}" />
+                <div id="addressInfo" th:each="address : ${addressList}" th:if="${address.defaultAddress}">
+                    <h2>배달 받을 주소지</h2>
+                    <p th:text="${address.address} + ' ' + ${address.addrDetail}"></p>
+                    <button type="button" onclick="toggleAddressList()">주소 변경</button>
+                </div>
+
+                <!-- 사용자 주소와 가게 주소 비교 결과 메시지 -->
+                <p id="addressErrorMessage" style="color: red; display: none;">주문이 불가능한 지역입니다.</p>
+
+                <!-- 주소 리스트 박스 -->
+                <div id="addressListBox" style="display: none;">
+                    <select id="addressSelect" onchange="selectAddress()">
+                        <option value="" disabled selected>주소를 선택하세요</option>
+                        <option th:each="address : ${addressList}"
+                                th:value="${address.userAddressKey}"
+                                th:text="${address.address} + ' ' + ${address.addrDetail}">
+                        </option>
+                    </select>
+                    <button type="button" onclick="showAddAddressModal()">주소 추가</button>
+                </div>
+                <br><br><br>
+
+                <!-- 주소 추가 모달창 -->
+                <div id="addAddressModal" style="display: none;">
+                    <h2>주소 추가</h2>
+                    <form id="addressForm">
+                        <label for="newAddress">주소:</label>
+                        <input type="text" id="newAddress" name="newAddress" readonly required>
+                        <button type="button" onclick="execDaumPostcode()">주소 찾기</button>
+                        <br>
+                        <label for="newAddrDetail">상세 주소:</label>
+                        <input type="text" id="newAddrDetail" name="newAddrDetail" required>
+                        <br>
+                        <label for="newZipcode">우편번호:</label>
+                        <input type="text" id="newZipcode" name="newZipcode" readonly required>
+                        <br>
+                        <button type="button" onclick="saveAddress()">저장</button>
+                        <button type="button" onclick="closeAddAddressModal()">취소</button>
+                    </form>
+                </div>
+
+                <!-- 유저 전화번호 -->
+                <h2 th:text="'내 연락처  : ' + ${user.userPhone}"></h2>
+                <br>
+
+                <!-- 가게 요청사항 입력란 -->
+                <div>
+                    <label for="shopDesc">가게 요청사항</label>
+                    <textarea id="shopDesc" name="shopDesc" rows="4" cols="50"></textarea>
+                </div>
+                <br>
+
+                <!-- 배달 요청사항 입력란 -->
+                <div th:id="riderDescContainer">
+                    <label for="riderDesc">배달 요청사항</label>
+                    <textarea id="riderDesc" name="riderDesc" rows="4" cols="50"></textarea>
+                </div>
+                <br>
+
+                <!-- 결제방식 선택 -->
+                <div>
+                    <label for="paymentMethod">결제방식</label>
+                    <select id="paymentMethod" name="paymentMethod">
+                        <option value="포인트 결제">포인트 결제</option>
+                        <option value="만나서 카드결제">만나서 카드결제</option>
+                        <option value="만나서 현금결제">만나서 현금결제</option>
+                    </select>
+                </div>
+                <br>
+
+                <!-- 쿠폰 선택 -->
+                <div>
+                    <label for="couponSelect">쿠폰 선택</label>
+                    <select id="couponSelect" name="couponSelect" onchange="applyCouponDiscount()">
+                        <option value="0" data-discount="0">쿠폰 선택 안함</option>
+                        <option th:each="coupon : ${coupons}" th:value="${coupon.couponKey}" th:data-discount="${coupon.couponPrice}" th:text="${coupon.couponName} + ' - ' + ${coupon.couponPrice} + '원 할인'"></option>
+                    </select>
+                </div>
+                <br>
+
+                <!-- 총 금액 표시 -->
+                <p th:text="'총 금액: ' + ${totalAmount} + '원'" id="totalAmountText">총 금액</p>
+
+                <!-- 금액별 배달비 정보 -->
+                <input type="hidden" id="orderAmount1" th:value="${storeInfo.orderAmount1}" />
+                <input type="hidden" id="deliveryAmount1" th:value="${storeInfo.deliveryAmount1}" />
+                <input type="hidden" id="orderAmount2" th:value="${storeInfo.orderAmount2}" />
+                <input type="hidden" id="deliveryAmount2" th:value="${storeInfo.deliveryAmount2}" />
+                <input type="hidden" id="orderAmount3" th:value="${storeInfo.orderAmount3}" />
+                <input type="hidden" id="deliveryAmount3" th:value="${storeInfo.deliveryAmount3}" />
+
+                <!-- 배달비 계산 및 표시 -->
+                <div id="deliveryFeeContainer">
+                    <p id="deliveryFeeText"></p>
+                </div>
+
+                <!-- 쿠폰 할인 금액 표시 -->
+                <div id="couponDiscountContainer">
+                    <p id="couponDiscountText">쿠폰 할인: 0원</p>
+                </div>
+
+                <!-- 총 결제 금액 계산 -->
+                <p id="totalPaymentText"></p>
+
+                <!-- 주문 버튼 -->
+                <button type="button" id="confirmOrderButton" onclick="confirmOrder()">주문</button>
+
+            </div>
+            <script src="/user/js/module/order.js"></script>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

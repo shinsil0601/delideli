@@ -31,7 +31,7 @@ public interface BoardService {
     List<Board> getAllKeywordEvent(int startNo, int endNo, String keyword);
 
     //내문의 목록
-    List<Board> getMyAskList(Long userKey);
+    List<Board> getMyAskList(int userKey);
     //내문의 글작성
     void myAskWrite(Board board);
     //내문의 상세보기

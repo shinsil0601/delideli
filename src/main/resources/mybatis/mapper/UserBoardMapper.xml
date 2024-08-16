@@ -186,7 +186,7 @@
     </insert>
 
     <!-- 내문의 글목록 -->
-    <select id="getMyAskList" parameterType="long" resultMap="BoardResultMap">
+    <select id="getMyAskList" parameterType="int" resultMap="BoardResultMap">
         SELECT board_key, user_key, board_type, board_status, board_progress_status, board_title, board_write,
         board_contents, board_thumbnail, board_comment, board_comment_status, board_start_date,
         board_end_date, board_regdate, board_comment_date, board_update,

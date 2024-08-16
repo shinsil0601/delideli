@@ -81,4 +81,12 @@
         WHERE og.menu_key = #{menuKey}
     </select>
 
+    <!-- storeInfoKey와 menuName으로 menuKey를 가져옴 -->
+    <select id="getMenuKeyByStoreInfoKeyAndMenuName" parameterType="map" resultType="int">
+        SELECT menu_key
+        FROM menu
+        WHERE storeInfo_key = #{storeInfoKey}
+          AND menu_name = #{menuName}
+    </select>
+
 </mapper>

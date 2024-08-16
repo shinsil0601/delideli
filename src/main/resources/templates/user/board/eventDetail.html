@@ -37,7 +37,7 @@
             </table>
             <hr>
             <!-- 댓글 폼 -->
-            <div class="card my-4">
+            <div class="card my-4" th:if="${user != null}">
                 <h5 class="card-header">댓글</h5>
                 <div class="card-body">
                     <div id="comment"></div>
@@ -52,7 +52,7 @@
                     </form>
                 </div>
             </div>
-            <script src="/user/js/module/eventDetail.js"></script>
+            <script src="/user/js/module/eventDetail.js" th:if="${user != null}"></script>
         </main>
         <!-- End:Main -->
 

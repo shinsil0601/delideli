@@ -83,4 +83,13 @@ public class StoreServiceImpl implements StoreService {
         return menuMapper.getOptionGroupsByMenuId(menuKey);
     }
 
+    @Override
+    public int getMenuByStoreInfoKeyAndMenuName(int storeInfoKey, String menuName) {
+        Integer menuKey = menuMapper.getMenuKeyByStoreInfoKeyAndMenuName(storeInfoKey, menuName);
+        if (menuKey == null) {
+            throw new IllegalArgumentException("해당하는 메뉴를 찾을 수 없습니다: storeInfoKey=" + storeInfoKey + ", menuName=" + menuName);
+        }
+        return menuKey;
+    }
+
 }
