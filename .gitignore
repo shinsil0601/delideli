@@ -227,4 +227,8 @@ Thumbs.db
 *.bak
 *.swp
 
+# 빌드 파일
 /bin/
+
+# GitHub Actions Workflow 파일 무시
+.github/workflows/gradle.yml
