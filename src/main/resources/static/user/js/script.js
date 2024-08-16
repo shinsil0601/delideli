@@ -26,4 +26,28 @@ $(document).ready(function(){
             el: ".mainBanner__pagination"
         },
     });
+
+    // MainCategory Tab
+    $('.mainCategory__items > li').click(function(){
+        $('.mainCategory__items > li').removeClass('active');
+        $(this).addClass('active');
+        $('.mainCategory__shop').removeClass('active');
+
+        const index = $(this).index();
+        $('.mainCategory__shop').eq(index).addClass('active');
+    });
+
+    // MainEvent Swiper
+    const mainEventSwiper = new Swiper(".mainEvent__con", {
+        sliedePerView: '1',
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        navigation: {
+            nextEl: ".mainEvent__prevNext--next",
+            prevEl: ".mainEvent__prevNext--prev",
+        },
+    });
 });
