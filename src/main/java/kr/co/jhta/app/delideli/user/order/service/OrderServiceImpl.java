@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean cancelOrder(int orderKey) {
         int result = orderMapper.cancelOrder(orderKey);
-        System.out.println("Order cancellation result: " + result);
+        //System.out.println("Order cancellation result: " + result);
         return result > 0;
     }
 

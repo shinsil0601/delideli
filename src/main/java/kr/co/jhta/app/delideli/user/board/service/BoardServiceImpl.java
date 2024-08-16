@@ -102,7 +102,7 @@ public class BoardServiceImpl implements BoardService {
 
     //내문의 목록
     @Override
-    public List<Board> getMyAskList(Long userKey) {
+    public List<Board> getMyAskList(int userKey) {
         List<Board> list =boardMapper.getMyAskList(userKey);
         return list;
     }

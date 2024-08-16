@@ -20,9 +20,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -45,6 +47,8 @@ public class ClientController {
     private final AuthenticationManager authenticationManager;
     @Autowired
     private final JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // 로그인창 이동
     @GetMapping("/login")
@@ -52,18 +56,18 @@ public class ClientController {
         if (error != null) {
             model.addAttribute("errorMessage", "아이디 또는 비밀번호가 일치하지 않습니다.");
         }
-        log.info("로그인창 넘어옴");
+        //log.info("로그인창 넘어옴");
         return "client/account/login";
     }
 
     // 로그인 확인
     @PostMapping("/loginProc")
     public String loginProc(@RequestParam String clientId, @RequestParam String password, HttpServletResponse response) {
-        log.debug("loginProc 호출됨");
-        log.debug("입력된 사용자 이름: {}", clientId);
+        //log.debug("loginProc 호출됨");
+        //log.debug("입력된 사용자 이름: {}", clientId);
         try {
             if (clientService.checkAccessAccount(clientId, password)) {
-                log.debug("승인된 계정");
+                //log.debug("승인된 계정");
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(clientId, password);
                 authenticationToken.setDetails(new CustomAuthenticationDetails("ROLE_CLIENT"));
@@ -83,7 +87,7 @@ public class ClientController {
                 }
 
                 String token = jwtTokenProvider.generateToken(authentication);
-                log.info("JWT 토큰 : {}", token);
+                //log.info("JWT 토큰 : {}", token);
 
                 // JWT 토큰을 쿠키에 추가
                 Cookie cookie = jwtTokenProvider.createCookie(token);
@@ -91,12 +95,12 @@ public class ClientController {
 
                 return "redirect:/client/storeList";
             } else {
-                log.debug("비승인된 계정");
+                //log.debug("비승인된 계정");
                 return "redirect:/client/login?error=" + urlEncode("승인되지 않은 계정입니다.");
             }
         } catch (AuthenticationException e) {
-            log.error("Authentication failed for client: " + clientId);
-            log.error("Authentication failed", e);
+            //log.error("Authentication failed for client: " + clientId);
+            //log.error("Authentication failed", e);
             return "redirect:/client/login?error=" + urlEncode("아이디 또는 비밀번호가 일치하지 않습니다.");
         }
     }
@@ -256,5 +260,55 @@ public class ClientController {
         model.addAttribute("client", clientAccount);
         return "client/mypage/myPage";
     }
+
+    //마이페이지(내정보 수정 창이동)
+    @GetMapping("/infoUpdate")
+    public String clientInfoUpdate(@AuthenticationPrincipal User user, Model model) {
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
+        return "client/mypage/infoUpdate";
+    }
+
+    //마이페이지(내정보 수정)
+    @PostMapping("infoUpdate")
+    public String clientInfoUpdate(@AuthenticationPrincipal User user, @ModelAttribute ClientDTO clientDTO, Model model){
+        if (user != null){
+            ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+            model.addAttribute("client", clientAccount);
+            clientDTO.setClientId(clientAccount.getClientId());
+        }
+        clientService.modifyClient(clientDTO);
+        return "redirect:/client/infoUpdate";
+    }
+
+    //마이페이지(비밀번호변경 창이동)
+    @GetMapping("changePwLogin")
+    public String changePwLogin(@AuthenticationPrincipal User user, Model model) {
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
+        return "/client/myPage/changePwLogin";
+    }
+
+    // 마이페이지(비밀번호변경)
+    @PostMapping("changePwLogin")
+    public String changePwLogin(@AuthenticationPrincipal User user, @ModelAttribute ClientDTO clientDTO,
+                                @RequestParam String clientId, @RequestParam String clientPw1, @RequestParam String newPw1,
+                                Model model, RedirectAttributes redirectAttributes) {
+        // 기존 비밀번호와 입력한 비밀번호가 일치하지 않으면 리턴
+        if (!passwordEncoder.matches(clientPw1, clientService.findClientById(clientId).getClientPw())) {
+            ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+            clientDTO.setClientId(clientAccount.getClientId());
+            model.addAttribute("client", clientAccount);
+            redirectAttributes.addFlashAttribute("message", "기존 비밀번호가 일치하지 않습니다.");
+            return "redirect:/client/changePwLogin";
+        }
+        clientService.changePwLogin(clientId, newPw1);
+        redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
+        return "redirect:/client/infoUpdate";
+    }
+
+
+
+
 }
 

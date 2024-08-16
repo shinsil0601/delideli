@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 // 유효한 역할인지 확인
                 if (!"ROLE_USER".equals(role) && !"ROLE_CLIENT".equals(role) && !"ROLE_ADMIN".equals(role)) {
-                    log.error("인증 실패: 유효하지 않은 역할입니다. 사용자 이름: {}, 역할: {}", username, role);
+                    //log.error("인증 실패: 유효하지 않은 역할입니다. 사용자 이름: {}, 역할: {}", username, role);
                     throw new UsernameNotFoundException("유효하지 않은 역할입니다. 사용자 이름: " + username + ", 역할: " + role);
                 }
 
@@ -50,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (UsernameNotFoundException e) {
-                log.error("인증 실패: {}", e.getMessage());
+                //log.error("인증 실패: {}", e.getMessage());
                 SecurityContextHolder.clearContext();
                 // 인증 실패시 메인 화면 대신 로그인 화면으로 리디렉션
                 response.sendRedirect("/user/login?error=" + e.getMessage());

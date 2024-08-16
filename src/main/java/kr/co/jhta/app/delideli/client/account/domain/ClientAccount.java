@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ClientAccount {
-    private Long clientKey;
+    private int clientKey;
     private String clientEID;
     private String clientName;
     private String clientPhone;

@@ -67,7 +67,7 @@ public class BoardController {
         model.addAttribute("list", list);
         model.addAttribute("map", map);
 
-        return "/user/board/notice";
+        return "/user/board/notice.list";
     }
 
     // 공지사항 상세보기
@@ -191,10 +191,8 @@ public class BoardController {
     public String myAsk(@AuthenticationPrincipal User user, Model model) {
         UserAccount userAccount = userService.findUserById(user.getUsername());
         model.addAttribute("user", userAccount);
-        log.info("userKey>>>>>>>>>!!! " + userAccount.getUserKey());
-        List<Board> list;
-
-        list = boardService.getMyAskList((long)userAccount.getUserKey());
+        //log.info("userKey>>>>>>>>>!!! " + userAccount.getUserKey());
+        List<Board> list = boardService.getMyAskList(userAccount.getUserKey());
         model.addAttribute("list", list);
 
         return "/user/mypage/myAsk";
@@ -212,7 +210,7 @@ public class BoardController {
     @PostMapping("/myAskWrite")
     public String myAskWrite(@AuthenticationPrincipal User user, @ModelAttribute Board board) {
         UserAccount userAccount = userService.findUserById(user.getUsername());
-        board.setUserKey(userAccount.getUserKey());  // Long 타입을 int 타입으로 변환
+        board.setUserKey(userAccount.getUserKey());
         boardService.myAskWrite(board);  // Board 객체를 매개변수로 전달
 
         return "redirect:/user/myAsk";

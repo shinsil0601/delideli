@@ -12,6 +12,8 @@ import kr.co.jhta.app.delideli.user.board.domain.Board;
 import kr.co.jhta.app.delideli.user.cart.domain.Cart;
 import kr.co.jhta.app.delideli.user.cart.domain.CartOptions;
 import kr.co.jhta.app.delideli.user.cart.service.CartService;
+import kr.co.jhta.app.delideli.user.coupon.domain.Coupon;
+import kr.co.jhta.app.delideli.user.coupon.service.CouponService;
 import kr.co.jhta.app.delideli.user.dto.CartDTO;
 import kr.co.jhta.app.delideli.user.dto.UserDTO;
 import kr.co.jhta.app.delideli.user.account.exception.DuplicateUserIdException;
@@ -62,18 +64,18 @@ public class UserController {
     @Autowired
     private final StoreService storeService;
     @Autowired
-    private final CartService cartService;
+    private final CouponService couponService;
 
 
     @GetMapping("/home")
     public String home(@AuthenticationPrincipal User user, Model model) {
         if (user != null) {
-            log.info("User is authenticated: {}", user.getUsername());
+            //log.info("User is authenticated: {}", user.getUsername());
             UserAccount userAccount = userService.findUserById(user.getUsername());
             model.addAttribute("user", userAccount);
-            log.info("프로필 이미지 : " + userAccount.getUserProfile());
+            //log.info("프로필 이미지 : " + userAccount.getUserProfile());
         } else {
-            log.info("User is not authenticated");
+            //log.info("User is not authenticated");
         }
         return "index";
     }
@@ -91,8 +93,8 @@ public class UserController {
     // 로그인 (JWT 토큰 생성 및 캐시에 저장)
     @PostMapping("/loginProc")
     public String loginProc(@RequestParam String userId, @RequestParam String password, HttpServletResponse response) {
-        log.debug("loginProc 호출됨");
-        log.debug("입력된 사용자 이름: {}", userId);
+        //log.debug("loginProc 호출됨");
+        //log.debug("입력된 사용자 이름: {}", userId);
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, password);
             authenticationToken.setDetails(new CustomAuthenticationDetails("ROLE_USER"));
@@ -107,13 +109,13 @@ public class UserController {
 
             // 유효한 역할인지 확인
             if (!"ROLE_USER".equals(role)) {
-                log.error("로그인 실패: 유효하지 않은 역할입니다. 사용자 이름: {}, 역할: {}", userId, role);
+                //log.error("로그인 실패: 유효하지 않은 역할입니다. 사용자 이름: {}, 역할: {}", userId, role);
                 SecurityContextHolder.clearContext();
                 return "redirect:/user/login?error=" + urlEncode("아이디 또는 비밀번호가 일치하지 않습니다.");
             }
 
             String token = jwtTokenProvider.generateToken(authentication);
-            log.info("JWT 토큰 : {}", token);
+            //log.info("JWT 토큰 : {}", token);
 
             // JWT 토큰을 쿠키에 추가
             Cookie cookie = jwtTokenProvider.createCookie(token);
@@ -121,8 +123,8 @@ public class UserController {
 
             return "redirect:home";
         } catch (AuthenticationException e) {
-            log.error("Authentication failed for user: " + userId);
-            log.error("Authentication failed", e);
+            //log.error("Authentication failed for user: " + userId);
+            //log.error("Authentication failed", e);
             return "redirect:/user/login?error="  + urlEncode("아이디 또는 비밀번호가 일치하지 않습니다.");
         }
     }
@@ -441,6 +443,19 @@ public class UserController {
         response.addCookie(cookie);
 
         return "redirect:/";
+    }
+
+    // 내 쿠폰보기
+    @GetMapping("/myCoupon")
+    public String myCoupon(@AuthenticationPrincipal User user, Model model) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        model.addAttribute("user", userAccount);
+
+        ArrayList<Coupon> coupon = couponService.getCouponsByUserKey(userAccount.getUserKey());
+        model.addAttribute("coupon", coupon);
+
+
+        return "/user/mypage/myCoupon";
     }
 
     // 페이지네이션 처리 메서드

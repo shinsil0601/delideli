@@ -107,7 +107,7 @@ public class CartController {
 
             response.put("success", true);
         } catch (Exception e) {
-            log.error("장바구니 추가 중 오류 발생", e);
+            //log.error("장바구니 추가 중 오류 발생", e);
             response.put("success", false);
             response.put("message", "오류가 발생했습니다. 다시 시도해 주세요.");
         }
@@ -144,7 +144,7 @@ public class CartController {
     @PostMapping("/updateCartItem")
     public ResponseEntity<Map<String, Object>> updateCartItem(@RequestBody CartDTO cartDTO) {
         try {
-            System.out.println("Updating cart with cartKey: " + cartDTO.getCartKey());
+            //System.out.println("Updating cart with cartKey: " + cartDTO.getCartKey());
 
             cartService.updateCartItem(cartDTO.getCartKey(),
                     cartDTO.getQuantity(),
@@ -185,7 +185,7 @@ public class CartController {
     public ResponseEntity<Map<String, Object>> addSameMenu(@RequestBody Map<String, Object> requestData) {
         try {
             // 로그로 요청 데이터를 찍어봅니다.
-            log.info("Received request data: {}", requestData);
+            //log.info("Received request data: {}", requestData);
 
             // storeInfoKey와 userKey 추출
             int storeInfoKey = Integer.parseInt(requestData.get("storeInfoKey").toString());
@@ -227,7 +227,7 @@ public class CartController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            log.error("Error occurred while processing the request", e);
+            //log.error("Error occurred while processing the request", e);
             Map<String, Object> errorResponse = Map.of("success", false, "message", "메뉴 추가에 실패했습니다.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
