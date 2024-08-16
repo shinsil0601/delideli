@@ -363,6 +363,8 @@ button:disabled:hover {
     font-weight: 700;
     color: var(--gray-900);
     line-height: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .mainEvent__con {
     position: relative;
