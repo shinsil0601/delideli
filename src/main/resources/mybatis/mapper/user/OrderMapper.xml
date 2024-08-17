@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.user.order.mapper.UserOrderMapper">
+
+    <!-- Order에 대한 resultMap 정의 -->
+    <resultMap id="OrderResultMap" type="kr.co.jhta.app.delideli.user.order.domain.Order">
+        <id property="orderKey" column="order_key"/>
+        <result property="userKey" column="user_key"/>
+        <result property="storeInfoKey" column="storeInfo_key"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="address" column="address"/>
+        <result property="orderMethod" column="order_method"/>
+        <result property="uorderPrice" column="uorder_price"/>
+        <result property="uorderPayment" column="uorder_payment"/>
+        <result property="orderEstimatedTime" column="order_estimated_time"/>
+        <result property="riderDesc" column="rider_desc"/>
+        <result property="shopDesc" column="shop_desc"/>
+        <result property="orderRegdate" column="order_regdate"/>
+        <result property="orderUpdate" column="order_update"/>
+    </resultMap>
+
+    <!-- OrderDetail에 대한 resultMap 정의 -->
+    <resultMap id="OrderDetailResultMap" type="kr.co.jhta.app.delideli.user.order.domain.OrderDetail">
+        <id property="orderDetailKey" column="order_detail_key"/>
+        <result property="orderKey" column="order_key"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="optionName" column="option_name"/>
+        <result property="quantity" column="quantity"/>
+    </resultMap>
+
+    <!-- 주문 정보를 삽입 -->
+    <insert id="insertOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="orderKey">
+        INSERT INTO `order` (user_key, storeInfo_key, order_no, address, order_method, uorder_price, uorder_payment, rider_desc, shop_desc)
+        VALUES (#{userKey}, #{storeInfoKey}, #{orderNo}, #{address}, #{orderMethod}, #{uorderPrice}, #{uorderPayment}, #{riderDesc}, #{shopDesc})
+    </insert>
+
+    <!-- 주문 상세 정보를 삽입 -->
+    <insert id="insertOrderDetail" parameterType="OrderDetail" useGeneratedKeys="true" keyProperty="orderDetailKey">
+        INSERT INTO order_detail (order_key, menu_name, option_name, quantity)
+        VALUES (#{orderKey}, #{menuName}, #{optionName}, #{quantity})
+    </insert>
+
+    <!-- 주문 정보 조회 -->
+    <select id="findOrderById" parameterType="int" resultMap="OrderResultMap">
+        SELECT *
+        FROM `order`
+        WHERE user_key = #{userKey}
+    </select>
+
+    <!-- 주문 상세 정보 조회 -->
+    <select id="findOrderDetailById" parameterType="int" resultMap="OrderDetailResultMap">
+        SELECT *
+        FROM order_detail
+        WHERE order_key = #{orderKey}
+    </select>
+
+    <!-- 주문 취소 -->
+    <update id="cancelOrder" parameterType="int">
+        UPDATE `order`
+        SET order_method = '취소됨'
+        WHERE order_key = #{orderKey}
+    </update>
+
+    <!-- 주문 키로 주문 정보 조회 -->
+    <select id="findOrderByOrderKey" parameterType="int" resultMap="OrderResultMap">
+        SELECT *
+        FROM `order`
+        WHERE order_key = #{orderKey}
+    </select>
+
+    <!-- 리뷰 작성 가능한 목록 가져오기 -->
+    <select id="findReviewableOrders" resultMap="OrderResultMap">
+        SELECT *
+        FROM `order`
+        WHERE user_key = #{userKey}
+        AND order_method = '완료'
+        AND order_update &gt; #{sevenDaysAgo}
+    </select>
+
+</mapper>
