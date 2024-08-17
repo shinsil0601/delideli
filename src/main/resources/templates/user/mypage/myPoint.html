@@ -22,33 +22,62 @@
 
         <!-- Start:Main -->
         <main id="mainpage__wrap">
-            <!-- 사용자 키를 HTML에 삽입 -->
-            <span id="userKey" style="display:none;" th:text="${user.userKey}"></span>
-            <span id="userName" style="display:none;" th:text="${user.userName}"></span>
+            <section class="user-account__wrap">
+                <div class="user-account__form-box">
+                    <div class="user-account__form-top">
+                        <h2 class="user-account__logo">
+                            <img src="/user/images/logo-color.png" alt="딜리델리노랑색로고">
+                        </h2>
+                        <p class="user-account__label">
+                            MyPoint
+                        </p>
+                    </div>
+                    <div class="user-account__form">
+                        <!-- 사용자 키를 HTML에 삽입 -->
+                        <span id="userKey" style="display:none;" th:text="${user.userKey}"></span>
+                        <span id="userName" style="display:none;" th:text="${user.userName}"></span>
+                        <div class="account__input-wrap">
+                            <!-- 포인트 -->
+                            <div class="account__input-box">
+                                <label>
+                                    [[${user.userNickname}]] 님의 포인트
+                                </label>
+                                <p class="myPoint__value js-point">
+                                    [[${user.userPoint}]]
+                                </p>
+                            </div>
+                            <!-- 적립결제금액 -->
+                            <div class="account__input-box">
+                                <label>
+                                    적립 결제 금액
+                                </label>
+                                <select name="userMoney" class="myPoint__select">
+                                    <option value="10000">10,000</option>
+                                    <option value="20000">20,000</option>
+                                    <option value="30000">30,000</option>
+                                    <option value="40000">40,000</option>
+                                    <option value="50000">50,000</option>
+                                    <option value="60000">60,000</option>
+                                    <option value="70000">70,000</option>
+                                    <option value="80000">80,000</option>
+                                    <option value="90000">90,000</option>
+                                    <option value="100000">100,000</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="myPoint__btn-wrap">
+                            <a href="/user/myPage">돌아가기</a>
+                            <button type="submit" onclick="checkform()">결제하기</button>
+                        </div>
+                        <script src="/user/js/module/myPoint.js"></script>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <!-- End:Main -->
 
-                <h3>포인트 조회</h3>
-                <p><span th:text="${user.userNickname}+'님의 포인트 : '"> </span><span id="userPoint" th:text="${user.userPoint}+'원'"></span></p>
-                <p>적립 결재 금액 :
-                    <select name="userMoney">
-                        <option value="1">10,000</option>
-                        <option value="20000">20,000</option>
-                        <option value="30000">30,000</option>
-                        <option value="40000">40,000</option>
-                        <option value="50000">50,000</option>
-                        <option value="60000">60,000</option>
-                        <option value="70000">70,000</option>
-                        <option value="80000">80,000</option>
-                        <option value="90000">90,000</option>
-                        <option value="100000">100,000</option>
-                    </select></p>
-                <br />
-                <input type="button" value="결제하기" onclick="checkform()" />
-                <script src="/user/js/module/myPoint.js"></script>
-            </main>
-            <!-- End:Main -->
-
-            <!-- Start:Footer -->
-            <th:block th:include="inc/user/footer :: userFooter"></th:block>
-            <!-- End:Footer -->
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
     </body>
 </html>

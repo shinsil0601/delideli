@@ -1,0 +1,218 @@
+.subPage__wrap {
+    position: relative;
+    max-width: 144rem;
+    margin: 0 auto;
+    padding: 6rem 0 12rem;
+}
+.subPage__title {
+    font-size: var(--font-size-48);
+    font-weight: 700;
+    color: var(--gray-900);
+    padding-bottom: 6rem;
+}
+/* subNav */
+.subNav__items {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2.4rem;
+    padding-bottom: 6rem;
+}
+.subNav__items > li > a {
+    display: block;
+    width: 100%;
+    padding: 1.6rem 0;
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    border-radius: 0.8rem;
+    font-size: var(--font-size-14);
+    font-weight: 700;
+    color: var(--gray-600);
+    text-align: center;
+    transition: .3s;
+}
+.subNav__items > li > a:hover {
+    background: var(--gray-100);
+}
+.subNav__items > li.active > a {
+    background: var(--subColor);
+    color: var(--whiteColor);
+}
+.subNav__items > li.active > a:hover {
+    opacity: 0.8;
+}
+/* MyPage */
+.myPage__con {
+    position: relative;
+    display: grid;
+    grid-template-columns: 46.7rem 93.3rem;
+    gap: 4rem;
+}
+.myPage__left {
+    padding: 4rem;
+    box-shadow: var(--box-shadow-100);
+    border-radius: 2rem;
+    background: var(--whiteColor);
+}
+.myPage__profile {
+    position: relative;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    padding-bottom: 2rem;
+}
+.myPage__profile--img {
+    position: relative;
+    width: 38.7rem;
+    height: 38.7rem;
+    border-radius: 100%;
+    overflow: hidden;
+}
+.myPage__profile--img img {
+    width: 100%;
+    height: 100%;
+}
+.myPage__profile--name {
+    text-align: center;
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.myPage__status {
+    width: 100%;
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    border-radius: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+    padding: 1.6rem 0;
+}
+.myPage__status i {
+    color: var(--mainColor);
+}
+.myPage__point-box {
+    padding-top: 4rem;
+    display: grid;
+    gap: 2rem;
+}
+.myPage__point-box h4 {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.myPage__point {
+    width: 100%;
+    border: 1px solid var(--gray-200);
+    padding: 1.6rem 0;
+    background: var(--whiteColor);
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+    text-align: center;
+    border-radius: 0.8rem;
+}
+.myPage__btn-box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+.myPage__btn-box a {
+    padding: 1.6rem 0;
+    text-align: center;
+    border-radius: 0.8rem;
+    transition: .3s;
+    font-weight: 700;
+}
+.myPage__btn-box a:hover {
+    opacity: 0.8;
+}
+.myPage__btn--1 {
+    background: var(--mainColor);
+    color: var(--whiteColor);
+}
+.myPage__btn--2 {
+    background: var(--gray-700);
+    color: var(--whiteColor);
+}
+.myPage__right {
+    display: grid;
+    gap: 2rem;
+}
+.myPage__right a {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem 1.6rem;
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    border-radius: 0.8rem;
+    box-shadow: var(--box-shadow-100);
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-500);
+    transition: .3s;
+}
+.myPage__right a:hover {
+    background: var(--subColor);
+    color: var(--whiteColor);
+}
+/* MyPoint */
+.myPoint__box {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--whiteColor);
+    box-shadow: var(--box-shadow-100);
+    border-radius: 2rem;
+}
+.myPoint__value {
+    text-align: left;
+    width: 65rem;
+    padding: 1.6rem 0.8rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+}
+.myPoint__select {
+    width: 65rem;
+    padding: 1.6rem 0.8rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+}
+.myPoint__select:focus {
+    outline-color: var(--mainColor);
+}
+.myPoint__btn-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding-top: 4rem;
+}
+.myPoint__btn-wrap a {
+    width: 14rem;
+    padding: 1.6rem 0;
+    text-align: center;
+    background: var(--gray-400);
+    font-weight: 700;
+    color: var(--whiteColor);
+    border-radius: 0.8rem;
+}
+.myPoint__btn-wrap button {
+    width: 14rem;
+    padding: 1.6rem 0;
+    text-align: center;
+    background: var(--subColor);
+    font-weight: 700;
+    color: var(--whiteColor);
+}
+/* myCoupon */
+.myCoupon__con table {
+    margin-top: 0;
+}

@@ -47,6 +47,18 @@
                             메뉴
                         </span>
                     </a>
+                    <ul>
+                        <!-- 여기에 가게 목록 출력 -->
+                        <th:block th:each="store : ${store}">
+                            <li>
+                                <a th:href="@{/client/menu/{storeKey}(storeKey=${store.storeInfoKey})}"
+                                   th:text="${store.storeName}"
+                                   th:classappend="${store.storeInfoKey == currentStoreKey ? 'active' : ''}"
+                                   th:style="${store.storeInfoKey == currentStoreKey ? 'color:red;' : ''}">
+                                </a>
+                            </li>
+                        </th:block>
+                    </ul>
                 </li>
                 <li>
                     <a href="#none">
