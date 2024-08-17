@@ -34,4 +34,43 @@
         WHERE m.storeInfo_key = #{storeInfoKey}
     </select>
 
+    <!-- 가게 메뉴 검색 -->
+    <select id="searchMenu" parameterType="map" resultMap="MenuResultMap">
+        SELECT m.*, mg.menu_group_name, mg.menu_group_regdate, mg.menu_group_update
+        FROM menu m
+        LEFT JOIN menu_group mg ON m.menu_group_key = mg.menu_group_key
+        WHERE m.storeInfo_key = #{storeKey}
+        <if test="filter == 'menuName'">
+            AND m.menu_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="filter == 'menuGroupName'">
+            AND mg.menu_group_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="filter == 'menuStatus'">
+            AND m.menu_status LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </select>
+
+    <update id="updateMenuStatus" parameterType="map">
+        UPDATE menu
+        SET menu_status = #{status}
+        WHERE menu_key = #{menuKey}
+    </update>
+
+    <delete id="deleteMenu" parameterType="int">
+        DELETE FROM menu WHERE menu_key = #{menuKey}
+    </delete>
+
+    <delete id="deleteMenusByGroupKey" parameterType="int">
+        DELETE FROM menu WHERE menu_group_key = #{menuGroupKey}
+    </delete>
+
+    <delete id="deleteMenuGroup" parameterType="int">
+        DELETE FROM menu_group WHERE menu_group_key = #{menuGroupKey}
+    </delete>
+
+    <select id="getMenuById" parameterType="int" resultMap="MenuResultMap">
+        SELECT * FROM menu WHERE menu_key = #{menuKey}
+    </select>
+
 </mapper>

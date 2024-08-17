@@ -21,4 +21,30 @@ public class ClientMenuServiceImpl implements ClientMenuService {
     public ArrayList<ClientMenu> getAllMenu(int storeKey) {
         return clientMenuMapper.getAllMenu(storeKey);
     }
+
+    @Override
+    public ArrayList<ClientMenu> searchMenu(int storeKey, String filter, String keyword) {
+        return clientMenuMapper.searchMenu(storeKey, filter, keyword);
+    }
+
+    @Override
+    public void updateMenuStatus(int menuKey, String status) {
+        clientMenuMapper.updateMenuStatus(menuKey, status);
+    }
+
+    @Override
+    public void deleteMenu(int menuKey) {
+        clientMenuMapper.deleteMenu(menuKey);
+    }
+
+    @Override
+    public void deleteMenuGroup(int menuGroupKey) {
+        clientMenuMapper.deleteMenusByGroupKey(menuGroupKey);
+        clientMenuMapper.deleteMenuGroup(menuGroupKey);
+    }
+
+    @Override
+    public ClientMenu getMenuById(int menuKey) {
+        return clientMenuMapper.getMenuById(menuKey);
+    }
 }
