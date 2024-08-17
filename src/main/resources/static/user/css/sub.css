@@ -10,6 +10,36 @@
     color: var(--gray-900);
     padding-bottom: 6rem;
 }
+/* subNav */
+.subNav__items {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2.4rem;
+    padding-bottom: 6rem;
+}
+.subNav__items > li > a {
+    display: block;
+    width: 100%;
+    padding: 1.6rem 0;
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    border-radius: 0.8rem;
+    font-size: var(--font-size-14);
+    font-weight: 700;
+    color: var(--gray-600);
+    text-align: center;
+    transition: .3s;
+}
+.subNav__items > li > a:hover {
+    background: var(--gray-100);
+}
+.subNav__items > li.active > a {
+    background: var(--subColor);
+    color: var(--whiteColor);
+}
+.subNav__items > li.active > a:hover {
+    opacity: 0.8;
+}
 /* MyPage */
 .myPage__con {
     position: relative;
@@ -143,7 +173,7 @@
     border-radius: 2rem;
 }
 .myPoint__value {
-    text-align: left
+    text-align: left;
     width: 65rem;
     padding: 1.6rem 0.8rem;
     border: 1px solid var(--gray-200);
@@ -181,4 +211,8 @@
     background: var(--subColor);
     font-weight: 700;
     color: var(--whiteColor);
+}
+/* myCoupon */
+.myCoupon__con table {
+    margin-top: 0;
 }
