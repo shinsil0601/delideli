@@ -13,4 +13,10 @@ public interface ReviewMapper {
     int getReviewCountForStore(int storeInfoKey);
 
     ArrayList<Review> getReviewListByStore(int storeInfoKey);
+
+    int countByOrderKey(int orderKey);
+
+    Review findReviewByOrderKey(int orderKey);
+
+    void insertReview(Review review);
 }

@@ -19,4 +19,19 @@
         FROM `option`
         WHERE option_key = #{optionKey}
     </select>
+
+    <!-- menuKey와 optionName 목록을 이용해 optionKey들을 가져옴 -->
+    <select id="getOptionKeysByMenuKeyAndOptionNames" parameterType="map" resultType="int">
+        SELECT o.option_key
+        FROM `option` o
+        JOIN `option_group` og ON o.option_group_key = og.option_group_key
+        WHERE og.menu_key = #{menuKey}
+        AND o.option_name IN
+        <foreach item="optionName" collection="optionNameList" open="(" separator="," close=")">
+            #{optionName}
+        </foreach>
+    </select>
+
+
+
 </mapper>

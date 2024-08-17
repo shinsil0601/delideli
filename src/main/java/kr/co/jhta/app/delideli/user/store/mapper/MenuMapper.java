@@ -17,4 +17,6 @@ public interface MenuMapper {
     Menu getMenuById(int menuKey);
 
     ArrayList<OptionGroup> getOptionGroupsByMenuId(int menuKey);
+
+    Integer getMenuKeyByStoreInfoKeyAndMenuName(int storeInfoKey, String menuName);
 }

@@ -20,7 +20,7 @@ public class ClientDetailsServiceImpl implements UserDetailsService {
     // 클라이언트를 username (유저 아이디) 으로 로드하는 메서드
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("ClientDetailsServiceImpl - loadUserByUsername 시작 with username: {}", username);
+        //log.info("ClientDetailsServiceImpl - loadUserByUsername 시작 with username: {}", username);
 
         ClientAccount client;
         try {
@@ -28,7 +28,7 @@ public class ClientDetailsServiceImpl implements UserDetailsService {
             client = clientMapper.selectClientById(username)
                     .orElseThrow(() -> new UsernameNotFoundException("Client not found with username: " + username));
         } catch (Exception e) {
-            log.error("ClientDetailsServiceImpl - loadUserByUsername 예외 발생: {}", e.getMessage());
+            //log.error("ClientDetailsServiceImpl - loadUserByUsername 예외 발생: {}", e.getMessage());
             throw e;
         }
 
@@ -39,7 +39,7 @@ public class ClientDetailsServiceImpl implements UserDetailsService {
                 .roles(client.getClientRole())
                 .build();
 
-        log.info("ClientDetailsServiceImpl - loadUserByUsername 완료 with userDetails: {}", userDetails);
+        //log.info("ClientDetailsServiceImpl - loadUserByUsername 완료 with userDetails: {}", userDetails);
         return userDetails;
     }
 }

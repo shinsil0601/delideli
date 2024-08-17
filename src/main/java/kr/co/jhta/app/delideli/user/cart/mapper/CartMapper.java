@@ -5,6 +5,7 @@ import kr.co.jhta.app.delideli.user.cart.domain.CartOptions;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @Mapper
 public interface CartMapper {
@@ -21,6 +22,8 @@ public interface CartMapper {
     void updateCartItemQuantity(int cartKey, int quantity);
 
     void deleteCartOptions(int cartKey);
+
+    ArrayList<Cart> findByStoreInfoKey(Map<String, Integer> map);
 
 }
 

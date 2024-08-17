@@ -55,4 +55,10 @@ public interface UserService {
 
     //포인트 충전
     void chargePoint(String userKey, int amount);
+
+    // 유저 포인트 수정
+    void updateUserPoint(int userKey, int i);
+
+    // 계정 탈퇴
+    void deleteUserByUserName(int userKey);
 }

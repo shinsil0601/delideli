@@ -79,7 +79,7 @@ public class BoardController {
         }
         Board board = boardService.readOneNotice(num);
         model.addAttribute("board", board);
-        return "/user/board/noticeDetail";
+        return "/user/board/notice.view";
     }
 
     // 이벤트 목록
@@ -120,8 +120,10 @@ public class BoardController {
     @GetMapping("/eventDetail/{num}")
     public String eventDetail(@AuthenticationPrincipal User user, @PathVariable int num, Model model) {
         Board board = boardService.readOneEvent(num);
-        UserAccount userAccount = userService.findUserById(user.getUsername());
-        model.addAttribute("user", userAccount);
+        if (user != null) {
+            UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("user", userAccount);
+        }
         model.addAttribute("board", board);
         return "/user/board/eventDetail";
     }
@@ -189,8 +191,8 @@ public class BoardController {
     public String myAsk(@AuthenticationPrincipal User user, Model model) {
         UserAccount userAccount = userService.findUserById(user.getUsername());
         model.addAttribute("user", userAccount);
-        log.info("userKey>>>>>>>>>!!! " + userAccount.getUserKey());
-        List<Board> list = boardService.getMyAskList((long) userAccount.getUserKey());
+        //log.info("userKey>>>>>>>>>!!! " + userAccount.getUserKey());
+        List<Board> list = boardService.getMyAskList(userAccount.getUserKey());
         model.addAttribute("list", list);
 
         return "/user/mypage/myAsk";

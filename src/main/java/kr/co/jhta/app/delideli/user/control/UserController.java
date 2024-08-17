@@ -12,6 +12,8 @@ import kr.co.jhta.app.delideli.user.board.domain.Board;
 import kr.co.jhta.app.delideli.user.cart.domain.Cart;
 import kr.co.jhta.app.delideli.user.cart.domain.CartOptions;
 import kr.co.jhta.app.delideli.user.cart.service.CartService;
+import kr.co.jhta.app.delideli.user.coupon.domain.Coupon;
+import kr.co.jhta.app.delideli.user.coupon.service.CouponService;
 import kr.co.jhta.app.delideli.user.dto.CartDTO;
 import kr.co.jhta.app.delideli.user.dto.UserDTO;
 import kr.co.jhta.app.delideli.user.account.exception.DuplicateUserIdException;
@@ -62,18 +64,18 @@ public class UserController {
     @Autowired
     private final StoreService storeService;
     @Autowired
-    private final CartService cartService;
+    private final CouponService couponService;
 
 
     @GetMapping("/home")
     public String home(@AuthenticationPrincipal User user, Model model) {
         if (user != null) {
-            log.info("User is authenticated: {}", user.getUsername());
+            //log.info("User is authenticated: {}", user.getUsername());
             UserAccount userAccount = userService.findUserById(user.getUsername());
             model.addAttribute("user", userAccount);
-            log.info("프로필 이미지 : " + userAccount.getUserProfile());
+            //log.info("프로필 이미지 : " + userAccount.getUserProfile());
         } else {
-            log.info("User is not authenticated");
+            //log.info("User is not authenticated");
         }
         return "index";
     }
@@ -91,16 +93,29 @@ public class UserController {
     // 로그인 (JWT 토큰 생성 및 캐시에 저장)
     @PostMapping("/loginProc")
     public String loginProc(@RequestParam String userId, @RequestParam String password, HttpServletResponse response) {
-        log.debug("loginProc 호출됨");
-        log.debug("입력된 사용자 이름: {}", userId);
+        //log.debug("loginProc 호출됨");
+        //log.debug("입력된 사용자 이름: {}", userId);
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, password);
             authenticationToken.setDetails(new CustomAuthenticationDetails("ROLE_USER"));
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            // 사용자의 역할 가져오기
+            String role = authentication.getAuthorities().stream()
+                    .map(grantedAuthority -> grantedAuthority.getAuthority())
+                    .findFirst()
+                    .orElse("");
+
+            // 유효한 역할인지 확인
+            if (!"ROLE_USER".equals(role)) {
+                //log.error("로그인 실패: 유효하지 않은 역할입니다. 사용자 이름: {}, 역할: {}", userId, role);
+                SecurityContextHolder.clearContext();
+                return "redirect:/user/login?error=" + urlEncode("아이디 또는 비밀번호가 일치하지 않습니다.");
+            }
+
             String token = jwtTokenProvider.generateToken(authentication);
-            log.info("JWT 토큰 : {}", token);
+            //log.info("JWT 토큰 : {}", token);
 
             // JWT 토큰을 쿠키에 추가
             Cookie cookie = jwtTokenProvider.createCookie(token);
@@ -108,8 +123,8 @@ public class UserController {
 
             return "redirect:home";
         } catch (AuthenticationException e) {
-            log.error("Authentication failed for user: " + userId);
-            log.error("Authentication failed", e);
+            //log.error("Authentication failed for user: " + userId);
+            //log.error("Authentication failed", e);
             return "redirect:/user/login?error="  + urlEncode("아이디 또는 비밀번호가 일치하지 않습니다.");
         }
     }
@@ -405,149 +420,51 @@ public class UserController {
         return "user/mypage/myLike";
     }
 
-    // 장바구니 추가
-    @PostMapping("/addToCart")
-    @ResponseBody
-    public Map<String, Object> addToCart(@RequestBody Map<String, Object> cartRequest,
-                                         @AuthenticationPrincipal User user) {
-        Map<String, Object> response = new HashMap<>();
-        if (user == null) {
-            response.put("success", false);
-            response.put("message", "로그인이 필요합니다.");
-            return response;
-        }
-
-        try {
-            UserAccount userAccount = userService.findUserById(user.getUsername());
-
-            // 문자열로 받은 데이터들을 적절한 타입으로 변환
-            int menuKey = Integer.parseInt(cartRequest.get("menuKey").toString());
-            int quantity = Integer.parseInt(cartRequest.get("quantity").toString());
-
-            // ArrayList로 변환
-            ArrayList<Integer> selectedOptions = new ArrayList<>();
-            for (Object option : (ArrayList<?>) cartRequest.get("selectedOptionKeys")) {
-                selectedOptions.add(Integer.parseInt(option.toString()));
-            }
-
-            // 장바구니에 항목 추가
-            cartService.addItemToCart(userAccount.getUserKey(), menuKey, quantity, selectedOptions);
-
-            response.put("success", true);
-        } catch (Exception e) {
-            log.error("장바구니 추가 중 오류 발생", e);
-            response.put("success", false);
-            response.put("message", "오류가 발생했습니다. 다시 시도해 주세요.");
-        }
-
-        return response;
+    // 내 정보 확인(회원탈퇴)
+    @GetMapping("/withdrawal")
+    public String withdrawal(@AuthenticationPrincipal User user, Model model) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        model.addAttribute("user", userAccount);
+        return "user/mypage/withdrawal";
     }
 
-    // 장바구니 페이지
-    @GetMapping("/myCart")
-    public String myCartPage(@AuthenticationPrincipal User user, Model model) {
-        if (user != null) {
-            UserAccount userAccount = userService.findUserById(user.getUsername());
-            model.addAttribute("user", userAccount);
+    // 회원 탈퇴
+    @PostMapping("/withdrawal")
+    public String withdrawUser(@AuthenticationPrincipal User user, HttpServletResponse response) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        userService.deleteUserByUserName(userAccount.getUserKey());
+        SecurityContextHolder.clearContext();
 
-            ArrayList<Cart> cartItems = new ArrayList<>(cartService.getCartItemsByUser(userAccount.getUserKey()));
+        Cookie cookie = new Cookie("JWT", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
 
-            Map<StoreInfo, ArrayList<Cart>> groupedItems = new HashMap<>();
-
-            for (Cart cartItem : cartItems) {
-                int totalOptionPrice = cartItem.getCartOptions().stream()
-                        .map(option -> Optional.ofNullable(option.getOptionPrice()).orElse(0))
-                        .mapToInt(Integer::intValue)
-                        .sum();
-
-                // 총 가격 계산
-                int totalPrice = (cartItem.getMenu().getMenuPrice() + totalOptionPrice) * cartItem.getQuantity();
-                cartItem.setTotalPrice(totalPrice);
-
-                // 가게 정보에 따라 그룹화
-                StoreInfo storeInfo = cartItem.getStoreInfo();
-                groupedItems.computeIfAbsent(storeInfo, k -> new ArrayList<>()).add(cartItem);
-            }
-
-            model.addAttribute("groupedCartItems", groupedItems);
-        }
-        return "user/mypage/myCart";
+        return "redirect:/";
     }
 
-    // 장바구니 아이템 수정 페이지로 이동
-    @GetMapping("/editCartItem/{cartKey}")
-    public String editCartItemPage(@PathVariable("cartKey") int cartKey, Model model) {
-        // 장바구니 아이템 정보 가져오기
-        Cart cartItem = cartService.getCartItemById(cartKey);
+    // 내 쿠폰보기
+    @GetMapping("/myCoupon")
+    public String myCoupon(@AuthenticationPrincipal User user, Model model) {
+        UserAccount userAccount = userService.findUserById(user.getUsername());
+        model.addAttribute("user", userAccount);
 
-        // 해당 메뉴의 정보와 옵션 그룹을 가져오기
-        Menu menu = storeService.getMenuById(cartItem.getMenuKey());
-        ArrayList<OptionGroup> optionGroups = storeService.getOptionGroupsByMenuId(cartItem.getMenuKey());
+        ArrayList<Coupon> coupon = couponService.getCouponsByUserKey(userAccount.getUserKey());
+        model.addAttribute("coupon", coupon);
 
-        // 선택된 옵션 키 가져오기
-        List<Integer> selectedOptionKeys = cartItem.getCartOptions().stream()
-                .map(CartOptions::getOptionKey)
-                .collect(Collectors.toList());
 
-        // 모델에 필요한 데이터 추가
-        model.addAttribute("menu", menu);
-        model.addAttribute("optionGroups", optionGroups);
-        model.addAttribute("selectedOptionKeys", selectedOptionKeys);  // 선택된 옵션 키들
-        model.addAttribute("cartItem", cartItem);
-
-        // 장바구니 아이템 수정 페이지로 이동
-        return "user/mypage/updateCartItem";
-    }
-
-    // 장바구니 아이템 수정 처리
-    @PostMapping("/updateCartItem")
-    public ResponseEntity<Map<String, Object>> updateCartItem(@RequestBody CartDTO cartDTO) {
-        try {
-            System.out.println("Updating cart with cartKey: " + cartDTO.getCartKey());
-
-            cartService.updateCartItem(cartDTO.getCartKey(),
-                    cartDTO.getQuantity(),
-                    cartDTO.getSelectedOptionKeys());
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            // 여기서 예외 메시지를 로깅합니다.
-            e.printStackTrace(); // 또는 Logger를 사용할 수도 있습니다.
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", false);
-            response.put("message", e.getMessage()); // 사용자에게 예외 메시지를 반환하는 대신, 로그에만 남기도록 처리할 수도 있습니다.
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-
-    // 장바구니 아이템 삭제 처리
-    @PostMapping("/deleteCartItem")
-    public ResponseEntity<Map<String, Object>> deleteCartItem(@RequestBody Map<String, Integer> request) {
-        int cartKey = request.get("cartKey");
-
-        try {
-            cartService.deleteCartItem(cartKey);
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", false);
-            response.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
+        return "/user/mypage/myCoupon";
     }
 
     // 페이지네이션 처리 메서드
     private ArrayList<StoreInfo> paginateStores(ArrayList<StoreInfo> allStores, int page, int pageSize) {
         int fromIndex = (page - 1) * pageSize;
         int toIndex = Math.min(fromIndex + pageSize, allStores.size());
-
         if (fromIndex > toIndex) {
             return new ArrayList<>();
         }
-
         return new ArrayList<>(allStores.subList(fromIndex, toIndex));
     }
   

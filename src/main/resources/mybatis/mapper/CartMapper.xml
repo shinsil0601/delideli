@@ -106,5 +106,16 @@
         DELETE FROM cart_options WHERE cart_key = #{cartKey}
     </delete>
 
+    <!-- 장바구니 아이템을 가게정보 키로 가져오는 쿼리 -->
+    <select id="findByStoreInfoKey" parameterType="map" resultMap="CartResultMap">
+        SELECT c.*, m.menu_name, m.menu_img, m.menu_price, s.*,
+               co.cart_option_key, co.option_key, co.option_price, co.option_name
+        FROM cart c
+                 JOIN menu m ON c.menu_key = m.menu_key
+                 JOIN storeInfo s ON m.storeInfo_key = s.storeInfo_key
+                 LEFT JOIN cart_options co ON c.cart_key = co.cart_key
+        WHERE c.user_key = #{userKey}
+          AND s.storeInfo_key = #{storeInfoKey}
+    </select>
 
 </mapper>

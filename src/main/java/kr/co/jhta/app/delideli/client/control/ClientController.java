@@ -56,26 +56,38 @@ public class ClientController {
         if (error != null) {
             model.addAttribute("errorMessage", "아이디 또는 비밀번호가 일치하지 않습니다.");
         }
-        log.info("로그인창 넘어옴");
+        //log.info("로그인창 넘어옴");
         return "client/account/login";
     }
 
     // 로그인 확인
     @PostMapping("/loginProc")
     public String loginProc(@RequestParam String clientId, @RequestParam String password, HttpServletResponse response) {
-        log.debug("loginProc 호출됨");
-        log.debug("입력된 사용자 이름: {}", clientId);
+        //log.debug("loginProc 호출됨");
+        //log.debug("입력된 사용자 이름: {}", clientId);
         try {
             if (clientService.checkAccessAccount(clientId, password)) {
-                log.debug("승인된 계정");
+                //log.debug("승인된 계정");
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(clientId, password);
                 authenticationToken.setDetails(new CustomAuthenticationDetails("ROLE_CLIENT"));
                 Authentication authentication = authenticationManager.authenticate(authenticationToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
+                // 사용자의 역할 가져오기
+                String role = authentication.getAuthorities().stream()
+                        .map(grantedAuthority -> grantedAuthority.getAuthority())
+                        .findFirst()
+                        .orElse("");
+
+                // 유효한 역할인지 확인
+                if (!"ROLE_CLIENT".equals(role)) {
+                    SecurityContextHolder.clearContext();
+                    return "redirect:/client/login?error=" + urlEncode("아이디 또는 비밀번호가 일치하지 않습니다.");
+                }
+
                 String token = jwtTokenProvider.generateToken(authentication);
-                log.info("JWT 토큰 : {}", token);
+                //log.info("JWT 토큰 : {}", token);
 
                 // JWT 토큰을 쿠키에 추가
                 Cookie cookie = jwtTokenProvider.createCookie(token);
@@ -83,12 +95,12 @@ public class ClientController {
 
                 return "redirect:/client/storeList";
             } else {
-                log.debug("비승인된 계정");
+                //log.debug("비승인된 계정");
                 return "redirect:/client/login?error=" + urlEncode("승인되지 않은 계정입니다.");
             }
         } catch (AuthenticationException e) {
-            log.error("Authentication failed for client: " + clientId);
-            log.error("Authentication failed", e);
+            //log.error("Authentication failed for client: " + clientId);
+            //log.error("Authentication failed", e);
             return "redirect:/client/login?error=" + urlEncode("아이디 또는 비밀번호가 일치하지 않습니다.");
         }
     }

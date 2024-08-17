@@ -1,0 +1,15 @@
+<table>
+    <tr>
+        <td colspan="2" th:text="${'['+board.boardStatus+ ']  '+board.boardTitle}"></td>
+    </tr>
+    <tr>
+        <td th:text="'작성일: '+ ${board.boardRegdate}"></td>
+        <td th:text="'조회수: '+ ${board.boardHits}"></td>
+    </tr>
+    <tr>
+        <td colspan="2" th:text="${board.boardContents}"></td>
+    </tr>
+    <tr>
+        <td colspan="2"><a href="/user/notice">목록</a></td>
+    </tr>
+</table>
