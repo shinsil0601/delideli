@@ -1,15 +1,66 @@
 <table>
     <tr>
-        <td colspan="2" th:text="${'['+board.boardStatus+ ']  '+board.boardTitle}"></td>
+        <td colspan="2" th:text="${'[' + board.boardStatus + ']  ' + board.boardTitle}"></td>
     </tr>
     <tr>
-        <td th:text="'작성일: '+ ${board.boardRegdate}"></td>
-        <td th:text="'조회수: '+ ${board.boardHits}"></td>
+        <td th:text="'작성일: ' + ${board.boardRegdate}"></td>
+        <td th:text="'조회수: ' + ${board.boardHits}"></td>
     </tr>
     <tr>
         <td colspan="2" th:text="${board.boardContents}"></td>
     </tr>
     <tr>
-        <td colspan="2"><a href="/user/notice">목록</a></td>
+        <td colspan="2"><a href="/user/event">목록</a></td>
     </tr>
 </table>
+<hr>
+<!-- 댓글 폼 -->
+<div class="card my-4" th:if="${user != null}">
+    <h5 class="card-header">댓글</h5>
+    <div class="card-body">
+        <div id="comment"></div>
+        <form name="comment-form" action="/user/eventDetail/comment/write" method="post" autocomplete="off">
+            <div class="form-group">
+                <input type="hidden" name="userKey" th:value="${user.userKey}" />
+                <input type="hidden" name="boardKey" th:value="${board.boardKey}" />
+                <input type="hidden" name="userNickname" th:value="${user.userNickname}" />
+                <textarea name="commentContents" class="form-control" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" name="comment-submit" disabled>댓글작성</button>
+        </form>
+    </div>
+</div>
+<script src="/user/js/module/eventDetail.js" th:if="${user != null}"></script>
+
+<div id="comment">
+    <div class="comment-content">
+        <strong>테스터12:</strong> test
+    </div>
+    <button>답글</button>
+    <button>수정</button>
+    <button>삭제</button>
+    <div class="reply-form" style="display:none;">
+        <textarea class="form-control"></textarea>
+        <button>작성완료</button>
+    </div>
+    <div class="replies" style="margin-left: 20px;"></div>
+    <div class="comment">
+        <div class="comment-content">
+            <strong>테스터12:</strong>
+            test
+        </div>
+        <button>답글</button>
+        <button>수정</button>
+        <div class="edit-form">
+            <textarea class="form-control"></textarea>
+            <a href="#" class="save-button" data-comment-key="47">저장</a>
+        </div>
+        <button>삭제</button>
+        <div class="reply-form" style="">
+            <textarea class="form-control"></textarea>
+            <button>작성완료</button>
+        </div>
+        <hr>
+        <div class="replies" style="margin-left: 20px;"></div>
+    </div>
+</div>

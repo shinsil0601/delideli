@@ -138,3 +138,79 @@
 .board__view--bottom img {
     max-width: 100%;
 }
+.board__view--btn-items {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 4rem;
+}
+.board__view--btn-items button {
+    width: 14rem;
+    padding: 1.6rem 0;
+}
+.view-btn1 {
+    background: var(--mainColor);
+    color: var(--whiteColor);
+}
+/* 게시판 댓글 */
+.coments__write {
+    padding-top: 4rem;
+}
+.coments__label {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--teal-500);
+    padding-bottom: 2rem;
+}
+.cmt-write__form {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr 140px;
+    gap: 2rem;
+}
+.cmt-write__form textarea {
+    width: 100%;
+    height: 120px;
+}
+.comments-write--btn button {
+    width: 100%;
+    padding: 1.6rem;
+}
+#comment__view {
+    padding-top: 4rem;
+    display: grid;
+    gap: 2rem;
+}
+.comment-content strong {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--gray-900);
+    padding-bottom: 1rem;
+}
+.comment-content p {
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    border-radius: 0.6rem;
+    padding: 0.8rem;
+    font-size: var(--font-size-14);
+}
+.comment-btn__items {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding-top: 0.8rem;
+}
+.comment-btn__items button {
+    width: 4rem;
+    padding: 0.4rem 0;
+    font-size: var(--font-size-12);
+}
+.cb-comment {
+    background: var(--teal-500);
+    color: var(--whiteColor);
+}
+.cb-edit {
+    background: var(--blue-500);
+    color: var(--whiteColor);
+}

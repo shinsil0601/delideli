@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>사용자 - 공지사항</title>
+        <title>사용자 - 이벤트페이지</title>
         <!-- Include:공통 CSS -->
         <th:block th:include="inc/common/common-css :: commonCss"></th:block>
         <!-- Include:User CSS -->
@@ -21,9 +21,9 @@
         <!-- Start:Main -->
         <main id="mainpage__wrap">
             <div class="board__wrap">
-                <h2 class="subPage__title">공지사항</h2>
+                <h2 class="subPage__title">이벤트</h2>
                 <div class="board__searchCon">
-                    <form th:action="@{/user/notice}" method="get">
+                    <form th:action="@{/user/event}" method="get">
                         <div class="board__searchBox">
                             <input type="text" name="keyword" id="keyword" placeholder="제목을 입력해주세요.">
                             <button type="submit">
@@ -40,31 +40,31 @@
                         <col width="15%">
                     </colgroup>
                     <thead>
-                        <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>등록일</th>
-                            <th>조회수</th>
-                        </tr>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>등록일</th>
+                        <th>조회수</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="board, iterState : ${list}">
-                            <td>
-                                [[${iterState.count}]]
-                            </td>
-                            <td>
-                                <a th:href="@{detail/{num}(num=${board.boardKey})}">
-                                    <span>[[${board.boardStatus}]]</span>
-                                    [[${board.boardTitle}]]
-                                </a>
-                            </td>
-                            <td>[[${board.boardRegdate}]]</td>
-                            <td>[[${board.boardHits}]]</td>
-                        </tr>
+                    <tr th:each="board, iterState : ${list}">
+                        <td>
+                            [[${iterState.count}]]
+                        </td>
+                        <td>
+                            <a th:href="@{eventDetail/{num}(num=${board.boardKey})}">
+                                <span>[[${board.boardStatus}]]</span>
+                                [[${board.boardTitle}]]
+                            </a>
+                        </td>
+                        <td>[[${board.boardRegdate}]]</td>
+                        <td>[[${board.boardHits}]]</td>
+                    </tr>
                     </tbody>
                 </table>
                 <!-- Start:Pagination -->
-                <th:block th:include="inc/user/pagination :: boardPagination ('type'='notice')"></th:block>
+                <th:block th:include="inc/user/pagination :: boardPagination ('type'='event')"></th:block>
                 <!-- End:Pagination -->
             </div>
         </main>
