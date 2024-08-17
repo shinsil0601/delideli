@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class Category {
+public class ClientCategory {
     private int categoryKey;
     private String categoryName;
     private String categoryImg;
