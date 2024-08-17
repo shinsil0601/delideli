@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>사용자 - 공지 상세보기</title>
+        <title>사용자 - 이벤트 상세보기</title>
         <!-- Include:공통 CSS -->
         <th:block th:include="inc/common/common-css :: commonCss"></th:block>
         <!-- Include:User CSS -->
@@ -47,9 +47,29 @@
                     </div>
                 </div>
                 <div class="board__view--btn-items">
-                    <button type="button" class="view-btn1" th:onclick="'location.href=\'' + @{/user/notice} + '\''">목록</button>
+                    <button type="button" class="view-btn1" th:onclick="'location.href=\'' + @{/user/event} + '\''">목록</button>
                 </div>
+                <!-- 댓글 작성 -->
+                <div class="coments__write" th:if="${user != null}">
+                    <h3 class="coments__label">댓글</h3>
+                    <form name="comment-form" action="/user/eventDetail/comment/write" method="post" autocomplete="off" class="cmt-write__form">
+                        <input type="hidden" name="userKey" th:value="${user.userKey}" />
+                        <input type="hidden" name="boardKey" th:value="${board.boardKey}" />
+                        <input type="hidden" name="userNickname" th:value="${user.userNickname}" />
+                        <textarea name="commentContents" class="form-control" rows="3"></textarea>
+                        <div class="comments-write--btn">
+                            <button type="submit" class="btn btn-primary" name="comment-submit" disabled>댓글작성</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 댓글 목록 -->
+                <div id="comment__view">
+                </div>
+
             </div>
+
+            <script src="/user/js/module/eventDetail.js" th:if="${user != null}"></script>
         </main>
         <!-- End:Main -->
 

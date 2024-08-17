@@ -51,6 +51,15 @@ button:disabled:hover {
     font-weight: 700;
     color: var(--teal-500);
 }
+textarea {
+    border-radius: 2rem;
+    border: 1px solid var(--gray-200);
+    resize: none;
+    padding: 1.6rem;
+}
+textarea:focus {
+    outline-color: var(--mainColor);
+}
 /* mainBanner */
 .mainBanner__wrap {
     position: relative;

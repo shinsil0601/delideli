@@ -1,19 +1,19 @@
-<th:block th:fragment="boardPagination">
- <ul class="board__pagination">
-     <li th:if="${map.prev}">
-         <a th:href="@{/user/notice(page=${map.startPageNo})}">
-             <i class="fa-solid fa-angle-left"></i>
-         </a>
-     </li>
-     <li th:each="i : ${#numbers.sequence(map.startPageNo, map.endPageNo)}">
-         <a th:href="@{/user/notice(page=${i}, keyword=${keyword})}">
-             [[${i}]]
-         </a>
-     </li>
-     <li th:if="${map.next}">
-         <a th:href="@{/user/notice(page=${map.endPageNo})}">
-             <i class="fa-solid fa-angle-right"></i>
-         </a>
-     </li>
- </ul>
+<th:block th:fragment="boardPagination (type)">
+    <ul class="board__pagination">
+        <li th:if="${map.prev}">
+            <a th:href="@{${'/user/' + type}(page=${map.startPageNo})}">
+                <i class="fa-solid fa-angle-left"></i>
+            </a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(map.startPageNo, map.endPageNo)}">
+            <a th:href="@{${'/user/' + type}(page=${i}, keyword=${keyword})}">
+                [[${i}]]
+            </a>
+        </li>
+        <li th:if="${map.next}">
+            <a th:href="@{${'/user/' + type}(page=${map.endPageNo})}">
+                <i class="fa-solid fa-angle-right"></i>
+            </a>
+        </li>
+    </ul>
 </th:block>
