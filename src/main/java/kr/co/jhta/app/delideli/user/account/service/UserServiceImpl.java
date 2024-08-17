@@ -6,7 +6,7 @@ import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
 import kr.co.jhta.app.delideli.user.dto.UserDTO;
 import kr.co.jhta.app.delideli.user.account.mapper.UserMapper;
 import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
-import kr.co.jhta.app.delideli.user.store.mapper.StoreMapper;
+import kr.co.jhta.app.delideli.user.store.mapper.UserStoreMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private final PasswordEncoder passwordEncoder;
     @Autowired
-    private final StoreMapper storeMapper;
+    private final UserStoreMapper userStoreMapper;
 
     // 회원가입
     @Override
@@ -184,7 +184,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ArrayList<StoreInfo> getLikedStores(int userKey) {
-        return storeMapper.getLikedStores(userKey);
+        return userStoreMapper.getLikedStores(userKey);
     }
 
     //포인트 충전
