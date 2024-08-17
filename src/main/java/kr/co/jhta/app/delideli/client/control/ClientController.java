@@ -6,10 +6,12 @@ import kr.co.jhta.app.delideli.client.account.domain.ClientAccount;
 import kr.co.jhta.app.delideli.client.dto.ClientDTO;
 import kr.co.jhta.app.delideli.client.account.exception.DuplicateClientIdException;
 import kr.co.jhta.app.delideli.client.account.service.ClientService;
+import kr.co.jhta.app.delideli.client.store.service.ClientStoreService;
 import kr.co.jhta.app.delideli.common.security.CustomAuthenticationDetails;
 import kr.co.jhta.app.delideli.common.security.JwtTokenProvider;
 import kr.co.jhta.app.delideli.common.service.EmailService;
 import kr.co.jhta.app.delideli.common.service.EmailVerificationService;
+import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -41,6 +44,8 @@ public class ClientController {
     private final ClientService clientService;
     @Autowired
     private final EmailService emailService;
+    @Autowired
+    private final ClientStoreService clientStoreService;
     @Autowired
     private final EmailVerificationService emailVerificationService;
     @Autowired
@@ -234,7 +239,11 @@ public class ClientController {
 
     // 메인 페이지로 이동
     @GetMapping("/storeList")
-    public String storeList() {
+    public String storeList(@AuthenticationPrincipal User user, Model model) {
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        ArrayList<StoreInfo> storeInfo = clientStoreService.getAllStore(clientAccount.getClientKey());
+        model.addAttribute("client", clientAccount);
+        model.addAttribute("store", storeInfo);
         return "client/store/store.list";
     }
 
