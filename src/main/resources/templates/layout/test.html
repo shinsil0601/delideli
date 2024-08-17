@@ -1,66 +1,15 @@
-<table>
-    <tr>
-        <td colspan="2" th:text="${'[' + board.boardStatus + ']  ' + board.boardTitle}"></td>
-    </tr>
-    <tr>
-        <td th:text="'작성일: ' + ${board.boardRegdate}"></td>
-        <td th:text="'조회수: ' + ${board.boardHits}"></td>
-    </tr>
-    <tr>
-        <td colspan="2" th:text="${board.boardContents}"></td>
-    </tr>
-    <tr>
-        <td colspan="2"><a href="/user/event">목록</a></td>
-    </tr>
-</table>
-<hr>
-<!-- 댓글 폼 -->
-<div class="card my-4" th:if="${user != null}">
-    <h5 class="card-header">댓글</h5>
-    <div class="card-body">
-        <div id="comment"></div>
-        <form name="comment-form" action="/user/eventDetail/comment/write" method="post" autocomplete="off">
-            <div class="form-group">
-                <input type="hidden" name="userKey" th:value="${user.userKey}" />
-                <input type="hidden" name="boardKey" th:value="${board.boardKey}" />
-                <input type="hidden" name="userNickname" th:value="${user.userNickname}" />
-                <textarea name="commentContents" class="form-control" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary" name="comment-submit" disabled>댓글작성</button>
-        </form>
-    </div>
-</div>
-<script src="/user/js/module/eventDetail.js" th:if="${user != null}"></script>
-
-<div id="comment">
-    <div class="comment-content">
-        <strong>테스터12:</strong> test
-    </div>
-    <button>답글</button>
-    <button>수정</button>
-    <button>삭제</button>
-    <div class="reply-form" style="display:none;">
-        <textarea class="form-control"></textarea>
-        <button>작성완료</button>
-    </div>
-    <div class="replies" style="margin-left: 20px;"></div>
-    <div class="comment">
-        <div class="comment-content">
-            <strong>테스터12:</strong>
-            test
-        </div>
-        <button>답글</button>
-        <button>수정</button>
-        <div class="edit-form">
-            <textarea class="form-control"></textarea>
-            <a href="#" class="save-button" data-comment-key="47">저장</a>
-        </div>
-        <button>삭제</button>
-        <div class="reply-form" style="">
-            <textarea class="form-control"></textarea>
-            <button>작성완료</button>
-        </div>
-        <hr>
-        <div class="replies" style="margin-left: 20px;"></div>
-    </div>
-</div>
+<p>사용자 프로필: <img th:src="@{${user.userProfile}}" alt="User Profile"></p>
+<p><span th:text="${user.userNickname}"></span> 님</p>
+<p>회원 등급: <span th:text="${user.userRank}"></span> 등급</p>
+<p>My Point: <span th:text="${user.userPoint}"></span> 원</p>
+<a href="/user/charge">충전하기</a><br>
+<a href="/user/myCoupon">내 쿠폰확인</a><br>
+<a href="/user/myAddress">주소관리</a><br>
+<a href="/user/checkAccount">내 정보 수정</a><br>
+<a href="/user/updatePw">비밀번호 변경</a><br>
+<a href="/user/myOrder">주문내역</a><br>
+<a href="/user/myReview">내 리뷰관리</a><br>
+<a href="/user/myLike">찜목록</a><br>
+<a href="/user/myCart">장바구니</a><br>
+<a href="/user/myAsk">내 문의확인</a><br>
+<a href="/user/withdrawal">회원탈퇴</a><br>

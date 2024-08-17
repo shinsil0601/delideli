@@ -1,4 +1,4 @@
-package kr.co.jhta.app.delideli.client.account.domain;
+package kr.co.jhta.app.delideli.client.store.domain;
 
 import lombok.Data;
 
@@ -20,8 +20,8 @@ public class ClientStoreInfo {
     private Integer deliveryAmount2;
     private Integer orderAmount3;
     private Integer deliveryAmount3;
-    private LocalDateTime openTime;
-    private LocalDateTime closeTime;
+    private String openTime;
+    private String closeTime;
     private String storeDetailInfo;
     private String storeOriginInfo;
     private String storeBusinessRegistrationFile;
