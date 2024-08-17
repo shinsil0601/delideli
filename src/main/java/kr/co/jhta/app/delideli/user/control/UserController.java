@@ -8,24 +8,16 @@ import kr.co.jhta.app.delideli.common.service.EmailService;
 import kr.co.jhta.app.delideli.common.service.EmailVerificationService;
 import kr.co.jhta.app.delideli.user.account.domain.UserAccount;
 import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
-import kr.co.jhta.app.delideli.user.board.domain.Board;
-import kr.co.jhta.app.delideli.user.cart.domain.Cart;
-import kr.co.jhta.app.delideli.user.cart.domain.CartOptions;
-import kr.co.jhta.app.delideli.user.cart.service.CartService;
 import kr.co.jhta.app.delideli.user.coupon.domain.Coupon;
-import kr.co.jhta.app.delideli.user.coupon.service.CouponService;
-import kr.co.jhta.app.delideli.user.dto.CartDTO;
+import kr.co.jhta.app.delideli.user.coupon.service.UserCouponService;
 import kr.co.jhta.app.delideli.user.dto.UserDTO;
 import kr.co.jhta.app.delideli.user.account.exception.DuplicateUserIdException;
 import kr.co.jhta.app.delideli.user.account.service.UserService;
-import kr.co.jhta.app.delideli.user.store.domain.Menu;
-import kr.co.jhta.app.delideli.user.store.domain.OptionGroup;
 import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
-import kr.co.jhta.app.delideli.user.store.service.StoreService;
+import kr.co.jhta.app.delideli.user.store.service.UserStoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,7 +34,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -62,9 +53,9 @@ public class UserController {
     @Autowired
     private final PasswordEncoder passwordEncoder;
     @Autowired
-    private final StoreService storeService;
+    private final UserStoreService userStoreService;
     @Autowired
-    private final CouponService couponService;
+    private final UserCouponService userCouponService;
 
 
     @GetMapping("/home")
@@ -399,10 +390,10 @@ public class UserController {
 
         // 각 가게의 추가 정보 (평점, 리뷰 개수 등) 가져오기
         for (StoreInfo store : likedStores) {
-            Double averageRating = storeService.getAverageRatingForStore(store.getStoreInfoKey());
+            Double averageRating = userStoreService.getAverageRatingForStore(store.getStoreInfoKey());
             store.setAverageRating(averageRating != null ? averageRating : 0.0);
 
-            int reviewCount = storeService.getReviewCountForStore(store.getStoreInfoKey());
+            int reviewCount = userStoreService.getReviewCountForStore(store.getStoreInfoKey());
             store.setReviewCount(reviewCount);
         }
 
@@ -451,7 +442,7 @@ public class UserController {
         UserAccount userAccount = userService.findUserById(user.getUsername());
         model.addAttribute("user", userAccount);
 
-        ArrayList<Coupon> coupon = couponService.getCouponsByUserKey(userAccount.getUserKey());
+        ArrayList<Coupon> coupon = userCouponService.getCouponsByUserKey(userAccount.getUserKey());
         model.addAttribute("coupon", coupon);
 
 

@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>사장님 - 가게목록</title>
+        <title>사장님 - 메인페이지</title>
         <!-- Include:공통 CSS -->
         <th:block th:include="inc/common/common-css :: commonCss"></th:block>
         <!-- Include:Client CSS -->
@@ -25,11 +25,23 @@
                 <!-- Start:Header -->
                 <th:block th:include="inc/client/header :: clientHeader"></th:block>
                 <!-- End:Header -->
-                
+
                 <!-- Start:Contents -->
                 <section class="contents">
-                    <a href="/client/storeRegister">가게 등록</a>
-                    가게목록
+
+                    <p>‘입점신청 하기’ 버튼을 눌러 신청서를 작성해 주세요. 담당자 확인 후 전화 혹은 대면으로 도와드립니다.</p>
+
+                    <label for="store-name">가게명</label>
+                    <input type="text" id="store-name" name="store-name" placeholder="입력함">
+
+
+                    <label for="category">가게 카테고리</label>
+                    <select id="category" name="category" multiple>
+                        <th:block th:each="category : ${category}">
+                            <option th:value="${category.categoryKey}" th:text="${category.categoryName}"></option>
+                        </th:block>
+                    </select>
+
                 </section>
                 <!-- End:Contents -->
             </main>
