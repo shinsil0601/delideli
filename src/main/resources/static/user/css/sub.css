@@ -132,3 +132,53 @@
     background: var(--subColor);
     color: var(--whiteColor);
 }
+/* MyPoint */
+.myPoint__box {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--whiteColor);
+    box-shadow: var(--box-shadow-100);
+    border-radius: 2rem;
+}
+.myPoint__value {
+    text-align: left
+    width: 65rem;
+    padding: 1.6rem 0.8rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+}
+.myPoint__select {
+    width: 65rem;
+    padding: 1.6rem 0.8rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+}
+.myPoint__select:focus {
+    outline-color: var(--mainColor);
+}
+.myPoint__btn-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding-top: 4rem;
+}
+.myPoint__btn-wrap a {
+    width: 14rem;
+    padding: 1.6rem 0;
+    text-align: center;
+    background: var(--gray-400);
+    font-weight: 700;
+    color: var(--whiteColor);
+    border-radius: 0.8rem;
+}
+.myPoint__btn-wrap button {
+    width: 14rem;
+    padding: 1.6rem 0;
+    text-align: center;
+    background: var(--subColor);
+    font-weight: 700;
+    color: var(--whiteColor);
+}
