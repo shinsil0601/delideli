@@ -20,21 +20,76 @@
 
         <!-- Start:Main -->
         <main id="mainpage__wrap">
-            <p>사용자 프로필: <img th:src="@{${user.userProfile}}" alt="User Profile"></p>
-            <p><span th:text="${user.userNickname}"></span> 님</p>
-            <p>회원 등급: <span th:text="${user.userRank}"></span> 등급</p>
-            <p>My Point: <span th:text="${user.userPoint}"></span> 원</p>
-            <a href="/user/charge">충전하기</a><br>
-            <a href="/user/myCoupon">내 쿠폰확인</a><br>
-            <a href="/user/myAddress">주소관리</a><br>
-            <a href="/user/checkAccount">내 정보 수정</a><br>
-            <a href="/user/updatePw">비밀번호 변경</a><br>
-            <a href="/user/myOrder">주문내역</a><br>
-            <a href="/user/myReview">내 리뷰관리</a><br>
-            <a href="/user/myLike">찜목록</a><br>
-            <a href="/user/myCart">장바구니</a><br>
-            <a href="/user/myAsk">내 문의확인</a><br>
-            <a href="/user/withdrawal">회원탈퇴</a><br>
+            <div class="subPage__wrap">
+                <h2 class="subPage__title">MyPage</h2>
+                <div class="myPage__con">
+                    <div class="myPage__left">
+                        <div class="myPage__profile">
+                            <div class="myPage__profile--img">
+                                <img th:src="@{${user.userProfile}}" alt="사용자 프로필">
+                            </div>
+                            <h3 class="myPage__profile--name">
+                                [[${user.userNickname}]] 님
+                            </h3>
+                        </div>
+                        <div class="myPage__status">
+                            <i class="fa-solid fa-utensils"></i>
+                            회원등급
+                            <span>
+                                [[${user.userRank}]]등급
+                            </span>
+                        </div>
+                        <div class="myPage__point-box">
+                            <h4>MyPoint</h4>
+                            <div class="myPage__point">
+                                <span class="js-point">[[${user.userPoint}]]</span>원
+                            </div>
+                            <div class="myPage__btn-box">
+                                <a href="/user/charge" class="myPage__btn--1">충전하기</a>
+                                <a href="/user/myCoupon" class="myPage__btn--2">내 쿠폰확인</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="myPage__right">
+                        <a href="/user/myAddress">
+                            주소관리
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/checkAccount">
+                            내 정보수정
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/updatePw">
+                            비밀번호 변경
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/myOrder">
+                            주문내역
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/myReview">
+                            내 리뷰관리
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/myLike">
+                            찜목록
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/myCart">
+                            장바구니
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/myAsk">
+                            내 문의확인
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/withdrawal">
+                            회원탈퇴
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </main>
         <!-- End:Main -->
 
