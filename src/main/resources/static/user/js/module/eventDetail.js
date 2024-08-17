@@ -9,17 +9,17 @@ $(document).ready(function () {
 });
 
 function validateCommentForm() {
-    var commentContents = $('textarea[name="commentContents"]').val();
-    var userKey = $('input[name="userKey"]').val();
-    var isFormValid = commentContents.trim() !== "" && userKey !== "";
+    const commentContents = $('textarea[name="commentContents"]').val();
+    const userKey = $('input[name="userKey"]').val();
+    const isFormValid = commentContents.trim() !== "" && userKey !== "";
 
     $('button[name="comment-submit"]').prop('disabled', !isFormValid);
 }
 
 // 댓글 조회
 function getCommentList() {
-    var userKey = $('input[name=userKey]').val();
-    var boardKey = $('input[name=boardKey]').val();
+    const userKey = $('input[name=userKey]').val();
+    const boardKey = $('input[name=boardKey]').val();
     $.ajax({
         type: 'GET',
         url: '/user/getCommentList',
@@ -28,49 +28,55 @@ function getCommentList() {
             boardKey: boardKey
         },
         success: function (result) {
-            console.log("성공시" + result);
-            console.log("userKey: " + userKey + ", boardKey: " + boardKey);
-            renderComments(result, null, $("#comment"), userKey);
+            // console.log("성공시" + result);
+            // console.log("userKey: " + userKey + ", boardKey: " + boardKey);
+            renderComments(result, null, $("#comment__view"), userKey);
         },
         error: function (xhr, status, error) {
             console.error("AJAX 요청 실패");
             console.error("상태: " + status);
             console.error("오류: " + error);
             console.error("응답: " + xhr.responseText);
-            console.log("userKey: " + userKey + ", boardKey: " + boardKey);
+            // console.log("userKey: " + userKey + ", boardKey: " + boardKey);
         },
         complete: function () {
-            console.log("AJAX 요청 완료");
+            // console.log("AJAX 요청 완료");
         }
     });
 }
 
 function renderComments(comments, parentId, parentElement, currentUserKey) {
     comments.filter(comment => comment.commentParent === parentId).forEach(comment => {
-        var commentDiv = $("<div class='comment'></div>").appendTo(parentElement);
-        var commentContentDiv = $("<div class='comment-content'><strong>" + comment.userNickname + ":</strong> " + comment.commentContents + "</div>").appendTo(commentDiv);
+        const commentDiv = $("<div class='comment__item'></div>").appendTo(parentElement);
+        const commentContentDiv = $("<div class='comment-content'><strong>" + comment.userNickname + ":</strong><p>" + comment.commentContents + "</p></div>").appendTo(commentDiv);
+        const commentBtnDiv = $("<div class='comment-btn__items'></div>").appendTo(commentDiv);
 
-        var replyButton = $("<button>답글</button>").appendTo(commentDiv);
+        const replyButton = $("<button type='button' class='cb-comment'>답글</button>").appendTo(commentBtnDiv);
 
         // 현재 사용자가 댓글 작성자인 경우에만 수정/삭제 버튼을 표시
         if (comment.userKey == currentUserKey) {
-            var editButton = $("<button>수정</button>").appendTo(commentDiv);
-            var deleteButton = $("<button>삭제</button>").appendTo(commentDiv);
+            const editButton = $("<button type='button' class='cb-edit'>수정</button>").appendTo(commentBtnDiv);
+            const deleteButton = $("<button type='button' class='cb-delete'>삭제</button>").appendTo(commentBtnDiv);
         }
 
         // 답글 작성 폼
-        var replyForm = $("<div class='reply-form' style='display:none;'></div>").appendTo(commentDiv);
-        var replyTextarea = $("<textarea class='form-control'></textarea>").appendTo(replyForm);
-        var replySubmitButton = $("<button>작성완료</button>").appendTo(replyForm);
+        const replyForm = $("<div class='reply-form' style='display:none; border-top: 1px solid var(--gray-200); margin-top: 1rem; padding-top: 1rem;'></div>").appendTo(commentDiv);
+        const replyFormContent = $(`
+            <div class="cmt-write__form">
+                <textarea class="form-control" rows="3" placeholder="답글을 작성하세요"></textarea>
+                <div class="comments-write--btn">
+                    <button type="button" class="btn btn-primary reply-submit-btn">작성완료</button>
+                </div>
+            </div>
+        `).appendTo(replyForm);
 
         replyButton.on("click", function () {
             replyForm.toggle();
         });
 
         // 답글 버튼 처리
-        replySubmitButton.on("click", function () {
-            console.log("작성완료키: " + comment.commentKey);
-            var replyContent = replyTextarea.val();
+        replyFormContent.find(".reply-submit-btn").on("click", function () {
+            const replyContent = replyFormContent.find("textarea").val();
             $.ajax({
                 type: 'POST',
                 url: '/user/insertReplyComment',
@@ -97,36 +103,42 @@ function renderComments(comments, parentId, parentElement, currentUserKey) {
         // 수정 버튼 처리
         if (comment.userKey == currentUserKey) {
             editButton.on("click", function () {
-                if ($(this).next(".edit-form").length === 0) {
-                    console.log("수정완료키: " + comment.commentKey);
-                    var editForm = $("<div class='edit-form'></div>").insertAfter($(this));
-                    var editTextarea = $("<textarea class='form-control'></textarea>").val(comment.commentContents).appendTo(editForm);
-                    var editSubmitButton = $("<a href='#' class='save-button' data-comment-key='" + comment.commentKey + "'>저장</a>").appendTo(editForm);
+                // 기존에 열려 있는 수정 폼이 있으면 닫기
+                $(".edit-form").remove();
 
-                    editSubmitButton.on("click", function (event) {
-                        event.preventDefault(); // 기본 동작 막기
-                        var newContent = editTextarea.val();
-                        var commentKey = $(this).data("comment-key"); // comment_key 값 가져오기
-                        $.ajax({
-                            type: 'POST',
-                            url: '/user/editComment',
-                            data: {
-                                commentKey: commentKey,
-                                commentContents: newContent
-                            },
-                            success: function (result) {
-                                alert("댓글이 수정되었습니다.");
-                                location.reload();
-                            },
-                            error: function (xhr, status, error) {
-                                console.error("AJAX 요청 실패");
-                                console.error("상태: " + status);
-                                console.error("오류: " + error);
-                                console.error("응답: " + xhr.responseText);
-                            }
-                        });
+                // 수정 폼을 현재 클릭한 댓글 아래에 추가
+                const editForm = $("<div class='edit-form' style='border-top: 1px solid var(--gray-200); margin-top: 1rem; padding-top: 1rem;'></div>").appendTo(commentDiv);
+                const editFormContent = $(`
+                    <p>댓글 수정</p>
+                    <div class="cmt-write__form">
+                        <textarea class="form-control" rows="3">` + comment.commentContents + `</textarea>
+                        <div class="comments-write--btn">
+                            <button type="button" class="btn btn-primary edit-submit-btn">저장</button>
+                        </div>
+                    </div>
+                `).appendTo(editForm);
+
+                editFormContent.find(".edit-submit-btn").on("click", function () {
+                    const newContent = editFormContent.find("textarea").val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '/user/editComment',
+                        data: {
+                            commentKey: comment.commentKey,
+                            commentContents: newContent
+                        },
+                        success: function (result) {
+                            alert("댓글이 수정되었습니다.");
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX 요청 실패");
+                            console.error("상태: " + status);
+                            console.error("오류: " + error);
+                            console.error("응답: " + xhr.responseText);
+                        }
                     });
-                }
+                });
             });
 
             // 삭제 버튼 처리
@@ -153,9 +165,8 @@ function renderComments(comments, parentId, parentElement, currentUserKey) {
             });
         }
 
-        commentDiv.append("<hr>");
         // 대댓글 영역
-        var repliesDiv = $("<div class='replies' style='margin-left: 20px;'></div>").appendTo(commentDiv); // margin-left를 추가하여 들여쓰기
+        const repliesDiv = $("<div class='replies' style='margin-left: 2rem; border-top: 1px solid var(--gray-200); margin-top: 1rem; padding-top: 1rem;'></div>").appendTo(commentDiv);
         renderComments(comments, comment.commentKey, repliesDiv, currentUserKey);
     });
 }
