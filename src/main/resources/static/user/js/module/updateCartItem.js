@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+               // console.error('Error:', error);
                 alert("오류가 발생했습니다. 다시 시도해 주세요.");
             });
     }

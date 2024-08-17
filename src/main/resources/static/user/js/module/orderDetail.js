@@ -32,11 +32,11 @@ $(document).ready(function() {
                 'X-CSRF-Token': $('meta[name="_csrf"]').attr('content')
             },
             success: function(response) {
-                console.log(response); // 서버로부터의 응답을 로그로 출력
+                //console.log(response); // 서버로부터의 응답을 로그로 출력
                 alert('같은 메뉴가 성공적으로 담겼습니다.');
             },
             error: function(xhr, status, error) {
-                console.error('Error:', status, error);
+                //console.error('Error:', status, error);
                 alert('같은 메뉴 담기에 실패했습니다.');
             }
         });
