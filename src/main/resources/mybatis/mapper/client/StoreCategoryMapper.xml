@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.client.store.mapper.StoreCategoryMapper">
+
+    <!-- StoreCategory resultMap -->
+    <resultMap id="StoreCategoryResultMap" type="kr.co.jhta.app.delideli.client.store.domain.ClientStoreCategory">
+        <id property="storeCategoryKey" column="store_category_key"/>
+        <result property="storeInfoKey" column="storeInfo_key"/>
+        <result property="categoryKey" column="category_key"/>
+        <result property="storeCategoryRegdate" column="store_category_regdate"/>
+        <result property="storeCategoryUpdate" column="store_category_update"/>
+    </resultMap>
+
+    <!-- Store Category 삽입 -->
+    <insert id="insertStoreCategory">
+        INSERT INTO store_category (storeInfo_key, category_key)
+        VALUES (#{storeInfoKey}, #{categoryKey})
+    </insert>
+
+</mapper>

@@ -19,8 +19,8 @@ public class StoreInfo {
     private Integer deliveryAmount2;
     private Integer orderAmount3;
     private Integer deliveryAmount3;
-    private LocalDateTime openTime;
-    private LocalDateTime closeTime;
+    private String openTime;
+    private String closeTime;
     private String storeDetailInfo;
     private String storeOriginInfo;
     private String storeBusinessRegistrationFile;

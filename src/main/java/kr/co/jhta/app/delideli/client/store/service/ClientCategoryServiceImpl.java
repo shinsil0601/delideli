@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-@Service("clientCategoryService")
+@Service
 public class ClientCategoryServiceImpl implements ClientCategoryService {
 
     private final ClientCategoryMapper clientCategoryMapper;
