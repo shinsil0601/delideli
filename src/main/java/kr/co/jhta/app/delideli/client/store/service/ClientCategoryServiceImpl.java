@@ -1,12 +1,12 @@
 package kr.co.jhta.app.delideli.client.store.service;
 
-import kr.co.jhta.app.delideli.client.store.domain.Category;
+import kr.co.jhta.app.delideli.client.store.domain.ClientCategory;
 import kr.co.jhta.app.delideli.client.store.mapper.ClientCategoryMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-@Service("clientCategoryService")
+@Service
 public class ClientCategoryServiceImpl implements ClientCategoryService {
 
     private final ClientCategoryMapper clientCategoryMapper;
@@ -16,7 +16,7 @@ public class ClientCategoryServiceImpl implements ClientCategoryService {
     }
 
     @Override
-    public ArrayList<Category> getAllCategory() {
+    public ArrayList<ClientCategory> getAllCategory() {
         return clientCategoryMapper.getAllCategory();
     }
 }
