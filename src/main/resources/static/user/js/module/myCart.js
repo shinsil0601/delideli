@@ -27,7 +27,7 @@ function deleteCartItem(cartKey) {
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                //console.error('Error:', error);
                 alert("오류가 발생했습니다. 다시 시도해 주세요.");
             });
     }
@@ -39,14 +39,14 @@ function processPayment(storeInfoKey, minOrderAmount) {
 
     // 요소가 존재하는지 확인
     if (!totalPriceElement) {
-        console.error('총 금액 요소를 찾을 수 없습니다:', 'storeTotalPrice-' + storeInfoKey);
+        //console.error('총 금액 요소를 찾을 수 없습니다:', 'storeTotalPrice-' + storeInfoKey);
         return;
     }
 
     const storeTotalPrice = parseInt(totalPriceElement.textContent.replace('총 금액: ', '').replace('원', '').replace(/,/g, ''));
 
     if (isNaN(storeTotalPrice)) {
-        console.error('총 금액을 파싱할 수 없습니다:', totalPriceElement.textContent);
+        //console.error('총 금액을 파싱할 수 없습니다:', totalPriceElement.textContent);
         return;
     }
 

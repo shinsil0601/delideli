@@ -72,7 +72,7 @@ $(document).ready(function () {
             userEmailMessage.hasClass('success-message') &&
             userEmailChkMsg.hasClass('success-message');
 
-        console.log({
+        /*console.log({
             allFilled: allFilled,
             allSuccess: allSuccess,
             userIdMessageClass: userIdMessage.attr('class'),
@@ -92,7 +92,7 @@ $(document).ready(function () {
             inputAddressVal: inputAddress.val(),
             inputAddrDetailVal: inputAddrDetail.val(),
         });
-
+*/
         if (allFilled && allSuccess) {
             registerButton.prop('disabled', false);
         } else {

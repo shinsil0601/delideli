@@ -35,7 +35,7 @@ function cancelOrder(element) {
             },
             error: function(xhr, status, error) {
                 alert("주문 취소에 실패했습니다. 다시 시도해주세요.");
-                console.error("Error:", status, error); // 디버깅 정보 로그 출력
+                //console.error("Error:", status, error); // 디버깅 정보 로그 출력
             }
         });
     }

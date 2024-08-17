@@ -1,12 +1,15 @@
-package kr.co.jhta.app.delideli.user.store.domain;
+package kr.co.jhta.app.delideli.client.menu.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
-public class Menu {
+@AllArgsConstructor
+public class ClientMenu {
     private int menuKey;
     private int storeInfoKey;
     private int menuGroupKey;
@@ -16,5 +19,5 @@ public class Menu {
     private String menuStatus;
     private Date menuRegdate;
     private Date menuUpdate;
-    private MenuGroup menuGroup;
+    private ClientMenuGroup clientMenuGroup;
 }
