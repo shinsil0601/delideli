@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.user.store.mapper.UserStoreMapper">
+
+    <resultMap id="StoreInfoResultMap" type="kr.co.jhta.app.delideli.user.store.domain.StoreInfo">
+        <id property="storeInfoKey" column="storeInfo_key"/>
+        <result property="clientKey" column="client_key"/>
+        <result property="storeName" column="store_name"/>
+        <result property="storeAddress" column="store_address"/>
+        <result property="storeZipcode" column="store_zipcode"/>
+        <result property="storeAddrDetail" column="store_addrs_detail"/>
+        <result property="storePhone" column="store_phone"/>
+        <result property="minOrderAmount" column="min_order_amount"/>
+        <result property="orderAmount1" column="order_amount1"/>
+        <result property="deliveryAmount1" column="delivery_amount1"/>
+        <result property="orderAmount2" column="order_amount2"/>
+        <result property="deliveryAmount2" column="delivery_amount2"/>
+        <result property="orderAmount3" column="order_amount3"/>
+        <result property="deliveryAmount3" column="delivery_amount3"/>
+        <result property="openTime" column="open_time"/>
+        <result property="closeTime" column="close_time"/>
+        <result property="storeDetailInfo" column="store_detail_info"/>
+        <result property="storeOriginInfo" column="store_origin_info"/>
+        <result property="storeBusinessRegistrationFile" column="store_business_registration_file"/>
+        <result property="storeBusinessReportFile" column="store_business_report_file"/>
+        <result property="storeProfileImg" column="store_profile_img"/>
+        <result property="storeAccess" column="store_access"/>
+        <result property="storeDelete" column="store_delete"/>
+        <result property="storeRegdate" column="store_regdate"/>
+        <result property="storeUpdate" column="store_update"/>
+
+        <!-- 사업자 정보 -->
+        <result property="clientName" column="client_name"/>
+        <result property="clientPhone" column="client_phone"/>
+        <result property="clientEID" column="client_EID"/>
+    </resultMap>
+
+    <!-- 지역에 따른 모든 가게 목록을 가져옴 -->
+    <select id="getAllStoresInRegion" resultMap="StoreInfoResultMap" parameterType="string">
+        SELECT si.*,
+               ca.client_name AS business_owner_name,
+               ca.client_phone AS business_phone,
+               ca.client_EID AS business_registration_no
+        FROM storeInfo si
+                 JOIN client_account ca ON si.client_key = ca.client_key
+        WHERE si.store_address LIKE CONCAT('%', #{region}, '%')
+          AND si.store_delete = 0
+    </select>
+
+    <!-- 카테고리와 지역에 따른 모든 가게 목록을 가져옴 -->
+    <select id="getAllStoresByCategoryAndRegion" resultMap="StoreInfoResultMap" parameterType="map">
+        SELECT si.*,
+               ca.client_name AS business_owner_name,
+               ca.client_phone AS business_phone,
+               ca.client_EID AS business_registration_no
+        FROM storeInfo si
+                 JOIN store_category sc ON si.storeInfo_key = sc.storeInfo_key
+                 JOIN client_account ca ON si.client_key = ca.client_key
+        WHERE sc.category_key = #{categoryId}
+          AND si.store_address LIKE CONCAT('%', #{region}, '%')
+          AND si.store_delete = 0
+    </select>
+
+    <!-- 검색어와 지역에 따른 모든 가게 목록을 가져옴 -->
+    <select id="searchAllStoresByNameAndRegion" resultMap="StoreInfoResultMap" parameterType="map">
+        SELECT si.*,
+               ca.client_name AS business_owner_name,
+               ca.client_phone AS business_phone,
+               ca.client_EID AS business_registration_no
+        FROM storeInfo si
+                 JOIN client_account ca ON si.client_key = ca.client_key
+        WHERE si.store_name LIKE CONCAT('%', #{query}, '%')
+          AND si.store_address LIKE CONCAT('%', #{region}, '%')
+          AND si.store_delete = 0
+    </select>
+
+    <!-- 특정 가게 정보를 가져옴 -->
+    <select id="getStoreInfoById" parameterType="int" resultMap="StoreInfoResultMap">
+        SELECT
+            si.*,
+            ca.client_name,
+            ca.client_phone,
+            ca.client_EID
+        FROM
+            storeInfo si
+                JOIN
+            client_account ca
+            ON
+                si.client_key = ca.client_key
+        WHERE
+            si.storeInfo_key = #{storeInfoKey}
+    </select>
+
+    <select id="getLikedStores" parameterType="int" resultMap="StoreInfoResultMap">
+        SELECT si.*
+        FROM storeInfo si
+                 JOIN `like` l ON si.storeInfo_key = l.storeInfo_key
+        WHERE l.user_key = #{userKey}
+          AND l.like_status = 1
+    </select>
+
+</mapper>

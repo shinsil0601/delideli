@@ -1,0 +1,56 @@
+name: Deploy to cloudtype
+on:
+  push:
+    branches:
+      - Code-Refactoring
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Connect deploy key
+        uses: cloudtype-github-actions/connect@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          ghtoken: ${{ secrets.GHP_TOKEN }}
+      - name: Deploy
+        uses: cloudtype-github-actions/deploy@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          project: ksna0303/delideli
+          stage: main
+          yaml: >
+            name: delideli
+
+            app: java@17
+
+            options:
+              ports: 8080
+              env:
+                - name: DB_NAME
+                  value: ${{ secrets.DB_NAME }}
+                - name: DB_URL
+                  value: ${{ secrets.DB_URL }}
+                - name: DB_USERNAME
+                  value: ${{ secrets.DB_USERNAME }}
+                - name: DB_PASSWORD
+                  value: ${{ secrets.DB_PASSWORD }}
+                - name: MYBATIS_LOCATION
+                  value: ${{ secrets.MYBATIS_LOCATION }}
+                - name: MYBATIS_TYPE
+                  value: ${{ secrets.MYBATIS_TYPE }}
+                - name: JWT_SECRET
+                  value: ${{ secrets.JWT_SECRET }}
+                - name: JWT_EXPIRATION
+                  value: ${{ secrets.JWT_EXPIRATION }}
+                - name: MAIL_USERNAME
+                  value: ${{ secrets.MAIL_USERNAME }}
+                - name: MAIL_PASSWORD
+                  value: ${{ secrets.MAIL_PASSWORD }}
+              buildenv: []
+            context:
+              git:
+                url: git@github.com:${{ github.repository }}.git
+                ref: ${{ github.ref }}
+              preset: java-springboot
