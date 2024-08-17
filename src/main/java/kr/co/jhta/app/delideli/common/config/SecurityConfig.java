@@ -37,18 +37,6 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()  // 모든 요청을 허용
-                )
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
-    }
-
-    /*@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/user/home", "/error",
                                 "/user/login","/user/register", "/user/loginProc", "/user/findId", "/user/findPw", "/user/sendResetLink", "/user/userChangePw", "/user/changePassword", "/user/checkUserId", "/user/checkUserEmail", "/user/sendVerificationCode", "/user/verifyCode",
                                 "/user/category/**", "/user/filterStoresByAddress", "/user/search", "/user/storeDetail/**", "/user/menuDetail/**",
@@ -62,7 +50,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }*/
+    }
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
