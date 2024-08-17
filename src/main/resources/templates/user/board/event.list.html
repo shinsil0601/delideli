@@ -40,27 +40,27 @@
                         <col width="15%">
                     </colgroup>
                     <thead>
-                    <tr>
-                        <th>번호</th>
-                        <th>제목</th>
-                        <th>등록일</th>
-                        <th>조회수</th>
-                    </tr>
+                        <tr>
+                            <th>번호</th>
+                            <th>제목</th>
+                            <th>등록일</th>
+                            <th>조회수</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="board, iterState : ${list}">
-                        <td>
-                            [[${iterState.count}]]
-                        </td>
-                        <td>
-                            <a th:href="@{eventDetail/{num}(num=${board.boardKey})}">
-                                <span>[[${board.boardStatus}]]</span>
-                                [[${board.boardTitle}]]
-                            </a>
-                        </td>
-                        <td>[[${board.boardRegdate}]]</td>
-                        <td>[[${board.boardHits}]]</td>
-                    </tr>
+                        <tr th:each="board, iterState : ${list}">
+                            <td>
+                                [[${iterState.count}]]
+                            </td>
+                            <td>
+                                <a th:href="@{eventDetail/{num}(num=${board.boardKey})}">
+                                    <span>[[${board.boardStatus}]]</span>
+                                    [[${board.boardTitle}]]
+                                </a>
+                            </td>
+                            <td>[[${board.boardRegdate}]]</td>
+                            <td>[[${board.boardHits}]]</td>
+                        </tr>
                     </tbody>
                 </table>
                 <!-- Start:Pagination -->

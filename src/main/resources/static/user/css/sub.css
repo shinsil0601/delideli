@@ -10,6 +10,36 @@
     color: var(--gray-900);
     padding-bottom: 6rem;
 }
+/* subNav */
+.subNav__items {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2.4rem;
+    padding-bottom: 6rem;
+}
+.subNav__items > li > a {
+    display: block;
+    width: 100%;
+    padding: 1.6rem 0;
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    border-radius: 0.8rem;
+    font-size: var(--font-size-14);
+    font-weight: 700;
+    color: var(--gray-600);
+    text-align: center;
+    transition: .3s;
+}
+.subNav__items > li > a:hover {
+    background: var(--gray-100);
+}
+.subNav__items > li.active > a {
+    background: var(--subColor);
+    color: var(--whiteColor);
+}
+.subNav__items > li.active > a:hover {
+    opacity: 0.8;
+}
 /* MyPage */
 .myPage__con {
     position: relative;
@@ -131,4 +161,58 @@
 .myPage__right a:hover {
     background: var(--subColor);
     color: var(--whiteColor);
+}
+/* MyPoint */
+.myPoint__box {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--whiteColor);
+    box-shadow: var(--box-shadow-100);
+    border-radius: 2rem;
+}
+.myPoint__value {
+    text-align: left;
+    width: 65rem;
+    padding: 1.6rem 0.8rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+}
+.myPoint__select {
+    width: 65rem;
+    padding: 1.6rem 0.8rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+}
+.myPoint__select:focus {
+    outline-color: var(--mainColor);
+}
+.myPoint__btn-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding-top: 4rem;
+}
+.myPoint__btn-wrap a {
+    width: 14rem;
+    padding: 1.6rem 0;
+    text-align: center;
+    background: var(--gray-400);
+    font-weight: 700;
+    color: var(--whiteColor);
+    border-radius: 0.8rem;
+}
+.myPoint__btn-wrap button {
+    width: 14rem;
+    padding: 1.6rem 0;
+    text-align: center;
+    background: var(--subColor);
+    font-weight: 700;
+    color: var(--whiteColor);
+}
+/* myCoupon */
+.myCoupon__con table {
+    margin-top: 0;
 }
