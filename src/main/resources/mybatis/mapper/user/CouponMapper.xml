@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.user.coupon.mapper.UserCouponMapper">
+
+    <!-- resultMap 정의 -->
+    <resultMap id="CouponResultMap" type="kr.co.jhta.app.delideli.user.coupon.domain.Coupon">
+        <id property="couponKey" column="coupon_key" />
+        <result property="userKey" column="user_key" />
+        <result property="couponName" column="coupon_name" />
+        <result property="couponPrice" column="coupon_price" />
+        <result property="couponUseGrade" column="coupon_use_grade" />
+        <result property="couponStartDate" column="coupon_start_date" />
+        <result property="couponEndDate" column="coupon_end_date" />
+        <result property="couponRegdate" column="coupon_regdate" />
+        <result property="couponUpdate" column="coupon_update" />
+    </resultMap>
+
+    <!-- 특정 유저의 쿠폰 리스트를 가져오는 쿼리 -->
+    <select id="getCouponsByUserKey" resultMap="CouponResultMap">
+        SELECT *
+        FROM coupon
+        WHERE user_key = #{userKey}
+        AND coupon_start_date &lt;= NOW()
+        AND coupon_end_date &gt;= NOW()
+        ORDER BY coupon_end_date ASC
+    </select>
+
+    <!-- 쿠폰 삭제 -->
+    <delete id="deleteCouponByKeyAndUser" parameterType="map">
+        DELETE FROM coupon
+        WHERE coupon_key = #{couponKey} AND user_key = #{userKey}
+    </delete>
+
+</mapper>
