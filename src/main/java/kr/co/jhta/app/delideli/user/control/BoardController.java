@@ -79,7 +79,7 @@ public class BoardController {
         }
         Board board = boardService.readOneNotice(num);
         model.addAttribute("board", board);
-        return "/user/board/noticeDetail";
+        return "/user/board/notice.view";
     }
 
     // 이벤트 목록
