@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -30,21 +31,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String token = getTokenFromRequest(request);
-        //log.info("토큰: {}", token);
+
         if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
-            //log.info("토큰 유효");
-            String username = jwtTokenProvider.getUsernameFromToken(token);
-            String role = jwtTokenProvider.getRoleFromToken(token);
-            //log.info("유저명: {}", username);
-            //log.info("역할: {}", role);
+            try {
+                String username = jwtTokenProvider.getUsernameFromToken(token);
+                String role = jwtTokenProvider.getRoleFromToken(token);
 
-            UserDetails userDetails = combinedUserDetailsService.loadUserByUsernameAndType(username, role);
+                // 유효한 역할인지 확인
+                if (!"ROLE_USER".equals(role) && !"ROLE_CLIENT".equals(role) && !"ROLE_ADMIN".equals(role)) {
+                    //log.error("인증 실패: 유효하지 않은 역할입니다. 사용자 이름: {}, 역할: {}", username, role);
+                    throw new UsernameNotFoundException("유효하지 않은 역할입니다. 사용자 이름: " + username + ", 역할: " + role);
+                }
 
-            if (userDetails != null) {
-                //log.info("유저 상세정보: {}", userDetails);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                //log.info("사용자 정보 기반 인증 토큰: {}", authentication);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                UserDetails userDetails = combinedUserDetailsService.loadUserByUsernameAndType(username, role);
+
+                if (userDetails != null) {
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (UsernameNotFoundException e) {
+                //log.error("인증 실패: {}", e.getMessage());
+                SecurityContextHolder.clearContext();
+                // 인증 실패시 메인 화면 대신 로그인 화면으로 리디렉션
+                response.sendRedirect("/user/login?error=" + e.getMessage());
+                return; // 필터 체인을 중단하고 리디렉션
             }
         }
 
@@ -54,13 +64,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String getTokenFromRequest(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
-            //log.info("쿠키가 없음");
             return null;
         }
         for (Cookie cookie : cookies) {
-            //log.info("받은 쿠키: {}", cookie.getName());
             if (cookie.getName().equals("JWT")) {
-                //log.info("일치하는 토큰 있음: {}", cookie.getValue());
                 return cookie.getValue();
             }
         }

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 메인페이지</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <div>
+                <input type="hidden" name="storeInfoKey" id="storeInfoKey" th:value="${store.storeInfoKey}">
+                <input type="hidden" name="userKey" id="userKey" th:value="${user.userKey}">
+
+                <div th:text="${order.statusMessage}"></div><br>
+                <div th:text="'가게명: ' + ${store.storeName}"></div><br>
+                <div th:text="'가게 주소: ' + ${store.storeAddress} + ' ' + ${store.storeAddrDetail}"></div>
+                <div th:text="'가게 번호: ' + ${store.storePhone}"></div>
+                <div th:text="'주문일시: ' + ${order.formattedOrderDate}"></div>
+                <div th:text="'주문번호: ' + ${order.orderNo}"></div><br>
+
+                <div th:each="menu : ${order.orderDetails}">
+                    <span class="menu-item" th:data-menu-name="${menu.menuName}" th:data-quantity="${menu.quantity}" th:data-option-name="${menu.optionName}">
+                    <span class="menu-name" th:data-menu-name="${menu.menuName}" th:text="'메인 메뉴 : ' + ${menu.menuName}"></span><br>
+                    <span class="menu-quantity" th:data-quantity="${menu.quantity}" th:text="'수량 : ' + ${menu.quantity}"></span><br>
+                    <span class="menu-option" th:data-option-name="${menu.optionName}" th:text="'옵션 : ' + ${menu.optionName}"></span>
+                    <br>
+                </div>
+                <br>
+
+                <div th:text="'결제방식: ' + ${order.uorderPayment}"></div>
+                <div th:text="'총 결제금액: ' + ${order.uorderPrice} + '원'"></div><br>
+                <div th:text="'가게 요청사항: ' + ${order.shopDesc}"></div><br>
+                <div th:text="'배달 요청사항: ' + ${order.riderDesc}"></div><br>
+
+                <!-- "같은 메뉴 담기" 버튼을 맨 아래로 이동 -->
+                <button id="sameMenuButton">같은 메뉴 담기</button>
+
+                <script src="/user/js/module/orderDetail.js"></script>
+            </div>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

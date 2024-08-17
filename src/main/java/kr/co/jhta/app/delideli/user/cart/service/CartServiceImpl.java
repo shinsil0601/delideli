@@ -9,6 +9,8 @@ import kr.co.jhta.app.delideli.user.store.service.OptionService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -83,4 +85,44 @@ public class CartServiceImpl implements CartService {
     public void deleteCartItem(int cartKey) {
         cartMapper.deleteCartItem(cartKey);
     }
+
+    @Override
+    public ArrayList<Cart> getCartItemsByStoreInfoKey(int userKey, int storeInfoKey) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("userKey", userKey);
+        map.put("storeInfoKey", storeInfoKey);
+        return cartMapper.findByStoreInfoKey(map);
+    }
+
+    @Override
+    public void removeCartItem(int cartKey) {
+        cartMapper.deleteCartOptions(cartKey);
+        cartMapper.deleteCartItem(cartKey);
+    }
+
+    @Override
+    public int addCart(int userKey, int menuKey, int quantity) {
+        Cart cart = new Cart();
+        cart.setUserKey(userKey);
+        cart.setMenuKey(menuKey);
+        cart.setQuantity(quantity);
+
+        // cart 테이블에 데이터를 삽입
+        cartMapper.insertCartItem(cart);
+
+        // 삽입된 cart_key 반환
+        return cart.getCartKey();
+    }
+
+    @Override
+    public void addCartOption(int cartKey, int optionKey, int optionPrice, String optionName) {
+        CartOptions cartOption = new CartOptions();
+        cartOption.setCartKey(cartKey);
+        cartOption.setOptionKey(optionKey);
+        cartOption.setOptionPrice(optionPrice);
+        cartOption.setOptionName(optionName);
+
+        cartMapper.insertCartOption(cartOption);
+    }
+
 }

@@ -106,7 +106,7 @@ public class ClientServiceImpl implements ClientService {
     //비밀번호변경(로그인)
     @Override
     public void changePwLogin(String clientId, String newPw1) {
-        log.info("clientId: {}, newPw1!!!!!!!!!!!!!! {}", clientId, newPw1);
+        //log.info("clientId: {}, newPw1!!!!!!!!!!!!!! {}", clientId, newPw1);
         ClientAccount clientAccount = findClientById(clientId);
         clientAccount.setClientPw(passwordEncoder.encode(newPw1));
         clientMapper.changePwLogin(clientAccount);

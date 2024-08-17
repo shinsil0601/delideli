@@ -43,4 +43,22 @@
         SELECT * FROM review WHERE storeInfo_key = #{storeInfoKey} ORDER BY review_regdate DESC
     </select>
 
+    <!-- 특정 주문에 대한 리뷰가 존재하는지 확인 -->
+    <select id="countByOrderKey" resultType="int" parameterType="int">
+        SELECT COUNT(*)
+        FROM review
+        WHERE order_key = #{orderKey}
+    </select>
+
+    <!-- 리뷰 상세 내용 가져오기 -->
+    <select id="findReviewByOrderKey" resultMap="ReviewResultMap" parameterType="int">
+        SELECT * FROM review WHERE order_key = #{orderKey}
+    </select>
+
+    <!-- 리뷰 삽입 -->
+    <insert id="insertReview" parameterType="kr.co.jhta.app.delideli.user.review.domain.Review">
+        INSERT INTO review (user_key, client_key, storeInfo_key, order_key, review_rating, review_desc, review_photo1, review_photo2)
+        VALUES (#{userKey}, #{clientKey}, #{storeInfoKey}, #{orderKey}, #{reviewRating}, #{reviewDesc}, #{reviewPhoto1}, #{reviewPhoto2})
+    </insert>
+
 </mapper>

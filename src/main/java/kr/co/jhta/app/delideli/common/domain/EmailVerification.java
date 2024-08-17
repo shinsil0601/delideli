@@ -6,5 +6,5 @@ import lombok.Data;
 public class EmailVerification {
     private String email;
     private String verificationCode;
-    private long timestamp;
+    private Long timestamp;
 }

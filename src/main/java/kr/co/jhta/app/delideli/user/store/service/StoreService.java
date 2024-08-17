@@ -40,4 +40,7 @@ public interface StoreService {
 
     // 메뉴 옵션 정보
     ArrayList<OptionGroup> getOptionGroupsByMenuId(int menuKey);
+
+    // 가게키와 메뉴명으로 메뉴키 가져오기
+    int getMenuByStoreInfoKeyAndMenuName(int storeInfoKey, String menuName);
 }
