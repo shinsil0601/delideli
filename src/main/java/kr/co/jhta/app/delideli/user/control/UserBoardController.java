@@ -113,7 +113,7 @@ public class UserBoardController {
         model.addAttribute("list", list);
         model.addAttribute("map", map);
 
-        return "/user/board/event";
+        return "/user/board/event.list";
     }
 
     // 이벤트 상세보기
@@ -125,7 +125,7 @@ public class UserBoardController {
             model.addAttribute("user", userAccount);
         }
         model.addAttribute("board", board);
-        return "/user/board/eventDetail";
+        return "/user/board/event.view";
     }
 
     // 댓글 삽입
