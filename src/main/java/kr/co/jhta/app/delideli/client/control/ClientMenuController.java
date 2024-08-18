@@ -4,7 +4,9 @@ import kr.co.jhta.app.delideli.client.account.domain.ClientAccount;
 import kr.co.jhta.app.delideli.client.account.service.ClientService;
 import kr.co.jhta.app.delideli.client.menu.domain.ClientMenu;
 import kr.co.jhta.app.delideli.client.menu.domain.ClientMenuGroup;
+import kr.co.jhta.app.delideli.client.menu.domain.ClientOptionGroup;
 import kr.co.jhta.app.delideli.client.menu.service.ClientMenuService;
+import kr.co.jhta.app.delideli.client.menu.service.ClientOptionService;
 import kr.co.jhta.app.delideli.client.store.service.ClientStoreService;
 import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +43,8 @@ public class ClientMenuController {
     private final ClientStoreService clientStoreService;
     @Autowired
     private final ClientMenuService clientMenuService;
+    @Autowired
+    private final ClientOptionService clientOptionService;
 
     // 메뉴 화면 이동
     @GetMapping("/menu/{storeKey}")
@@ -195,16 +199,10 @@ public class ClientMenuController {
 
     @GetMapping("/registerMenuOption/{menuKey}")
     public String registerMenuOption(@PathVariable("menuKey") int menuKey, Model model) {
-        // 메뉴 정보를 가져옴
-        ClientMenu clientMenu = clientMenuService.getMenuById(menuKey);
-
-        // 모델에 메뉴 정보 추가
-        model.addAttribute("menu", clientMenu);
-
-        // 추가 옵션을 처리하기 위한 페이지로 이동
+        ArrayList<ClientOptionGroup> optionGroups = clientOptionService.getMenuOptionByMenuKey(menuKey);
+        model.addAttribute("optionList", optionGroups);
         return "client/menu/registerMenuOption";
     }
-
 
     // 프로필 이미지 저장
     private String saveProfileImage(MultipartFile file) {
