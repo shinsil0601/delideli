@@ -1,6 +1,7 @@
 package kr.co.jhta.app.delideli.client.menu.mapper;
 
 import kr.co.jhta.app.delideli.client.menu.domain.ClientMenu;
+import kr.co.jhta.app.delideli.client.menu.domain.ClientMenuGroup;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
@@ -20,4 +21,10 @@ public interface ClientMenuMapper {
     void deleteMenusByGroupKey(int menuGroupKey);
 
     ClientMenu getMenuById(int menuKey);
+
+    ArrayList<ClientMenuGroup> getAllMenuGroup(int storeKey);
+
+    void addMenuGroup(ClientMenuGroup clientMenuGroup);
+
+    void addMenu(ClientMenu clientMenu);
 }

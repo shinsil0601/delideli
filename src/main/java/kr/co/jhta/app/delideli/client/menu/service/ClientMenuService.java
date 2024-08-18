@@ -1,6 +1,7 @@
 package kr.co.jhta.app.delideli.client.menu.service;
 
 import kr.co.jhta.app.delideli.client.menu.domain.ClientMenu;
+import kr.co.jhta.app.delideli.client.menu.domain.ClientMenuGroup;
 
 import java.util.ArrayList;
 
@@ -17,4 +18,10 @@ public interface ClientMenuService {
     void deleteMenuGroup(int menuGroupKey);
 
     ClientMenu getMenuById(int menuKey);
+
+    ArrayList<ClientMenuGroup> getAllMenuGroup(int storeKey);
+
+    void addMenuGroup(ClientMenuGroup clientMenuGroup);
+
+    void addMenu(ClientMenu clientMenu);
 }

@@ -1,6 +1,7 @@
 package kr.co.jhta.app.delideli.client.menu.service;
 
 import kr.co.jhta.app.delideli.client.menu.domain.ClientMenu;
+import kr.co.jhta.app.delideli.client.menu.domain.ClientMenuGroup;
 import kr.co.jhta.app.delideli.client.menu.mapper.ClientMenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,20 @@ public class ClientMenuServiceImpl implements ClientMenuService {
     @Override
     public ClientMenu getMenuById(int menuKey) {
         return clientMenuMapper.getMenuById(menuKey);
+    }
+
+    @Override
+    public ArrayList<ClientMenuGroup> getAllMenuGroup(int storeKey) {
+        return clientMenuMapper.getAllMenuGroup(storeKey);
+    }
+
+    @Override
+    public void addMenuGroup(ClientMenuGroup clientMenuGroup) {
+        clientMenuMapper.addMenuGroup(clientMenuGroup);
+    }
+
+    @Override
+    public void addMenu(ClientMenu clientMenu) {
+        clientMenuMapper.addMenu(clientMenu);
     }
 }

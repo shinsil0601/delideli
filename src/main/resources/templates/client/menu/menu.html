@@ -31,6 +31,9 @@
                 <!-- Start:Contents -->
                 <section class="contents">
                     <form th:action="@{/client/menu/{storeKey}(storeKey=${storeKey})}" method="get">
+                        <a th:href="@{/client/menuRegister/{storeKey}(storeKey=${storeKey})}">
+                            메뉴 등록
+                        </a>
                         <div>
                             <select name="filter">
                                 <option value="menuName" th:selected="${filter == 'menuName'}">메뉴명</option>
