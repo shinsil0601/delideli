@@ -10,4 +10,6 @@ import java.util.ArrayList;
 @Mapper
 public interface UserCategoryMapper {
     ArrayList<Category> getAllCategory();
+
+    Category getCategoryById(int categoryKey);
 }

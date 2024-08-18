@@ -13,7 +13,10 @@ import kr.co.jhta.app.delideli.user.coupon.service.UserCouponService;
 import kr.co.jhta.app.delideli.user.dto.UserDTO;
 import kr.co.jhta.app.delideli.user.account.exception.DuplicateUserIdException;
 import kr.co.jhta.app.delideli.user.account.service.UserService;
+import kr.co.jhta.app.delideli.user.review.domain.Review;
+import kr.co.jhta.app.delideli.user.store.domain.Category;
 import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
+import kr.co.jhta.app.delideli.user.store.service.UserCategoryService;
 import kr.co.jhta.app.delideli.user.store.service.UserStoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,9 +59,17 @@ public class UserController {
     private final UserStoreService userStoreService;
     @Autowired
     private final UserCouponService userCouponService;
+    @Autowired
+    private final UserCategoryService categoryService;
+    @Autowired
+    private final UserStoreService storeService;
 
-    @GetMapping("/home")
-    public String home(@AuthenticationPrincipal User user, Model model, HttpServletResponse response) {
+    @GetMapping({"/home", "/home/{categoryId}"})
+    public String home(@AuthenticationPrincipal User user,
+                       @PathVariable(required = false) Integer categoryId,
+                       Model model,
+                       HttpServletResponse response) {
+
         if (user != null) {
             boolean hasUserRole = user.getAuthorities().stream()
                     .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
@@ -76,6 +87,32 @@ public class UserController {
                 model.addAttribute("user", userAccount);
             }
         }
+
+        // 카테고리 목록 가져오기
+        ArrayList<Category> categoryList = categoryService.getAllCategory();
+        model.addAttribute("categoryList", categoryList);
+
+        // categoryId가 없는 경우 첫 번째 카테고리 사용
+        if (categoryId == null && !categoryList.isEmpty()) {
+            categoryId = categoryList.get(0).getCategoryKey();
+        }
+
+        // 선택된 카테고리 정보 가져오기
+        Category selectedCategory = categoryService.getCategoryById(categoryId);
+        model.addAttribute("selectedCategory", selectedCategory);
+
+        // 해당 카테고리의 가게 목록 가져오기
+        ArrayList<StoreInfo> storeList = storeService.getStoresByCategory(categoryId, 8);
+        for (StoreInfo store : storeList) {
+            ArrayList<Review> reviewList = userStoreService.getReviewListByStore(store.getStoreInfoKey());
+            Double averageRating = userStoreService.getAverageRatingForStore(store.getStoreInfoKey());
+            store.setAverageRating(averageRating != null ? String.format("%.1f", averageRating) : "0.0");  // 평균 리뷰 점수 설정
+            store.setReviewCount(userStoreService.getReviewCountForStore(store.getStoreInfoKey()));
+        }
+        model.addAttribute("storeList", storeList);
+
+        log.info("storeList {}", storeList);
+
         return "index";
     }
 
