@@ -43,5 +43,4 @@ public interface UserBoardService {
     void updateHitEvent(int num);
     //공지사항 상세보기 조회수업데이트
     void updateHitNotice(int num);
-  
-}
+  }
