@@ -43,4 +43,6 @@ public interface UserStoreService {
 
     // 가게키와 메뉴명으로 메뉴키 가져오기
     int getMenuByStoreInfoKeyAndMenuName(int storeInfoKey, String menuName);
+
+    ArrayList<StoreInfo> getStoresByCategory(int firstCategoryId, int i);
 }

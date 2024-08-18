@@ -19,4 +19,10 @@ public class UserCategoryServiceImpl implements UserCategoryService {
     public ArrayList<Category> getAllCategory() {
         return userCategoryMapper.getAllCategory();
     }
+
+    @Override
+    public Category getCategoryById(int categoryKey) {
+        return userCategoryMapper.getCategoryById(categoryKey);
+    }
+
 }

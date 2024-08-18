@@ -6,4 +6,6 @@ import java.util.ArrayList;
 
 public interface UserCategoryService {
     ArrayList<Category> getAllCategory();
+
+    Category getCategoryById(int categoryKey);
 }
