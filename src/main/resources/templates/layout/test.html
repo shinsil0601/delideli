@@ -6,25 +6,49 @@
 <a href="/user/myLike">찜목록</a><br>
 <a href="/user/myCart">장바구니</a><br>
 <a href="/user/myAsk">내 문의확인</a><br>
-<a href="/user/withdrawal">회원탈퇴</a>
-<br><br><br>
-<table>
-    <thead>
-    <tr>
-        <th>번호</th>
-        <th>쿠폰명</th>
-        <th>쿠폰할인금액</th>
-        <th>사용가능시작일</th>
-        <th>사용가능종료일</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="coupon : ${coupon}">
-        <td th:text="${coupon.couponKey}"></td>
-        <td class="coupon-name" th:text="${coupon.couponName}"></td>
-        <td class="price" th:text="'-' + ${#numbers.formatInteger(coupon.couponPrice,3,'POINT')} + '원'"></td>
-        <td th:text="${#temporals.format(coupon.couponStartDate, 'yyyy/MM/dd')}"></td>
-        <td th:text="${#temporals.format(coupon.couponEndDate, 'yyyy/MM/dd')}"></td>
-    </tr>
-    </tbody>
-</table>
+<a href="/user/withdrawal">회원탈퇴</a><br>
+
+<h1>내 주소관리</h1>
+
+<!-- 대표 주소지 -->
+<div th:each="address : ${addressList}" th:if="${address.defaultAddress}">
+    <h2>대표주소지</h2>
+    <p th:text="${address.address} + ' ' + ${address.addrDetail}"></p>
+</div>
+
+<!-- 일반 주소지 -->
+<div th:each="address, iterStat : ${addressList}" th:unless="${address.defaultAddress}">
+    <h3 th:text="'주소지 ' + ${iterStat.count}"></h3>
+    <p th:text="${address.address} + ' ' + ${address.addrDetail}"></p>
+    <div>
+        <button th:if="${!address.defaultAddress}" th:data-address-key="${address.userAddressKey}" onclick="setDefaultAddress(this)">대표등록</button>
+        <button th:data-address-key="${address.userAddressKey}" th:data-address="${address.address}" th:data-addr-detail="${address.addrDetail}" th:data-zipcode="${address.zipcode}" onclick="showModifyAddressModal(this)">수정</button>
+        <button th:data-address-key="${address.userAddressKey}" onclick="deleteAddress(this)">삭제</button>
+    </div>
+</div>
+
+<button onclick="showAddAddressModal()">주소 추가</button>
+
+<!-- 주소 모달창 -->
+<div id="addressModal" style="display: none;">
+    <div>
+        <h2 id="modalTitle">주소 추가</h2>
+        <form id="addressForm">
+            <input type="hidden" id="addressKey" name="addressKey">
+            <label for="newAddress">주소:</label>
+            <input type="text" id="newAddress" name="newAddress" readonly required>
+            <button type="button" onclick="execDaumPostcode()">주소 찾기</button>
+            <br>
+            <label for="newAddrDetail">상세 주소:</label>
+            <input type="text" id="newAddrDetail" name="newAddrDetail" required>
+            <br>
+            <label for="newZipcode">우편번호:</label>
+            <input type="text" id="newZipcode" name="newZipcode" readonly required>
+            <br>
+            <button type="button" onclick="saveAddress()">저장</button>
+            <button type="button" onclick="closeAddressModal()">취소</button>
+        </form>
+    </div>
+</div>
+
+<script src="/user/js/module/myAddress.js"></script>

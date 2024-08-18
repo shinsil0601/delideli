@@ -94,25 +94,6 @@
                                         </div>
                                     </a>
                                 </li>
-                                <!-- 빈 칸 채우기 -->
-                                <li th:if="${iterStat.count != null and iterStat.count < 8}"
-                                    th:each="i : ${#numbers.sequence(iterStat.count + 1, 8)}">
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name1
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                     </div>
