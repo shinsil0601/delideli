@@ -23,8 +23,8 @@ public class PageUtil {
 		boolean prev = currentPage > 2 ? true : false;
 		// 다음
 		boolean next = currentPage + 2 >= totalPage ? false : true;
-		// map.put("키", "밸류"); 
-		
+    
+		// map.put("키", "밸류");
 		map.put("currentPage", currentPage);
 		map.put("totalNumber", totalNumber);
 		map.put("countPerPage", countPerPage);

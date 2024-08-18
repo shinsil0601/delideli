@@ -68,15 +68,15 @@ public class UserBoardController {
         if (keyword.equals("none")) {
             totalNumber = userBoardService.getTotalNotice();
             map = PageUtil.getPageData(totalNumber, recordPerPage, page);
+            int countPerPage = (int) map.get("countPerPage");
             int startNo = (int) map.get("startNo");
-            int endNo = (int) map.get("endNo");
-            list = userBoardService.getBoardList(startNo, endNo);
+            list = userBoardService.getBoardList(countPerPage, startNo);
         } else {
             totalNumber = userBoardService.getTotalKeyword(keyword);
             map = PageUtil.getPageData(totalNumber, recordPerPage, page);
+            int countPerPage = (int) map.get("countPerPage");
             int startNo = (int) map.get("startNo");
-            int endNo = (int) map.get("endNo");
-            list = userBoardService.getAllKeyword(startNo, endNo, keyword);
+            list = userBoardService.getAllKeyword(countPerPage, startNo, keyword);
             model.addAttribute("keyword", keyword);
         }
 
@@ -106,6 +106,9 @@ public class UserBoardController {
                 model.addAttribute("user", userAccount);
             }
         }
+      
+        //조회수업뎃
+        userBoardService.updateHitNotice(num);
         Board board = userBoardService.readOneNotice(num);
         model.addAttribute("board", board);
         return "/user/board/notice.view";
@@ -140,15 +143,15 @@ public class UserBoardController {
         if (keyword.equals("none")) {
             totalNumber = userBoardService.getTotalEvent();
             map = PageUtil.getPageData(totalNumber, recordPerPage, page);
+            int countPerPage = (int) map.get("countPerPage");
             int startNo = (int) map.get("startNo");
-            int endNo = (int) map.get("endNo");
-            list = userBoardService.getEventList(startNo, endNo);
+            list = userBoardService.getEventList(countPerPage, startNo);
         } else {
             totalNumber = userBoardService.getTotalKeywordEvent(keyword);
             map = PageUtil.getPageData(totalNumber, recordPerPage, page);
+            int countPerPage = (int) map.get("countPerPage");
             int startNo = (int) map.get("startNo");
-            int endNo = (int) map.get("endNo");
-            list = userBoardService.getAllKeywordEvent(startNo, endNo, keyword);
+            list = userBoardService.getAllKeywordEvent(countPerPage, startNo, keyword);
             model.addAttribute("keyword", keyword);
         }
 
@@ -161,6 +164,8 @@ public class UserBoardController {
     // 이벤트 상세보기
     @GetMapping("/eventDetail/{num}")
     public String eventDetail(@AuthenticationPrincipal User user, @PathVariable int num, Model model, HttpServletResponse response) {
+        //조회수업뎃
+        userBoardService.updateHitEvent(num);
         Board board = userBoardService.readOneEvent(num);
         if (user != null) {
             boolean hasUserRole = user.getAuthorities().stream()

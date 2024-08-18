@@ -20,10 +20,10 @@ public class UserBoardServiceImpl implements UserBoardService {
 
     // 공지사항 목록
     @Override
-    public List<Board> getBoardList(int startNo, int endNo) {
+    public List<Board> getBoardList(int countPerPage, int startNo) {
         HashMap<String, Integer> map = new HashMap<>();
+        map.put("countPerPage", countPerPage);
         map.put("startNo", startNo);
-        map.put("endNo", endNo);
         List<Board> list = userBoardMapper.getAll(map);
       
         return list;
@@ -31,12 +31,11 @@ public class UserBoardServiceImpl implements UserBoardService {
 
     //공지사항 검색키워드 리스트
     @Override
-    public List<Board> getAllKeyword(int startNo, int endNo, String keyword) {
+    public List<Board> getAllKeyword(int countPerPage, int startNo, String keyword) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("keyword", keyword);
+        map.put("countPerPage", countPerPage);
         map.put("startNo", startNo);
-        map.put("endNo", endNo);
-      
         List<Board> list = userBoardMapper.getAllKeyword(map);
         return list;
     }
@@ -62,10 +61,10 @@ public class UserBoardServiceImpl implements UserBoardService {
 
     //이벤트 목록
     @Override
-    public List<Board> getEventList(int startNo, int endNo) {
+    public List<Board> getEventList(int countPerPage, int startNo) {
         HashMap<String, Integer> map = new HashMap<>();
+        map.put("countPerPage", countPerPage);
         map.put("startNo", startNo);
-        map.put("endNo", endNo);
         List<Board> list = userBoardMapper.getEventList(map);
         return list;
     }
@@ -91,11 +90,11 @@ public class UserBoardServiceImpl implements UserBoardService {
 
     //이벤트 검색 목록
     @Override
-    public List<Board> getAllKeywordEvent(int startNo, int endNo, String keyword) {
+    public List<Board> getAllKeywordEvent(int countPerPage, int startNo, String keyword) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("keyword", keyword);
+        map.put("countPerPage", countPerPage);
         map.put("startNo", startNo);
-        map.put("endNo", endNo);
         List<Board> list = userBoardMapper.getAllKeywordEvent(map);
         return list;
     }
@@ -118,9 +117,23 @@ public class UserBoardServiceImpl implements UserBoardService {
         Board board = userBoardMapper.myAskDetail(boardKey);
         return board;
     }
-
+  
+    //내문의 삭제
     @Override
     public void myAskDelete(int boardKey) {
         userBoardMapper.myAskDelete(boardKey);
     }
+
+    //이벤트 조회수 업데이트
+    @Override
+    public void updateHitEvent(int num) {
+        userBoardMapper.updateHitEvent(num);
+    }
+
+    //공지사항 상세보기 조회수 업데이트
+    @Override
+    public void updateHitNotice(int num) {
+        userBoardMapper.updateHitNotice(num);
+    }
+
 }
