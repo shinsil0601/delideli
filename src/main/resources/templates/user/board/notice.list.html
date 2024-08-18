@@ -54,7 +54,11 @@
                             </td>
                             <td>
                                 <a th:href="@{detail/{num}(num=${board.boardKey})}">
-                                    <span>[[${board.boardStatus}]]</span>
+                                    <th:block th:if="${board.boardStatus} == '공지'">
+                                        <span>[[${board.boardStatus}]]</span>
+                                    </th:block>
+                                    <th:block th:if="${board.boardStatus} == '일반'">
+                                    </th:block>
                                     [[${board.boardTitle}]]
                                 </a>
                             </td>

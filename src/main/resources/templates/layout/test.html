@@ -1,19 +1,71 @@
-<form method="post" action="/user/updatePassword">
-    <input type="hidden" name="userId" th:value="${user.userId}">
-    <input type="hidden" name="currentUserPw" th:value="${user.userPw}">
-    <label for="userPw">현재 비밀번호:</label>
-    <input type="password" id="userPw" name="userPw" required>
-    <br>
-    <label for="newUserPw">새 비밀번호:</label>
-    <input type="password" id="newUserPw" name="newPassword" required>
-    <br>
-    <label for="checkUserPw">새 비밀번호 확인:</label>
-    <input type="password" id="checkUserPw" name="confirmPassword" required>
-    <br>
-    <span id="passwordMessage"></span>
-    <br>
-    <button type="submit">비밀번호 변경</button>
-</form>
-<div id="errorMessage" style="color: red;" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+<!-- 진행중, 진행완료 선택 -->
+<div>
+    <input type="radio" id="in-progress" name="order-tab" checked onclick="switchTab('in-progress')">
+    <label for="in-progress">진행중</label>
+    <input type="radio" id="completed" name="order-tab" onclick="switchTab('completed')">
+    <label for="completed">진행완료</label>
+</div>
 
-<script src="/user/js/module/updatePw.js"></script>
+<!-- 진행중 -->
+<div id="in-progress-orders" style="display:block;">
+    <ul>
+        <li th:each="order : ${inProgressOrders}">
+            <a th:href="'/user/orderDetail/' + ${order.orderKey}">
+                <div>
+                    <span th:text="'주문번호: ' + ${order.orderNo}"></span>
+                </div>
+                <div>
+                    <span th:text="'가게명: ' + ${order.storeName}"></span>
+                </div>
+                <div>
+                    <span th:text="'주문일자: ' + ${order.formattedOrderDate}"></span>
+                </div>
+                <div>
+                    <span th:text="'메뉴: ' + ${order.orderDetails[0].menuName} + '(외 ' + (${order.orderDetails.size() - 1}) + '개)'"></span>
+                </div>
+                <div>
+                    <span th:text="'총가격: ' + ${order.uorderPrice} + '원'"></span>
+                </div>
+                <div>
+                    <span th:text="${order.statusMessage}"></span><br/>
+                    <span th:if="${order.orderMethod == '배달접수' || order.orderMethod == '배달중'}"
+                          th:text="'배달 도착 예정시간 : ' + ${order.orderEstimatedTime}"></span>
+                    <button th:if="${order.orderMethod == '배달' || order.orderMethod == '포장'}"
+                            th:data-order-key="${order.orderKey}"
+                            onclick="cancelOrder(this)">주문취소
+                    </button>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- 진행완료 -->
+<div id="completed-orders" style="display:none;">
+    <ul>
+        <li th:each="order : ${completedOrders}">
+            <a th:href="'/user/orderDetail/' + ${order.orderKey}">
+                <div>
+                    <span th:text="'주문번호: ' + ${order.orderNo}"></span>
+                </div>
+                <div>
+                    <span th:text="'가게명: ' + ${order.storeName}"></span>
+                </div>
+                <div>
+                    <span th:text="'주문일자: ' + ${order.formattedOrderDate}"></span>
+                </div>
+                <div>
+                    <span th:text="'메뉴: ' + ${order.orderDetails[0].menuName} + '(외 ' + (${order.orderDetails.size() - 1}) + '개)'"></span>
+                </div>
+                <div>
+                    <span th:text="'총가격: ' + ${order.uorderPrice} + '원'"></span>
+                </div>
+                <div>
+                    <span th:text="${order.statusMessage}"></span>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<script src="/user/js/module/myOrder.js"></script>

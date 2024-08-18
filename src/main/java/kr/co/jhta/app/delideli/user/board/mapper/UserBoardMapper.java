@@ -53,4 +53,10 @@ public interface UserBoardMapper {
     Board myAskDetail(int boardKey);
     //내문의 글삭제
     void myAskDelete(int boardKey);
+
+    //이벤트 조회수 업데이트
+    void updateHitEvent(int num);
+
+    //공지사항 상세보기 조회수업데이트
+    void updateHitNotice(int num);
 }

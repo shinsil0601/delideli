@@ -54,7 +54,16 @@
                             </td>
                             <td>
                                 <a th:href="@{eventDetail/{num}(num=${board.boardKey})}">
-                                    <span>[[${board.boardStatus}]]</span>
+                                    <th:block th:if="${board.boardProgressStatus} == '진행중'">
+                                        <span class="event__table--ip">
+                                            [[${board.boardProgressStatus}]]
+                                        </span>
+                                    </th:block>
+                                    <th:block th:if="${board.boardProgressStatus} == '종료'">
+                                        <span class="event__table--cp">
+                                            [[${board.boardProgressStatus}]]
+                                        </span>
+                                    </th:block>
                                     [[${board.boardTitle}]]
                                 </a>
                             </td>

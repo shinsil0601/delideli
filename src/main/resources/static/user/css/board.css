@@ -72,6 +72,9 @@
     color: var(--whiteColor);
     line-height: 1;
 }
+.notice__table td a > span.event__table--cp {
+    background: var(--gray-400);
+}
 .board__pagination {
     display: flex;
     align-items: center;
