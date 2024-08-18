@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 마이페이지</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <div class="subPage__wrap">
+                <h2 class="subPage__title">MyPage</h2>
+                <div class="myPage__con">
+                    <div class="myPage__left">
+                        <div class="myPage__profile">
+                            <div class="myPage__profile--img">
+                                <img th:src="@{${user.userProfile}}" alt="사용자 프로필">
+                            </div>
+                            <h3 class="myPage__profile--name">
+                                [[${user.userNickname}]] 님
+                            </h3>
+                        </div>
+                        <div class="myPage__status">
+                            <i class="fa-solid fa-utensils"></i>
+                            회원등급
+                            <span>
+                                [[${user.userRank}]]등급
+                            </span>
+                        </div>
+                        <div class="myPage__point-box">
+                            <h4>MyPoint</h4>
+                            <div class="myPage__point">
+                                <span class="js-point">[[${user.userPoint}]]</span>원
+                            </div>
+                            <div class="myPage__btn-box">
+                                <a href="/user/charge" class="myPage__btn--1">충전하기</a>
+                                <a href="/user/myCoupon" class="myPage__btn--2">내 쿠폰확인</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="myPage__right">
+                        <a href="/user/myAddress">
+                            주소관리
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/checkAccount">
+                            내 정보수정
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/updatePw">
+                            비밀번호 변경
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/myOrder">
+                            주문내역
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/myReview">
+                            내 리뷰관리
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/myLike">
+                            찜목록
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/myCart">
+                            장바구니
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/myAsk">
+                            내 문의확인
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="/user/withdrawal">
+                            회원탈퇴
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

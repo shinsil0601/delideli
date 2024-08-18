@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사장님 - 로그인</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Client CSS -->
+        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Client JS -->
+        <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+
+    </head>
+    <body>
+        <div class="client-account__wrap">
+            <section class="client-account__left">
+                <div class="client-account__form-box">
+                    <div class="client-account__form-top">
+                        <h1 class="client-account__logo">
+                            <img src="/client/images/logo-blue.png" alt="딜리델리파랑색로고">
+                        </h1>
+                        <p class="client-account__label">
+                            사장님 로그인
+                        </p>
+                    </div>
+                    <!-- Start:Form -->
+                    <form method="post" action="/client/loginProc" class="client-account__form">
+                        <div class="account__input-wrap">
+                            <!-- 아이디 -->
+                            <div class="account__input-box">
+                                <label for="clientId">아이디</label>
+                                <input type="text" name="clientId" id="clientId">
+                            </div>
+                            <!-- 비밀번호 -->
+                            <div class="account__input-box">
+                                <label for="password">비밀번호</label>
+                                <input type="password" name="password" id="password">
+                            </div>
+                            <!-- 유효성메시지 -->
+                            <div class="validation-msg validation-msg--account" th:if="${param.error}" th:text="${param.error}"></div>
+                        </div>
+                        <div class="account__btn-wrap">
+                            <button type="submit" class="client-btn--blue">로그인</button>
+                            <button type="button" class="client-btn--default" th:onclick="'location.href=\'' + @{/} + '\''">뒤로가기</button>
+                        </div>
+                        <ul class="account__links">
+                            <li>
+                                <a href="/client/register">회원가입</a>
+                            </li>
+                            <li>
+                                <a href="/client/findId">아이디 찾기</a>
+                            </li>
+                            <li>
+                                <a href="/client/findPw">비밀번호 찾기</a>
+                            </li>
+                        </ul>
+                    </form>
+                    <!-- End:Form -->
+                </div>
+                <p class="client-account__copyright">
+                    delideli ⓒ All right reserved.
+                </p>
+            </section>
+            <!-- Start:Right -->
+            <th:block th:include="inc/client/account-right :: clientAccountRight"></th:block>
+            <!-- End:Right -->
+        </div>
+    </body>
+</html>

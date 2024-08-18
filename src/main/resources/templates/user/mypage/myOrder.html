@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 메인페이지</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+
+            <!-- 진행중, 진행완료 선택 -->
+            <div>
+                <input type="radio" id="in-progress" name="order-tab" checked onclick="switchTab('in-progress')">
+                <label for="in-progress">진행중</label>
+                <input type="radio" id="completed" name="order-tab" onclick="switchTab('completed')">
+                <label for="completed">진행완료</label>
+            </div>
+
+            <!-- 진행중 -->
+            <div id="in-progress-orders" style="display:block;">
+                <ul>
+                    <li th:each="order : ${inProgressOrders}">
+                        <a th:href="'/user/orderDetail/' + ${order.orderKey}">
+                            <div>
+                                <span th:text="'주문번호: ' + ${order.orderNo}"></span>
+                            </div>
+                            <div>
+                                <span th:text="'가게명: ' + ${order.storeName}"></span>
+                            </div>
+                            <div>
+                                <span th:text="'주문일자: ' + ${order.formattedOrderDate}"></span>
+                            </div>
+                            <div>
+                                <span th:text="'메뉴: ' + ${order.orderDetails[0].menuName} + '(외 ' + (${order.orderDetails.size() - 1}) + '개)'"></span>
+                            </div>
+                            <div>
+                                <span th:text="'총가격: ' + ${order.uorderPrice} + '원'"></span>
+                            </div>
+                            <div>
+                                <span th:text="${order.statusMessage}"></span><br/>
+                                <span th:if="${order.orderMethod == '배달접수' || order.orderMethod == '배달중'}"
+                                      th:text="'배달 도착 예정시간 : ' + ${order.orderEstimatedTime}"></span>
+                                <button th:if="${order.orderMethod == '배달' || order.orderMethod == '포장'}"
+                                        th:data-order-key="${order.orderKey}"
+                                        onclick="cancelOrder(this)">주문취소
+                                </button>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 진행완료 -->
+            <div id="completed-orders" style="display:none;">
+                <ul>
+                    <li th:each="order : ${completedOrders}">
+                        <a th:href="'/user/orderDetail/' + ${order.orderKey}">
+                            <div>
+                                <span th:text="'주문번호: ' + ${order.orderNo}"></span>
+                            </div>
+                            <div>
+                                <span th:text="'가게명: ' + ${order.storeName}"></span>
+                            </div>
+                            <div>
+                                <span th:text="'주문일자: ' + ${order.formattedOrderDate}"></span>
+                            </div>
+                            <div>
+                                <span th:text="'메뉴: ' + ${order.orderDetails[0].menuName} + '(외 ' + (${order.orderDetails.size() - 1}) + '개)'"></span>
+                            </div>
+                            <div>
+                                <span th:text="'총가격: ' + ${order.uorderPrice} + '원'"></span>
+                            </div>
+                            <div>
+                                <span th:text="${order.statusMessage}"></span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <script src="/user/js/module/myOrder.js"></script>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

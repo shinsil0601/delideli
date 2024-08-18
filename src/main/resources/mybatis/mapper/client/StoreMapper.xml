@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.client.store.mapper.ClientStoreMapper">
+
+    <resultMap id="StoreInfoResultMap" type="kr.co.jhta.app.delideli.client.store.domain.ClientStoreInfo">
+        <id property="storeInfoKey" column="storeInfo_key"/>
+        <result property="clientKey" column="client_key"/>
+        <result property="storeName" column="store_name"/>
+        <result property="storeAddress" column="store_address"/>
+        <result property="storeZipcode" column="store_zipcode"/>
+        <result property="storeAddrDetail" column="store_addrs_detail"/>
+        <result property="storePhone" column="store_phone"/>
+        <result property="minOrderAmount" column="min_order_amount"/>
+        <result property="orderAmount1" column="order_amount1"/>
+        <result property="deliveryAmount1" column="delivery_amount1"/>
+        <result property="orderAmount2" column="order_amount2"/>
+        <result property="deliveryAmount2" column="delivery_amount2"/>
+        <result property="orderAmount3" column="order_amount3"/>
+        <result property="deliveryAmount3" column="delivery_amount3"/>
+        <result property="openTime" column="open_time"/>
+        <result property="closeTime" column="close_time"/>
+        <result property="storeDetailInfo" column="store_detail_info"/>
+        <result property="storeOriginInfo" column="store_origin_info"/>
+        <result property="storeBusinessRegistrationFile" column="store_business_registration_file"/>
+        <result property="storeBusinessReportFile" column="store_business_report_file"/>
+        <result property="storeProfileImg" column="store_profile_img"/>
+        <result property="storeAccess" column="store_access"/>
+        <result property="storeDelete" column="store_delete"/>
+        <result property="storePause" column="store_pause"/>
+        <result property="storeRegdate" column="store_regdate"/>
+        <result property="storeUpdate" column="store_update"/>
+    </resultMap>
+
+    <!-- 가게 정보 등록 -->
+    <insert id="insertStore" useGeneratedKeys="true" keyProperty="storeInfoKey">
+        INSERT INTO storeInfo (
+            client_key, store_name, store_address, store_zipcode, store_addrs_detail, store_phone,
+            min_order_amount, order_amount1, delivery_amount1, order_amount2, delivery_amount2,
+            delivery_amount3, open_time, close_time, store_detail_info, store_origin_info,
+            store_business_registration_file, store_business_report_file, store_profile_img
+        ) VALUES (
+             #{clientKey}, #{storeName}, #{storeAddress}, #{storeZipcode}, #{storeAddrDetail}, #{storePhone},
+             #{minOrderAmount}, #{orderAmount1}, #{deliveryAmount1}, #{orderAmount2}, #{deliveryAmount2},
+             #{deliveryAmount3}, #{openTime}, #{closeTime}, #{storeDetailInfo}, #{storeOriginInfo},
+             #{storeBusinessRegistrationFile}, #{storeBusinessReportFile}, #{storeProfileImg}
+                 )
+    </insert>
+
+    <select id="getAllStore" resultMap="StoreInfoResultMap" parameterType="int">
+        SELECT * FROM storeInfo WHERE client_key = #{clientKey}
+    </select>
+
+</mapper>

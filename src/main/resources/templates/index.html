@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DeliDeli</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <!-- Main Banner -->
+            <section class="mainBanner__wrap">
+                <div class="mainBanner__con">
+                    <ul class="mainBanner__items swiper-wrapper">
+                        <li class="mainBanner__item swiper-slide" style="background-image: url();">
+                            <p>Banner1</p>
+                        </li>
+                        <li class="mainBanner__item swiper-slide" style="background-image: url();">
+                            <p>Banner2</p>
+                        </li>
+                        <li class="mainBanner__item swiper-slide" style="background-image: url();">
+                            <p>Banner3</p>
+                        </li>
+                    </ul>
+                    <div class="mainBanner__prevNext">
+                        <button class="mainBanner__prevNext--prev">
+                            <i class="fa-solid fa-caret-left"></i>
+                        </button>
+                        <button class="mainBanner__prevNext--next">
+                            <i class="fa-solid fa-caret-right"></i>
+                        </button>
+                    </div>
+                    <div class="mainBanner__pagination"></div>
+                </div>
+            </section>
+            <!-- Main Category -->
+            <section class="mainCategory__wrap">
+                <h2 class="mainCategory__title">카테고리</h2>
+                <div class="mainCategory__con">
+                    <!-- 선택된 카테고리 이미지 및 이름 표시 -->
+                    <div class="mainCategory__top">
+                        <div class="mainCategory__label">
+                            <div class="mainCategory__label--img">
+                                <img th:src="@{${selectedCategory.categoryImg}}" alt="카테고리이미지">
+                            </div>
+                            <p class="mainCategory__label--name" th:text="${selectedCategory.categoryName}">카테고리명</p>
+                        </div>
+                        <a href="/user/category/0" class="mainCategory__allLink">
+                            전체보기
+                            <i class="fa-solid fa-caret-right"></i>
+                        </a>
+                    </div>
+                    <!-- 카테고리 목록-->
+                    <ul class="mainCategory__items">
+                        <li th:each="category, iterStat : ${categoryList}"
+                            th:classappend="${iterStat.index == 0} ? 'active'"
+                            th:text="${category.categoryName}"
+                            th:data-category-id="${category.categoryKey}">
+                        </li>
+                    </ul>
+                    <!-- 해당 카테고리 가게 목록 -->
+                    <div class="mainCategory__shop-con">
+                        <div class="mainCategory__shop active">
+                            <ul class="mctgShop__items" th:each="store, iterStat : ${storeList}">
+                                <!-- 가게 리스트 출력 -->
+                                <li>
+                                    <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}">
+                                    <div class="mctgShop__img"
+                                             th:style="'background-image: url(' + (${store.storeProfileImg != null ? store.storeProfileImg : '/path/to/default/image.jpg'}) + ');'"></div>
+                                        <div class="mctgShop__info">
+                                            <span class="mctgShop__info--review">
+                                                <i class="fa-solid fa-star"></i>
+                                                <span th:text="${store.averageRating != null ? store.averageRating : 0}"></span>
+                                                (<span th:text="${store.reviewCount != null ? store.reviewCount : 0}"></span>)
+                                            </span>
+                                            <h3 class="mctgShop__info--name">
+                                                [[${store.storeName}]]
+                                            </h3>
+                                            <ul class="mctgShop__info--desc">
+                                                <li>배달팁 : [[${store.deliveryAmount1}]] ~ [[${store.deliveryAmount3}]]</li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+            </section>
+            <!-- Main Client -->
+            <section class="mainClient__wrap">
+                <a href="/client/login"></a>
+            </section>
+            <!-- Main Board -->
+            <section class="mainBoard__wrap">
+                <!-- 공지사항 -->
+                <article class="mainBoard__item">
+                    <div class="mainBoard__top">
+                        <h3>공지사항</h3>
+                        <a href="#none">
+                            전체보기
+                            <i class="fa-solid fa-angle-right"></i>
+                        </a>
+                    </div>
+                    <ul class="mainBoard__notice">
+                        <li>
+                            <a href="#none">
+                                <span class="mainNotice__ctg">공지</span>
+                                <ul class="mainNotice__info">
+                                    <li>
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                        2024-07-20
+                                    </li>
+                                    <li>
+                                        <i class="fa-solid fa-eye"></i>
+                                        117
+                                    </li>
+                                </ul>
+                                <h3 class="mainNotice__title">
+                                    Notice Title
+                                </h3>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#none">
+                                <span class="mainNotice__ctg">공지</span>
+                                <ul class="mainNotice__info">
+                                    <li>
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                        2024-07-20
+                                    </li>
+                                    <li>
+                                        <i class="fa-solid fa-eye"></i>
+                                        117
+                                    </li>
+                                </ul>
+                                <h3 class="mainNotice__title">
+                                    Notice Title
+                                </h3>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#none">
+                                <span class="mainNotice__ctg">공지</span>
+                                <ul class="mainNotice__info">
+                                    <li>
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                        2024-07-20
+                                    </li>
+                                    <li>
+                                        <i class="fa-solid fa-eye"></i>
+                                        117
+                                    </li>
+                                </ul>
+                                <h3 class="mainNotice__title">
+                                    Notice Title
+                                </h3>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#none">
+                                <span class="mainNotice__ctg">공지</span>
+                                <ul class="mainNotice__info">
+                                    <li>
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                        2024-07-20
+                                    </li>
+                                    <li>
+                                        <i class="fa-solid fa-eye"></i>
+                                        117
+                                    </li>
+                                </ul>
+                                <h3 class="mainNotice__title">
+                                    Notice Title
+                                </h3>
+                            </a>
+                        </li>
+                    </ul>
+                </article>
+                <!-- 이벤트 -->
+                <article class="mainBoard__item">
+                    <div class="mainBoard__top">
+                        <h3>이벤트</h3>
+                        <a href="#none">
+                            전체보기
+                            <i class="fa-solid fa-angle-right"></i>
+                        </a>
+                    </div>
+                    <div class="mainEvent__con">
+                        <ul class="mainEvent__items swiper-wrapper">
+                            <li class="mainEvent__item swiper-slide" style="background-image: url();">
+                                <p>Banner1</p>
+                            </li>
+                            <li class="mainEvent__item swiper-slide" style="background-image: url();">
+                                <p>Banner2</p>
+                            </li>
+                            <li class="mainEvent__item swiper-slide" style="background-image: url();">
+                                <p>Banner3</p>
+                            </li>
+                        </ul>
+                        <div class="mainEvent__prevNext">
+                            <button class="mainEvent__prevNext--prev">
+                                <i class="fa-solid fa-caret-left"></i>
+                            </button>
+                            <button class="mainEvent__prevNext--next">
+                                <i class="fa-solid fa-caret-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            </section>
+            <script src="/common/js/index.js"></script>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

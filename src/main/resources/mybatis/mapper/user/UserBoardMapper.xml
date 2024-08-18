@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.user.board.mapper.UserBoardMapper">
+
+    <!-- Board resultMap -->
+    <resultMap id="BoardResultMap" type="kr.co.jhta.app.delideli.user.board.domain.Board">
+        <id property="boardKey" column="board_key" />
+        <result property="userKey" column="user_key" />
+        <result property="boardType" column="board_type" />
+        <result property="boardStatus" column="board_status" />
+        <result property="boardProgressStatus" column="board_progress_status" />
+        <result property="boardTitle" column="board_title" />
+        <result property="boardWrite" column="board_write" />
+        <result property="boardContents" column="board_contents" />
+        <result property="boardThumbnail" column="board_thumbnail" />
+        <result property="boardComment" column="board_comment" />
+        <result property="boardCommentStatus" column="board_comment_status" />
+        <result property="boardStartDate" column="board_start_date" />
+        <result property="boardEndDate" column="board_end_date" />
+        <result property="boardRegdate" column="board_regdate" />
+        <result property="boardCommentDate" column="board_comment_date" />
+        <result property="boardUpdate" column="board_update" />
+        <result property="fileAttach1" column="file_attach1" />
+        <result property="fileAttach2" column="file_attach2" />
+        <result property="fileAttach3" column="file_attach3" />
+        <result property="fileAttach4" column="file_attach4" />
+        <result property="boardHits" column="board_hits" />
+    </resultMap>
+
+    <!-- Comment resultMap -->
+    <resultMap id="CommentResultMap" type="kr.co.jhta.app.delideli.user.board.domain.Comment">
+        <id property="commentKey" column="comment_key" />
+        <result property="commentParent" column="comment_parent" />
+        <result property="commentContents" column="comment_contents" />
+        <result property="commentRegdate" column="comment_regdate" />
+        <result property="commentUpdate" column="comment_update" />
+        <result property="commentDeldate" column="comment_deldate" />
+        <result property="boardKey" column="board_key" />
+        <result property="userKey" column="user_key" />
+        <result property="userNickname" column="user_nickname" />
+    </resultMap>
+
+    <!-- 공지사항 전체 목록 -->
+    <select id="getAll" resultMap="BoardResultMap" parameterType="hashmap">
+        SELECT board_key, user_key, board_type, board_status, board_progress_status, board_title, board_write,
+        board_contents, board_thumbnail, board_comment, board_comment_status, board_start_date,
+        board_end_date, board_regdate, board_comment_date, board_update,
+        file_attach1, file_attach2, file_attach3, file_attach4, board_hits
+        FROM board
+        WHERE board_type = "공지"
+        ORDER BY board_key DESC
+        LIMIT #{countPerPage} OFFSET #{startNo}
+    </select>
+
+    <!-- 공지사항 검색 -->
+    <select id="getAllKeyword" resultMap="BoardResultMap" parameterType="hashmap">
+        SELECT board_key, user_key, board_type, board_status, board_progress_status, board_title, board_write,
+        board_contents, board_thumbnail, board_comment, board_comment_status, board_start_date,
+        board_end_date, board_regdate, board_comment_date, board_update,
+        file_attach1, file_attach2, file_attach3, file_attach4, board_hits
+        FROM board
+        WHERE board_type = "공지" AND
+        (board_title LIKE CONCAT('%', #{keyword}, '%'))
+        ORDER BY board_key DESC
+        LIMIT #{countPerPage} OFFSET #{startNo}
+    </select>
+
+    <!-- 공지사항 총개시물수 -->
+    <select id="getTotalNotice" resultType="int">
+        SELECT COUNT(*) cnt
+        FROM board
+        WHERE board_type = "공지"
+    </select>
+
+    <!-- 공지사항 검색 총게시글수 -->
+    <select id="getTotalKeyword" resultType="int">
+        SELECT COUNT(*) cnt
+        FROM board
+        WHERE (board_title LIKE CONCAT('%', #{keyword}, '%'))
+        AND board_type = "공지"
+    </select>
+
+    <!-- 공지사항 상세 -->
+    <select id="getOneNotice" resultMap="BoardResultMap" parameterType="int">
+        SELECT board_key, user_key, board_type, board_status, board_progress_status, board_title, board_write,
+        board_contents, board_thumbnail, board_comment, board_comment_status, board_start_date,
+        board_end_date, board_regdate, board_comment_date, board_update,
+        file_attach1, file_attach2, file_attach3, file_attach4, board_hits
+        FROM board
+        WHERE board_key = #{boardKey}
+    </select>
+
+    <!-- 이벤트 전체리스트 -->
+    <select id="getEventList" resultMap="BoardResultMap" parameterType="hashmap">
+        SELECT board_key, user_key, board_type, board_status, board_progress_status, board_title, board_write,
+        board_contents, board_thumbnail, board_comment, board_comment_status, board_start_date,
+        board_end_date, board_regdate, board_comment_date, board_update,
+        file_attach1, file_attach2, file_attach3, file_attach4, board_hits
+        FROM board
+        WHERE board_type = "이벤트"
+        ORDER BY board_key DESC
+        LIMIT #{countPerPage} OFFSET #{startNo}
+    </select>
+
+    <!-- 이벤트 상세 -->
+    <select id="readOneEvent" resultMap="BoardResultMap" parameterType="int">
+        SELECT board_key, user_key, board_type, board_status, board_progress_status, board_title, board_write,
+        board_contents, board_thumbnail, board_comment, board_comment_status, board_start_date,
+        board_end_date, board_regdate, board_comment_date, board_update,
+        file_attach1, file_attach2, file_attach3, file_attach4, board_hits
+        FROM board
+        WHERE board_key = #{boardKey}
+    </select>
+
+    <!-- 이벤트 댓글 삽입 -->
+    <insert id="addComment" parameterType="kr.co.jhta.app.delideli.user.board.domain.Comment">
+        INSERT INTO comment (comment_contents, comment_parent, comment_regdate, board_key, user_key)
+        VALUES (#{commentContents}, #{commentParent}, NOW(), #{boardKey}, #{userKey})
+    </insert>
+
+    <!-- 이벤트 댓글 조회 -->
+    <select id="getCommentAll" resultMap="CommentResultMap" parameterType="int">
+        SELECT c.comment_key, c.comment_parent, c.comment_contents, c.comment_regdate, c.comment_update,
+        c.comment_deldate, c.board_key, c.user_key, u.user_nickname
+        FROM comment c
+        JOIN user_account u ON c.user_key = u.user_key
+        WHERE c.board_key = #{boardKey}
+    </select>
+
+    <!-- 이벤트 총개시물수 -->
+    <select id="getTotalEvent" resultType="int">
+        SELECT COUNT(*) cnt
+        FROM board
+        WHERE board_type = "이벤트"
+    </select>
+
+    <!-- 이벤트 검색 총게시글수 -->
+    <select id="getTotalKeywordEvent" resultType="int">
+        SELECT COUNT(*) cnt
+        FROM board
+        WHERE (board_title LIKE CONCAT('%', #{keyword}, '%'))
+        AND board_type = "이벤트"
+    </select>
+
+    <!-- 이벤트 검색 -->
+    <select id="getAllKeywordEvent" resultMap="BoardResultMap" parameterType="hashmap">
+        SELECT board_key, user_key, board_type, board_status, board_progress_status, board_title, board_write,
+        board_contents, board_thumbnail, board_comment, board_comment_status, board_start_date,
+        board_end_date, board_regdate, board_comment_date, board_update,
+        file_attach1, file_attach2, file_attach3, file_attach4, board_hits
+        FROM board
+        WHERE board_type = "이벤트" AND
+        (board_title LIKE CONCAT('%', #{keyword}, '%'))
+        ORDER BY board_key DESC
+        LIMIT #{countPerPage} OFFSET #{startNo}
+    </select>
+
+    <!-- 이벤트 댓글 수정 -->
+    <update id="updateComment" parameterType="kr.co.jhta.app.delideli.user.board.domain.Comment">
+        UPDATE comment
+        SET comment_contents = #{commentContents}, comment_update = NOW()
+        WHERE comment_key = #{commentKey}
+    </update>
+
+    <!-- 이벤트 댓글 삭제 -->
+    <delete id="deleteChildComments" parameterType="int">
+        DELETE FROM comment WHERE comment_parent = #{commentKey}
+    </delete>
+
+    <!-- 이벤트 대댓글 삭제 -->
+    <delete id="deleteComment" parameterType="int">
+        DELETE FROM comment WHERE comment_key = #{commentKey}
+    </delete>
+
+    <!-- 이벤트 댓글 답글삽입 -->
+    <insert id="insertReplyComment" parameterType="kr.co.jhta.app.delideli.user.board.domain.Comment">
+        INSERT INTO comment (comment_contents, comment_parent, comment_regdate, board_key, user_key)
+        VALUES (#{commentContents}, #{commentParent}, NOW(), #{boardKey}, #{userKey})
+    </insert>
+
+    <!-- 내문의 글목록 -->
+    <select id="getMyAskList" parameterType="int" resultMap="BoardResultMap">
+        SELECT board_key, user_key, board_type, board_status, board_progress_status, board_title, board_write,
+        board_contents, board_thumbnail, board_comment, board_comment_status, board_start_date,
+        board_end_date, board_regdate, board_comment_date, board_update,
+        file_attach1, file_attach2, file_attach3, file_attach4, board_hits
+        FROM board
+        WHERE board_type = "문의"
+        AND user_key = ${userKey}
+        ORDER BY board_key DESC
+    </select>
+
+    <!-- 내문의 글작성 -->
+    <insert id="myAskWrite" parameterType="kr.co.jhta.app.delideli.user.board.domain.Board">
+        INSERT INTO board (user_key, board_type, board_status, board_progress_status, board_title, board_write, board_contents)
+        VALUES (#{userKey}, '문의', '문의', '대기중', #{boardTitle}, '사용자', #{boardContents})
+    </insert>
+
+    <!-- 내문의 상세보기 -->
+    <select id="myAskDetail" parameterType="int" resultMap="BoardResultMap">
+        SELECT board_key, user_key, board_type, board_status, board_progress_status, board_title, board_write,
+        board_contents, board_thumbnail, board_comment, board_comment_status, board_start_date,
+        board_end_date, board_regdate, board_comment_date, board_update,
+        file_attach1, file_attach2, file_attach3, file_attach4, board_hits
+        FROM board
+        WHERE board_type = "문의"
+        AND board_key = ${boardKey}
+        ORDER BY board_key DESC
+    </select>
+
+    <!-- 내문의 글삭제 -->
+    <delete id="myAskDelete" parameterType="int">
+        DELETE FROM board WHERE board_key = #{boardKey}
+    </delete>
+
+    <!-- 이벤트 상세보기 조회수 증가 -->
+    <update id="updateHitEvent" parameterType="int">
+        UPDATE board
+        SET board_hits = board_hits + 1
+        WHERE board_key = #{board_key}
+    </update>
+
+    <!-- 공지사항 상세보기 조회수 증가 -->
+    <update id="updateHitNotice" parameterType="int">
+        UPDATE board
+        SET board_hits = board_hits + 1
+        WHERE board_key = #{board_key}
+    </update>
+
+</mapper>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 공지사항</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <div class="board__wrap">
+                <h2 class="subPage__title">공지사항</h2>
+                <div class="board__searchCon">
+                    <form th:action="@{/user/notice}" method="get">
+                        <div class="board__searchBox">
+                            <input type="text" name="keyword" id="keyword" placeholder="제목을 입력해주세요.">
+                            <button type="submit">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <table class="notice__table">
+                    <colgroup>
+                        <col width="5%">
+                        <col width="65%">
+                        <col width="15%">
+                        <col width="15%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>제목</th>
+                            <th>등록일</th>
+                            <th>조회수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="board, iterState : ${list}">
+                            <td>
+                                [[${iterState.count}]]
+                            </td>
+                            <td>
+                                <a th:href="@{detail/{num}(num=${board.boardKey})}">
+                                    <span>[[${board.boardStatus}]]</span>
+                                    [[${board.boardTitle}]]
+                                </a>
+                            </td>
+                            <td>[[${board.boardRegdate}]]</td>
+                            <td>[[${board.boardHits}]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Start:Pagination -->
+                <th:block th:include="inc/user/pagination :: boardPagination ('type'='notice')"></th:block>
+                <!-- End:Pagination -->
+            </div>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

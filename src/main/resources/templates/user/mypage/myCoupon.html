@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 내 쿠폰 목록</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <div class="subPage__wrap">
+                <!-- Start:subNav -->
+                <th:block th:include="inc/user/subNav :: subNav"></th:block>
+                <!-- End:subNav -->
+                <h2 class="subPage__title">MyCoupon</h2>
+                <div class="myCoupon__con">
+                    <table class="notice__table">
+                        <colgroup>
+                            <col width="5%">
+                            <col width="50%">
+                            <col width="10%">
+                            <col width="15%">
+                            <col width="15%">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>쿠폰명</th>
+                            <th>할인금액</th>
+                            <th>쿠폰 시작일</th>
+                            <th>쿠폰 종료일</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="coupon, iterStat : ${couponList}">
+                            <td>
+                                [[${(currentPage - 1) * pageSize + iterStat.index + 1}]]
+                            </td>
+                            <td>
+                                [[${coupon.couponName}]]
+                            </td>
+                            <td>
+                                [[${#numbers.formatInteger(coupon.couponPrice,3,'POINT')}]]
+                            </td>
+                            <td>
+                                [[${#temporals.format(coupon.couponStartDate, 'yyyy/MM/dd')}]]
+                            </td>
+                            <td>
+                                [[${#temporals.format(coupon.couponEndDate, 'yyyy/MM/dd')}]]
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Start:Pagination -->
+            <th:block th:include="inc/user/pagination :: boardPagination (${type})"></th:block>
+            <!-- End:Pagination -->
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

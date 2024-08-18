@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>사용자 - 회원가입</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+        <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <section class="user-account__wrap">
+                <div class="user-account__form-box">
+                    <div class="user-account__form-top">
+                        <h2 class="user-account__logo">
+                            <img src="/user/images/logo-color.png" alt="딜리델리노랑색로고">
+                        </h2>
+                        <p class="user-account__label">
+                            회원가입
+                        </p>
+                    </div>
+                    <form id="registerForm" action="/user/register" method="post" enctype="multipart/form-data" class="user-account__form">
+                        <div class="account__input-wrap">
+                            <!-- 아이디 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userId">아이디</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <div class="account__input-btn">
+                                    <input type="text" id="userId" name="userId">
+                                    <button type="button" id="checkUserIdButton" disabled>중복확인</button>
+                                </div>
+                                <span id="userIdMessage" class="error-message" style="display: none;"></span>
+                            </div>
+                            <!-- 이름 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userName">이름</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="text" id="userName" name="userName">
+                            </div>
+                            <!-- 닉네임 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userNickname">닉네임</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="text" id="userNickname" name="userNickname">
+                            </div>
+                            <!-- 비밀번호 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userPw">비밀번호</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="password" id="userPw" name="userPw">
+                            </div>
+                            <!-- 비밀번호확인 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="checkUserPw">비밀번호 확인</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="password" id="checkUserPw" name="checkUserPw">
+                                <span id="passwordMessage" class="error-message" style="display: none;"></span>
+                            </div>
+                            <!-- 생년월일 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userBirth">생년월일</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="text" id="userBirth" name="userBirth" placeholder="xxxx-xx-xx" maxlength="10">
+                            </div>
+                            <!-- 휴대폰번호 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userPhone">휴대폰번호</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="text" id="userPhone" name="userPhone" maxlength="13">
+                            </div>
+                            <!-- 이메일 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userEmail">이메일</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <div class="account__input-btn">
+                                    <input type="text" id="userEmail" name="userEmail">
+                                    <button type="button" id="sendCodeButton" disabled>인증코드전송</button>
+                                </div>
+                                <span id="userEmailMessage" class="error-message" style="display: none;"></span>
+                            </div>
+                            <!-- 인증번호 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="verificationCode">인증번호</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <div class="account__input-btn">
+                                    <input type="text" id="verificationCode" name="verificationCode">
+                                    <button type="button" id="verifyCodeButton">인증코드확인</button>
+                                </div>
+                                <span id="userEmailChkMsg" class="success-message" style="display: none;"></span>
+                            </div>
+                            <!-- 주소 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userAddress">주소</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <div class="account__input-btn">
+                                    <input type="text" id="userZipcode" name="userZipcode" readonly placeholder="우편번호">
+                                    <button type="button" onclick="execDaumPostcode()">주소찾기</button>
+                                </div>
+                                <input type="text" id="userAddress" name="userAddress" readonly placeholder="기본주소">
+                                <input type="text" id="userAddrDetail" name="userAddrDetail" placeholder="상세주소">
+                            </div>
+                            <!-- 프로필사진 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userProfile">프로필사진</label>
+                                </div>
+                                <div class="account__profile-img">
+                                    <span id="profilePreview" style="background-image: url('/user/images/profile-default.png')" alt="프로필미리보기"></span>
+                                </div>
+                                <div class="account__input-btn">
+                                    <input class="regUpload-file" placeholder="첨부파일">
+                                    <label for="userProfile" class="regUpload-file-btn">파일첨부하기</label>
+                                    <input type="file" id="userProfile" name="userProfile" class="regUpload-file--hidden">
+                                </div>
+                                <span class="account-guide__msg">
+                                    가로 500px, 세로 500px 사이즈의 jpg, png, jpeg 파일만 첨부 가능합니다.
+                                </span>
+                            </div>
+                        </div>
+                        <div class="account__btn-wrap account__btn-wrap--a">
+                            <button type="button" class="account__user-btn--a" th:onclick="'location.href=\'' + @{/} + '\''">취소하기</button>
+                            <button type="submit" class="account__user-btn--b">등록하기</button>
+                        </div>
+                        <script src="/user/js/module/register.js"></script>
+                    </form>
+                </div>
+            </section>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

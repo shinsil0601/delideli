@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 비밀번호변경(비로그인)</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <section class="user-account__wrap">
+                <div class="user-account__form-box">
+                    <div class="user-account__form-top">
+                        <h2 class="user-account__logo">
+                            <img src="/user/images/logo-color.png" alt="딜리델리노랑색로고">
+                        </h2>
+                        <p class="user-account__label">
+                            비밀번호 변경
+                        </p>
+                    </div>
+                    <form method="post" action="/user/changePassword" class="user-account__form">
+                        <input type="hidden" name="userId" th:value="${userId}">
+                        <div class="account__input-wrap">
+                            <!-- 비밀번호 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="userPw">비밀번호</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="password" id="userPw" name="newPassword">
+                            </div>
+                            <!-- 비밀번호 확인 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="checkUserPw">비밀번호 확인</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="password" id="checkUserPw" name="confirmPassword">
+                                <span id="passwordMessage" class="error-message" style="display: none;"></span>
+                            </div>
+                        </div>
+                        <div class="account__btn-wrap account__btn-wrap--a">
+                            <button type="button" class="account__user-btn--a" th:onclick="'location.href=\'' + @{/user/login} + '\''">취소하기</button>
+                            <button type="submit" class="account__user-btn--b">변경하기</button>
+                        </div>
+                    </form>
+                    <script src="/user/js/module/changePw.js"></script>
+                </div>
+            </section>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

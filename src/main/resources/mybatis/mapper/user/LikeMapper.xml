@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.user.like.mapper.UserLikeMapper">
+
+    <!-- resultMap 정의 -->
+    <resultMap id="LikeResultMap" type="kr.co.jhta.app.delideli.user.like.domain.Like">
+        <id property="likeKey" column="like_key"/>
+        <result property="userKey" column="user_key"/>
+        <result property="storeInfoKey" column="storeInfo_key"/>
+        <result property="likeStatus" column="like_status"/>
+        <result property="likeUpdate" column="like_update"/>
+        <result property="likeRedate" column="like_redate"/>
+    </resultMap>
+
+    <!-- 유저와 가게 키로 좋아요 정보 찾기 -->
+    <select id="findLikeByUserAndStore" resultMap="LikeResultMap" parameterType="map">
+        SELECT *
+        FROM `like`
+        WHERE user_key = #{userKey}
+          AND storeInfo_key = #{storeInfoKey}
+    </select>
+
+    <!-- 좋아요 추가 -->
+    <insert id="insertLike" parameterType="kr.co.jhta.app.delideli.user.like.domain.Like">
+        INSERT INTO `like` (user_key, storeInfo_key, like_status)
+        VALUES (#{userKey}, #{storeInfoKey}, #{likeStatus})
+    </insert>
+
+    <!-- 좋아요 삭제 -->
+    <delete id="deleteLike" parameterType="map">
+        DELETE FROM `like`
+        WHERE like_key = #{likeKey}
+    </delete>
+</mapper>

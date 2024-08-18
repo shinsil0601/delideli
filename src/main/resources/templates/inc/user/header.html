@@ -1,0 +1,90 @@
+<th:block th:fragment="userHeader">
+    <html xmlns:th="http://www.thymeleaf.org">
+    <header id="header">
+        <div class="inner">
+            <div class="header__top">
+                <h1 class="header__logo">
+                    <a href="/user/home">
+                        <img src="/user/images/logo-color.png" alt="딜리델리컬러로고">
+                    </a>
+                </h1>
+                <!-- 로그인 전 -->
+                <ul class="header__top-menu header__status--off" th:if="${user == null}">
+                    <li>
+                        <a href="/user/login">로그인</a>
+                    </li>
+                    <li>
+                        <a href="/user/register">회원가입</a>
+                    </li>
+                    <li>
+                        <a href="/client/login" class="header__top-menu--btn">사장님</a>
+                    </li>
+                </ul>
+                <!-- 로그인 후 -->
+                <ul class="header__top-menu header__status--on" th:if="${user != null}">
+                    <!-- 사용자프로필 -->
+                    <li>
+                        <a href="/user/myPage" class="header__profile">
+                            <!-- 프로필 X : default Img -->
+                            <img src="/user/images/profile-default.png" alt="사용자프로필" th:if="${user.userProfile == '' or user.userProfile == NULL}">
+                            <!-- 프로필 O : userProfile Img -->
+                            <img th:src="${user.userProfile}" alt="사용자프로필" th:if="${user.userProfile !=  '' and user.userProfile != NULL}">
+                        </a>
+                    </li>
+                    <!-- 장바구니 -->
+                    <li>
+                        <a href="/user/myCart">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </a>
+                    </li>
+                    <!-- 찜 -->
+                    <li>
+                        <a href="/user/myLike">
+                            <i class="fa-solid fa-heart"></i>
+                        </a>
+                    </li>
+                    <!-- 로그아웃 -->
+                    <li>
+                        <a href="/user/logout">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="header__bot">
+                <!-- 메뉴 -->
+                <ul class="header__bot-menu">
+                    <!-- 카테고리 -->
+                    <li>
+                        <a href="/user/category/0">
+                            <i class="fa-solid fa-bars"></i>
+                            카테고리
+                        </a>
+                        <ul class="header__ctg">
+                            <li>
+                                <a href="/user/category/0">전체보기</a>
+                            </li>
+                            <li th:each="category : ${categoryList}">
+                                <a th:href="@{'/user/category/' + ${category.categoryKey}}"
+                                   th:text="${category.categoryName}"></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/user/notice">공지사항</a>
+                    </li>
+                    <li>
+                        <a href="/user/event">이벤트</a>
+                    </li>
+                </ul>
+                <!-- 검색바 -->
+                <form action="" class="header__bot-searchForm">
+                    <input type="text" name="" id="" class="header__searchBar" placeholder="메뉴를 검색해주세요.">
+                    <button type="submit" class="header__searchBtn">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+</th:block>

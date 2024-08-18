@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>관리자 - 로그인</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Admin CSS -->
+        <th:block th:include="inc/admin/admin-css :: adminCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Admin JS -->
+        <th:block th:include="inc/admin/admin-js :: adminJs"></th:block>
+
+    </head>
+    <body>
+        <div class="admin-account__wrap">
+            <div class="admin-account__form-box">
+                <div class="admin-account__top">
+                    <h1 class="admin-account__logo">
+                        <img src="/admin/images/logo-black.png" alt="모자란남매들검정로고">
+                    </h1>
+                    <p class="admin-account__title">관리자 로그인</p>
+                </div>
+                <form action="/admin/login" method="post">
+                    <div class="account--input-wrap">
+                        <!-- 아이디 -->
+                        <div class="account__input-box">
+                            <label for="userId">아이디</label>
+                            <input type="text" id="userId" name="userId">
+                        </div>
+                        <!-- 비밀번호 -->
+                        <div class="account__input-box">
+                            <label for="userPw">비밀번호</label>
+                            <input type="password" id="userPw" name="userPw">
+                        </div>
+                        <!-- 유효성 메시지 -->
+                        <span th:if="${errorMessage}" th:text="${errorMessage}" class="validation-msg validation-msg--account"></span>
+                    </div>
+                    <div class="account__btn-wrap">
+                        <button type="submit" class="admin-btn--violet">로그인</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

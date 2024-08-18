@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 비밀번호 변경(로그인시)</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <section class="user-account__wrap">
+                <div class="user-account__form-box">
+                    <div class="user-account__form-top">
+                        <h2 class="user-account__logo">
+                            <img src="/user/images/logo-color.png" alt="딜리델리노랑색로고">
+                        </h2>
+                        <p class="user-account__label">
+                            비밀번호 변경
+                        </p>
+                    </div>
+                    <form method="post" action="/user/updatePassword" class="user-account__form">
+                        <input type="hidden" name="userId" th:value="${user.userId}">
+                        <input type="hidden" name="currentUserPw" th:value="${user.userPw}">
+                        <div class="account__input-wrap">
+                            <!-- 현재 비밀번호 -->
+                            <div class="account__input-box">
+                                <label for="userPw">현재 비밀번호</label>
+                                <input type="password" id="userPw" name="userPw">
+                            </div>
+                            <!-- 새 비밀번호 -->
+                            <div class="account__input-box">
+                                <label for="newUserPw">새 비밀번호</label>
+                                <input type="password" id="newUserPw" name="newPassword">
+                            </div>
+                            <!-- 새 비밀번호 확인 -->
+                            <div class="account__input-box">
+                                <label for="checkUserPw">새 비밀번호 확인</label>
+                                <input type="password" id="checkUserPw" name="confirmPassword">
+                            </div>
+                            <!-- 유효성메시지 -->
+                            <span id="errorMessage" th:if="${errorMessage}" th:text="${errorMessage}" class="validation-msg validation-msg--account"></span>
+                        </div>
+                        <div class="account__btn-wrap">
+                            <button type="submit" class="user-btn--main">변경하기</button>
+                        </div>
+                        <script src="/user/js/module/updatePw.js"></script>
+                    </form>
+                </div>
+            </section>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>

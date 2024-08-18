@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.client.account.mapper.ClientMapper">
+
+    <!-- ClientAccount resultMap -->
+    <resultMap id="ClientAccountResultMap" type="kr.co.jhta.app.delideli.client.account.domain.ClientAccount">
+        <id property="clientKey" column="client_key"/>
+        <result property="clientEID" column="client_EID"/>
+        <result property="clientName" column="client_name"/>
+        <result property="clientPhone" column="client_phone"/>
+        <result property="clientId" column="client_id"/>
+        <result property="clientPw" column="client_pw"/>
+        <result property="clientEmail" column="client_email"/>
+        <result property="bankName" column="bank_name"/>
+        <result property="bankAccount" column="bank_account"/>
+        <result property="clientAccess" column="client_access"/>
+        <result property="clientDelete" column="client_delete"/>
+        <result property="clientRole" column="client_role"/>
+        <result property="clientRegdate" column="client_regdate"/>
+        <result property="clientUpdate" column="client_update"/>
+    </resultMap>
+
+    <!-- 회원가입 -->
+    <insert id="insertClient" parameterType="ClientAccount">
+        INSERT INTO client_account (client_EID, client_name, client_phone, client_id, client_pw, client_email, bank_name, bank_account)
+        VALUES (#{clientEID}, #{clientName}, #{clientPhone}, #{clientId}, #{clientPw}, #{clientEmail}, #{bankName}, #{bankAccount})
+    </insert>
+
+    <!-- 아이디가 일치하는 계정의 정보 가져오기 -->
+    <select id="selectClientById" parameterType="String" resultMap="ClientAccountResultMap">
+        SELECT * FROM client_account WHERE client_id = #{clientId}
+    </select>
+
+    <!-- 이메일이 일치하는 계정의 정보 가져오기 -->
+    <select id="selectClientByEmail" parameterType="String" resultMap="ClientAccountResultMap">
+        SELECT * FROM client_account WHERE client_email = #{email}
+    </select>
+
+    <!-- 사업자번호, 아이디가 일치하는 계정의 정보 가져오기 -->
+    <select id="selectClientByEIDAndName" parameterType="map" resultMap="ClientAccountResultMap">
+        SELECT * FROM client_account WHERE client_EID = #{clientEID} AND client_name = #{clientName}
+    </select>
+
+    <!-- 사업자번호, 아이디, 사장명이 일치하는 계정의 정보 가져오기 -->
+    <select id="selectClientByIdAndEIDAndName" parameterType="map" resultMap="ClientAccountResultMap">
+        SELECT * FROM client_account WHERE client_id = #{clientId} AND client_EID = #{clientEID} AND client_name = #{clientName}
+    </select>
+
+    <!-- 아이디 승인 여부 검토 -->
+    <select id="checkAccessAccount" parameterType="ClientAccount" resultType="boolean">
+        SELECT client_access as clientAccess FROM client_account WHERE client_id = #{clientId} AND client_pw = #{clientPw}
+    </select>
+
+    <!-- 비밀번호 변경 -->
+    <update id="updatePwClient" parameterType="ClientAccount">
+        UPDATE client_account
+        SET client_pw = #{clientPw},
+        client_update = NOW()
+        WHERE client_id = #{clientId}
+    </update>
+
+    <!-- 내정보 수정 -->
+    <update id="modifyClient" parameterType="ClientAccount">
+        UPDATE client_account
+        SET client_name = #{clientName}, client_phone = #{clientPhone},
+        client_email = #{clientEmail}, client_update = NOW()
+        WHERE client_id = #{clientId}
+    </update>
+
+    <!-- 비밀번호 변경(로그인) -->
+    <update id="changePwLogin" parameterType="ClientAccount">
+        UPDATE client_account
+        SET client_pw = #{clientPw}, client_update = NOW()
+        WHERE client_id = #{clientId}
+    </update>
+
+</mapper>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사장님 - 비밀번호변경(비로그인)</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Client CSS -->
+        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Client JS -->
+        <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+
+    </head>
+    <body>
+        <div class="client-account__wrap">
+            <section class="client-account__left">
+                <div class="client-account__form-box">
+                    <div class="client-account__form-top">
+                        <h1 class="client-account__logo">
+                            <img src="/client/images/logo-blue.png" alt="딜리델리파랑색로고">
+                        </h1>
+                        <p class="client-account__label">
+                            비밀번호 변경
+                        </p>
+                    </div>
+                    <!-- Start:Form -->
+                    <form action="/client/changePassword" method="POST" id="registerForm" class="client-account__form">
+                        <!-- 아이디 -->
+                        <input type="hidden" name="clientId" th:value="${clientId}">
+                        <div class="account__input-wrap">
+                            <!-- 비밀번호 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="clientPw">비밀번호</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="password" id="clientPw" name="newPassword">
+                            </div>
+                            <!-- 비밀번호확인 -->
+                            <div class="account__input-box">
+                                <div class="account__label-box">
+                                    <label for="checkClientPw">비밀번호 확인</label>
+                                    <span class="account-essential">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        필수항목
+                                    </span>
+                                </div>
+                                <input type="password" id="checkClientPw" name="confirmPassword">
+                                <span id="passwordMessage" class="error-message" style="display: none;"></span>
+                            </div>
+                        </div>
+                        <div class="account__btn-wrap">
+                            <button type="submit" id="registerButton" class="client-btn--blue" disabed>변경하기</button>
+                        </div>
+                        <script src="/client/js/module/chagePw.js"></script>
+                    </form>
+                    <!-- End:Form -->
+                </div>
+                <p class="client-account__copyright">
+                    delideli ⓒ All right reserved.
+                </p>
+            </section>
+            <!-- Start:Right -->
+            <th:block th:include="inc/client/account-right :: clientAccountRight"></th:block>
+            <!-- End:Right -->
+        </div>
+    </body>
+</html>

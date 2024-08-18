@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사장님 - 메뉴</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Client CSS -->
+        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Client JS -->
+        <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+
+    </head>
+    <body>
+        <div class="client-wrap">
+            <!-- Start:Aside -->
+            <th:block th:include="inc/client/aside :: clientAside"></th:block>
+            <!-- End:Aside -->
+
+            <!-- Start:Main -->
+            <main id="mainpage__wrap">
+                <!-- Start:Header -->
+                <th:block th:include="inc/client/header :: clientHeader">
+
+                </th:block>
+                <!-- End:Header -->
+
+                <!-- Start:Contents -->
+                <section class="contents">
+                    <form th:action="@{/client/menu/{storeKey}(storeKey=${storeKey})}" method="get">
+                        <div>
+                            <select name="filter">
+                                <option value="menuName" th:selected="${filter == 'menuName'}">메뉴명</option>
+                                <option value="menuGroupName" th:selected="${filter == 'menuGroupName'}">메뉴 그룹명</option>
+                                <option value="menuStatus" th:selected="${filter == 'menuStatus'}">메뉴 상태</option>
+                            </select>
+                            <input type="text" name="keyword" th:value="${keyword}" placeholder="메뉴 검색">
+                            <button type="submit">검색</button>
+                        </div>
+                    </form>
+                    <div>
+                        <h2>메뉴 목록</h2><br>
+                        <!-- 메뉴 그룹화된 데이터 렌더링 -->
+                        <div th:each="entry : ${groupedMenu}">
+                            <h3 th:text="${entry.key}">메뉴 그룹 이름</h3>
+                            <!-- 메뉴 그룹 삭제 버튼 -->
+                            <button class="delete-group-btn" th:data-groupkey="${entry.value[0].clientMenuGroup.menuGroupKey}">메뉴 그룹 삭제</button>
+                            <br><br>
+                            <ul>
+                                <li th:each="menu : ${entry.value}">
+                                    <img th:src="${menu.menuImg}" alt="메뉴 이미지">
+                                    <br>
+                                    <span th:text="${menu.menuName}">메뉴 이름</span>
+                                    <br>
+                                    <span th:text="${menu.menuPrice}">메뉴 가격</span>원
+                                    <br>
+                                    <span th:text="'상태 : ' + ${menu.menuStatus}"></span><br>
+                                    <!-- 상태에 일치하는 놈이 색이 나오게 해줄 수 있나 (상태 변경 버튼임) -->
+                                    <button class="status-btn" data-status="판매중" th:classappend="${menu.menuStatus == '판매중' ? 'active' : ''}" th:data-menukey="${menu.menuKey}">판매중</button>
+                                    <button class="status-btn" data-status="하루품절" th:classappend="${menu.menuStatus == '하루품절' ? 'active' : ''}" th:data-menukey="${menu.menuKey}">하루품절</button>
+                                    <button class="status-btn" data-status="숨김" th:classappend="${menu.menuStatus == '숨김' ? 'active' : ''}" th:data-menukey="${menu.menuKey}">숨김</button>
+                                    <!-- 메뉴 삭제 버튼 -->
+                                    <button class="delete-menu-btn" th:data-menukey="${menu.menuKey}">메뉴 삭제</button>
+                                    <a th:href="@{/client/updateMenu/{menuKey}(menuKey=${menu.menuKey})}">메뉴 수정</a>
+                                    <br>
+                                </li>
+                                <br>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <script src="/client/js/module/menu.js"></script>
+                </section>
+                <!-- End:Contents -->
+            </main>
+            <!-- End:Main -->
+        </div>
+    </body>
+</html>

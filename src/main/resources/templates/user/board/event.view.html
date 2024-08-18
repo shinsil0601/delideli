@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사용자 - 이벤트 상세보기</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <!-- Start:Header -->
+        <th:block th:include="inc/user/header :: userHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Main -->
+        <main id="mainpage__wrap">
+            <div class="board__wrap">
+                <div class="board__view">
+                    <div class="board__view--top">
+                        <ul class="board__view--info">
+                            <li>
+                                <span class="board__view--ctg">
+                                    [[${board.boardStatus}]]
+                                </span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-calendar-days"></i>
+                                [[${board.boardRegdate}]]
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-eye"></i>
+                                [[${board.boardHits}]]
+                            </li>
+                        </ul>
+                        <h2 class="board__view--title">
+                            [[${board.boardTitle}]]
+                        </h2>
+                    </div>
+                    <div class="board__view--bottom">
+                        [[${board.boardContents}]]
+                    </div>
+                </div>
+                <div class="board__view--btn-items">
+                    <button type="button" class="view-btn1" th:onclick="'location.href=\'' + @{/user/event} + '\''">목록</button>
+                </div>
+                <!-- 댓글 작성 -->
+                <div class="coments__write" th:if="${user != null}">
+                    <h3 class="coments__label">댓글</h3>
+                    <form name="comment-form" action="/user/eventDetail/comment/write" method="post" autocomplete="off" class="cmt-write__form">
+                        <input type="hidden" name="userKey" th:value="${user.userKey}" />
+                        <input type="hidden" name="boardKey" th:value="${board.boardKey}" />
+                        <input type="hidden" name="userNickname" th:value="${user.userNickname}" />
+                        <textarea name="commentContents" class="form-control" rows="3"></textarea>
+                        <div class="comments-write--btn">
+                            <button type="submit" class="btn btn-primary" name="comment-submit" disabled>댓글작성</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 댓글 목록 -->
+                <div id="comment__view">
+                </div>
+
+            </div>
+
+            <script src="/user/js/module/eventDetail.js" th:if="${user != null}"></script>
+        </main>
+        <!-- End:Main -->
+
+        <!-- Start:Footer -->
+        <th:block th:include="inc/user/footer :: userFooter"></th:block>
+        <!-- End:Footer -->
+    </body>
+</html>
