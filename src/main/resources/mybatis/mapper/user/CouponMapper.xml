@@ -34,4 +34,20 @@
         WHERE coupon_key = #{couponKey} AND user_key = #{userKey}
     </delete>
 
+    <!-- 페이징을 고려한 사용자 쿠폰 목록 조회 -->
+    <select id="getCouponsByUserKeyWithPaging" resultMap="CouponResultMap">
+        SELECT *
+        FROM coupon
+        WHERE user_key = #{userKey}
+        ORDER BY coupon_key ASC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 사용자의 총 쿠폰 개수 조회 -->
+    <select id="getTotalCouponsByUserKey" resultType="int">
+        SELECT COUNT(*)
+        FROM coupon
+        WHERE user_key = #{userKey}
+    </select>
+
 </mapper>

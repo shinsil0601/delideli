@@ -44,9 +44,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="coupon : ${coupon}">
+                        <tr th:each="coupon, iterStat : ${couponList}">
                             <td>
-                                [[${coupon.couponKey}]]
+                                [[${(currentPage - 1) * pageSize + iterStat.index + 1}]]
                             </td>
                             <td>
                                 [[${coupon.couponName}]]
@@ -65,6 +65,9 @@
                     </table>
                 </div>
             </div>
+            <!-- Start:Pagination -->
+            <th:block th:include="inc/user/pagination :: boardPagination (${type})"></th:block>
+            <!-- End:Pagination -->
         </main>
         <!-- End:Main -->
 

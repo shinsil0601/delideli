@@ -1,5 +1,7 @@
 package kr.co.jhta.app.delideli.user.control;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import kr.co.jhta.app.delideli.user.account.domain.UserAccount;
 import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
 import kr.co.jhta.app.delideli.user.account.service.UserService;
@@ -13,12 +15,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,7 +49,7 @@ public class UserStoreController {
                                @RequestParam(value = "address", required = false) String address,
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "pageSize", defaultValue = "8") int pageSize,
-                               Model model) {
+                               Model model, HttpServletResponse response) {
         // 모든 카테고리 목록을 가져와서 모델에 추가
         ArrayList<Category> categoryList = userCategoryService.getAllCategory();
         model.addAttribute("categoryList", categoryList);
@@ -55,21 +59,33 @@ public class UserStoreController {
 
         String region = null;
         ArrayList<StoreInfo> allStores;
-        int totalStores;
 
         // 로그인된 사용자의 정보를 모델에 추가
         if (user != null) {
-            UserAccount userAccount = userService.findUserById(user.getUsername());
-            ArrayList<UserAddress> addressList = userService.userAddressList(userAccount.getUserKey());
-            model.addAttribute("user", userAccount);
-            model.addAttribute("addressList", addressList);
+            boolean hasUserRole = user.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
+            if (!hasUserRole) {
+                SecurityContextHolder.clearContext();
 
-            // 로그인한 사용자의 기본 주소를 설정
-            if (address == null || address.isEmpty()) {
-                for (UserAddress userAddress : addressList) {
-                    if (userAddress.isDefaultAddress()) {
-                        address = userAddress.getAddress() + " " + userAddress.getAddrDetail();
-                        break;
+                Cookie cookie = new Cookie("JWT", null);
+                cookie.setHttpOnly(true);
+                cookie.setSecure(true);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            } else {
+                UserAccount userAccount = userService.findUserById(user.getUsername());
+                ArrayList<UserAddress> addressList = userService.userAddressList(userAccount.getUserKey());
+                model.addAttribute("user", userAccount);
+                model.addAttribute("addressList", addressList);
+
+                // 로그인한 사용자의 기본 주소를 설정
+                if (address == null || address.isEmpty()) {
+                    for (UserAddress userAddress : addressList) {
+                        if (userAddress.isDefaultAddress()) {
+                            address = userAddress.getAddress() + " " + userAddress.getAddrDetail();
+                            break;
+                        }
                     }
                 }
             }
@@ -96,30 +112,49 @@ public class UserStoreController {
             Double averageRating = userStoreService.getAverageRatingForStore(store.getStoreInfoKey());
 
             store.setFirstMenu(firstMenu);  // 첫 번째 메뉴 설정
-            store.setAverageRating(averageRating != null ? averageRating : 0.0);  // 평균 리뷰 점수 설정
+            store.setAverageRating(averageRating != null ? String.format("%.1f", averageRating) : "0.0");  // 평균 리뷰 점수 설정
             store.setReviewCount(userStoreService.getReviewCountForStore(store.getStoreInfoKey()));  // 리뷰 개수 설정
         }
 
-        totalStores = allStores.size();
+        int totalStores = allStores.size();
         int totalPages = (int) Math.ceil((double) totalStores / pageSize);
 
         // 페이지 범위 내의 데이터를 잘라서 가져옴
         ArrayList<StoreInfo> storeList = paginateStores(allStores, page, pageSize);
 
-        // 가게 목록 및 총 페이지 수를 모델에 추가
+        // 페이지네이션 정보를 담을 map 객체 생성
+        Map<String, Object> paginationMap = createPaginationMap(page, totalPages);
+
+        // 가게 목록 및 페이지네이션 정보를 모델에 추가
         model.addAttribute("storeList", storeList);
         model.addAttribute("totalPages", totalPages);
+        model.addAttribute("map", paginationMap);
+        model.addAttribute("type", "category/" + categoryId); // 카테고리 유형 전달
 
         // user/store/store.html 페이지를 반환
         return "user/store/store";
     }
 
+
     // 지역별 가게목록 추출
     @GetMapping("/filterStoresByAddress")
-    public String filterStoresByAddress(@RequestParam("address") String address, @AuthenticationPrincipal User user, Model model) {
+    public String filterStoresByAddress(@RequestParam("address") String address, @AuthenticationPrincipal User user, Model model, HttpServletResponse response) {
         if (user != null) {
-            UserAccount userAccount = userService.findUserById(user.getUsername());
-            model.addAttribute("user", userAccount);
+            boolean hasUserRole = user.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
+            if (!hasUserRole) {
+                SecurityContextHolder.clearContext();
+
+                Cookie cookie = new Cookie("JWT", null);
+                cookie.setHttpOnly(true);
+                cookie.setSecure(true);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            } else {
+                UserAccount userAccount = userService.findUserById(user.getUsername());
+                model.addAttribute("user", userAccount);
+            }
         }
         // 주소에서 지역 정보를 추출
         String region = extractRegion(address);
@@ -133,18 +168,26 @@ public class UserStoreController {
             Double averageRating = userStoreService.getAverageRatingForStore(store.getStoreInfoKey());
 
             store.setFirstMenu(firstMenu);  // 첫 번째 메뉴 설정
-            store.setAverageRating(averageRating != null ? averageRating : 0.0);  // 평균 리뷰 점수 설정
+            store.setAverageRating(averageRating != null ? String.format("%.1f", averageRating) : "0.0");  // 평균 리뷰 점수 설정
             store.setReviewCount(userStoreService.getReviewCountForStore(store.getStoreInfoKey()));  // 리뷰 개수 설정
         }
 
-        // 페이지네이션 처리
+        int totalStores = allStores.size();
+        int totalPages = (int) Math.ceil((double) totalStores / 8);
+
+        // 페이지에 따른 가게 목록을 가져옴
         ArrayList<StoreInfo> storeList = paginateStores(allStores, 1, 8);
+
+        // 페이지네이션 정보를 담을 map 객체 생성
+        Map<String, Object> paginationMap = createPaginationMap(1, totalPages);
 
         // 가게 목록 및 기본 정보를 모델에 추가
         model.addAttribute("storeList", storeList);
         model.addAttribute("currentPage", 1);
         model.addAttribute("categoryId", 0); // ALL 카테고리로 가정
-        model.addAttribute("totalPages", (int) Math.ceil((double) allStores.size() / 8));
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("map", paginationMap);
+        model.addAttribute("type", "filterStoresByAddress"); // 필터 유형 전달
 
         // user/store/store.html 페이지로 반환
         return "user/store/store";
@@ -157,21 +200,34 @@ public class UserStoreController {
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "pageSize", defaultValue = "8") int pageSize,
                                @AuthenticationPrincipal User user,
-                               Model model) {
+                               Model model, HttpServletResponse response) {
 
         // 로그인된 사용자의 정보를 모델에 추가
         if (user != null) {
-            UserAccount userAccount = userService.findUserById(user.getUsername());
-            ArrayList<UserAddress> addressList = userService.userAddressList(userAccount.getUserKey());
-            model.addAttribute("user", userAccount);
-            model.addAttribute("addressList", addressList);
+            boolean hasUserRole = user.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
+            if (!hasUserRole) {
+                SecurityContextHolder.clearContext();
 
-            // 로그인한 사용자의 기본 주소를 설정
-            if (address == null || address.isEmpty()) {
-                for (UserAddress userAddress : addressList) {
-                    if (userAddress.isDefaultAddress()) {
-                        address = userAddress.getAddress() + " " + userAddress.getAddrDetail();
-                        break;
+                Cookie cookie = new Cookie("JWT", null);
+                cookie.setHttpOnly(true);
+                cookie.setSecure(true);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            } else {
+                UserAccount userAccount = userService.findUserById(user.getUsername());
+                ArrayList<UserAddress> addressList = userService.userAddressList(userAccount.getUserKey());
+                model.addAttribute("user", userAccount);
+                model.addAttribute("addressList", addressList);
+
+                // 로그인한 사용자의 기본 주소를 설정
+                if (address == null || address.isEmpty()) {
+                    for (UserAddress userAddress : addressList) {
+                        if (userAddress.isDefaultAddress()) {
+                            address = userAddress.getAddress() + " " + userAddress.getAddrDetail();
+                            break;
+                        }
                     }
                 }
             }
@@ -201,25 +257,36 @@ public class UserStoreController {
             Double averageRating = userStoreService.getAverageRatingForStore(store.getStoreInfoKey());
 
             store.setFirstMenu(firstMenu);  // 첫 번째 메뉴 설정
-            store.setAverageRating(averageRating != null ? averageRating : 0.0);  // 평균 리뷰 점수 설정
+            store.setAverageRating(averageRating != null ? String.format("%.1f", averageRating) : "0.0");// 평균 리뷰 점수 설정
             store.setReviewCount(userStoreService.getReviewCountForStore(store.getStoreInfoKey()));  // 리뷰 개수 설정
         }
 
-        int totalStores = allStores.size();
-        int totalPages = (int) Math.ceil((double) totalStores / pageSize);
+        int totalStores = allStores.size();  // 검색 결과의 총 가게 수
+        int totalPages = (int) Math.ceil((double) totalStores / pageSize);  // 검색 결과를 기반으로 총 페이지 수 계산
+
+        // 현재 페이지가 총 페이지 수보다 클 경우 총 페이지 수로 설정
+        if (page > totalPages) {
+            page = totalPages;
+        }
 
         // 페이지 범위 내의 데이터를 잘라서 가져옴
         ArrayList<StoreInfo> storeList = paginateStores(allStores, page, pageSize);
+
+        // 페이지네이션 정보를 담을 map 객체 생성
+        Map<String, Object> paginationMap = createPaginationMap(page, totalPages);
 
         // 가게 목록 및 페이지네이션 정보를 모델에 추가
         model.addAttribute("storeList", storeList);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
-        model.addAttribute("categoryId", 0); // 검색 시 ALL 카테고리로 가정
+        model.addAttribute("map", paginationMap);
+        model.addAttribute("type", "search");
+        model.addAttribute("query", query);
 
         // user/store/store.html 페이지를 반환
         return "user/store/store";
     }
+
 
     // 주소에서 구, 동, 읍 등의 지역 정보를 추출하는 메서드
     private String extractRegion(String address) {
@@ -248,24 +315,37 @@ public class UserStoreController {
     @GetMapping("/storeDetail/{storeInfoKey}")
     public String storeDetailPage(@AuthenticationPrincipal User user,
                                   @PathVariable("storeInfoKey") int storeInfoKey,
-                                  @RequestParam(value = "tab", defaultValue = "menu") String tab, Model model) {
+                                  @RequestParam(value = "tab", defaultValue = "menu") String tab, Model model, HttpServletResponse response) {
         // 가게 정보 가져오기
         StoreInfo store = userStoreService.getStoreInfoById(storeInfoKey);
 
         if (user != null) {
-            UserAccount userAccount = userService.findUserById(user.getUsername());
-            model.addAttribute("user", userAccount);
+            boolean hasUserRole = user.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
+            if (!hasUserRole) {
+                SecurityContextHolder.clearContext();
 
-            // 찜 상태 확인
-            Like like = userLikeService.findLikeByUserAndStore(userAccount.getUserKey(), storeInfoKey);
-            model.addAttribute("isLiked", like != null && like.getLikeStatus() == 1);
+                Cookie cookie = new Cookie("JWT", null);
+                cookie.setHttpOnly(true);
+                cookie.setSecure(true);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            } else {
+                UserAccount userAccount = userService.findUserById(user.getUsername());
+                model.addAttribute("user", userAccount);
+
+                // 찜 상태 확인
+                Like like = userLikeService.findLikeByUserAndStore(userAccount.getUserKey(), storeInfoKey);
+                model.addAttribute("isLiked", like != null && like.getLikeStatus() == 1);
+            }
         }
 
         Map<MenuGroup, ArrayList<Menu>> groupedMenus = userStoreService.getMenuGroupedByMenuGroup(storeInfoKey);
         ArrayList<Review> reviewList = userStoreService.getReviewListByStore(storeInfoKey);
 
         Double averageRating = userStoreService.getAverageRatingForStore(store.getStoreInfoKey());
-        store.setAverageRating(averageRating != null ? averageRating : 0.0);  // 평균 리뷰 점수 설정
+        store.setAverageRating(averageRating != null ? String.format("%.1f", averageRating) : "0.0");  // 평균 리뷰 점수 설정
         store.setReviewCount(userStoreService.getReviewCountForStore(store.getStoreInfoKey()));  // 리뷰 개수 설정
 
         // 모델에 데이터 추가
@@ -293,7 +373,7 @@ public class UserStoreController {
     @GetMapping("/menuDetail/{menuKey}")
     public String getMenuDetail(@PathVariable int menuKey,
                                 @AuthenticationPrincipal User user,
-                                Model model) {
+                                Model model, HttpServletResponse response) {
         // 메뉴 정보 및 옵션 그룹을 가져옴
         Menu menu = userStoreService.getMenuById(menuKey);
         ArrayList<OptionGroup> optionGroups = userStoreService.getOptionGroupsByMenuId(menuKey);
@@ -302,9 +382,22 @@ public class UserStoreController {
         boolean isLoggedIn = (user != null);
 
         // 로그인된 상태일 경우, 사용자 정보를 모델에 추가
-        if (isLoggedIn) {
-            UserAccount userAccount = userService.findUserById(user.getUsername());
-            model.addAttribute("user", userAccount);
+        if (user != null) {
+            boolean hasUserRole = user.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
+            if (!hasUserRole) {
+                SecurityContextHolder.clearContext();
+
+                Cookie cookie = new Cookie("JWT", null);
+                cookie.setHttpOnly(true);
+                cookie.setSecure(true);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            } else {
+                UserAccount userAccount = userService.findUserById(user.getUsername());
+                model.addAttribute("user", userAccount);
+            }
         }
 
         // 모델에 필요한 데이터 추가
@@ -326,5 +419,15 @@ public class UserStoreController {
         }
 
         return new ArrayList<>(allStores.subList(fromIndex, toIndex));
+    }
+
+    // 페이지네이션 정보를 맵핑하는 메서드
+    private Map<String, Object> createPaginationMap(int currentPage, int totalPages) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("prev", currentPage > 1);
+        map.put("next", currentPage < totalPages);
+        map.put("startPageNo", 1); // 필요에 따라 조정 가능
+        map.put("endPageNo", totalPages); // 필요에 따라 조정 가능
+        return map;
     }
 }

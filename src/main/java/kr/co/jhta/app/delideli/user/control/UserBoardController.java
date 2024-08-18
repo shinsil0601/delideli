@@ -1,5 +1,7 @@
 package kr.co.jhta.app.delideli.user.control;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import kr.co.jhta.app.delideli.common.util.PageUtil;
 import kr.co.jhta.app.delideli.user.account.domain.UserAccount;
 import kr.co.jhta.app.delideli.user.account.service.UserService;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,10 +42,23 @@ public class UserBoardController {
     @GetMapping("/notice")
     public String notice(Model model,
                          @RequestParam(name = "keyword", defaultValue = "none") String keyword,
-                         @RequestParam(name = "page", defaultValue = "1") int page, @AuthenticationPrincipal User user) {
+                         @RequestParam(name = "page", defaultValue = "1") int page, @AuthenticationPrincipal User user, HttpServletResponse response) {
         if (user != null) {
-            UserAccount userAccount = userService.findUserById(user.getUsername());
-            model.addAttribute("user", userAccount);
+            boolean hasUserRole = user.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
+            if (!hasUserRole) {
+                SecurityContextHolder.clearContext();
+
+                Cookie cookie = new Cookie("JWT", null);
+                cookie.setHttpOnly(true);
+                cookie.setSecure(true);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            } else {
+                UserAccount userAccount = userService.findUserById(user.getUsername());
+                model.addAttribute("user", userAccount);
+            }
         }
         int totalNumber = 0;
         int recordPerPage = 5;
@@ -72,10 +88,23 @@ public class UserBoardController {
 
     // 공지사항 상세보기
     @GetMapping("/detail/{num}")
-    public String detail(@PathVariable int num, @AuthenticationPrincipal User user, Model model) {
+    public String detail(@PathVariable int num, @AuthenticationPrincipal User user, Model model, HttpServletResponse response) {
         if (user != null) {
-            UserAccount userAccount = userService.findUserById(user.getUsername());
-            model.addAttribute("user", userAccount);
+            boolean hasUserRole = user.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
+            if (!hasUserRole) {
+                SecurityContextHolder.clearContext();
+
+                Cookie cookie = new Cookie("JWT", null);
+                cookie.setHttpOnly(true);
+                cookie.setSecure(true);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            } else {
+                UserAccount userAccount = userService.findUserById(user.getUsername());
+                model.addAttribute("user", userAccount);
+            }
         }
         Board board = userBoardService.readOneNotice(num);
         model.addAttribute("board", board);
@@ -85,10 +114,23 @@ public class UserBoardController {
     // 이벤트 목록
     @GetMapping("/event")
     public String event(Model model, @RequestParam(name = "keyword", defaultValue = "none") String keyword,
-                        @RequestParam(name = "page", defaultValue = "1") int page,@AuthenticationPrincipal User user) {
+                        @RequestParam(name = "page", defaultValue = "1") int page,@AuthenticationPrincipal User user, HttpServletResponse response) {
         if (user != null) {
-            UserAccount userAccount = userService.findUserById(user.getUsername());
-            model.addAttribute("user", userAccount);
+            boolean hasUserRole = user.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
+            if (!hasUserRole) {
+                SecurityContextHolder.clearContext();
+
+                Cookie cookie = new Cookie("JWT", null);
+                cookie.setHttpOnly(true);
+                cookie.setSecure(true);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            } else {
+                UserAccount userAccount = userService.findUserById(user.getUsername());
+                model.addAttribute("user", userAccount);
+            }
         }
         int totalNumber = 0;
         int recordPerPage = 5;
@@ -118,11 +160,24 @@ public class UserBoardController {
 
     // 이벤트 상세보기
     @GetMapping("/eventDetail/{num}")
-    public String eventDetail(@AuthenticationPrincipal User user, @PathVariable int num, Model model) {
+    public String eventDetail(@AuthenticationPrincipal User user, @PathVariable int num, Model model, HttpServletResponse response) {
         Board board = userBoardService.readOneEvent(num);
         if (user != null) {
-            UserAccount userAccount = userService.findUserById(user.getUsername());
-            model.addAttribute("user", userAccount);
+            boolean hasUserRole = user.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
+            if (!hasUserRole) {
+                SecurityContextHolder.clearContext();
+
+                Cookie cookie = new Cookie("JWT", null);
+                cookie.setHttpOnly(true);
+                cookie.setSecure(true);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            } else {
+                UserAccount userAccount = userService.findUserById(user.getUsername());
+                model.addAttribute("user", userAccount);
+            }
         }
         model.addAttribute("board", board);
         return "/user/board/event.view";
