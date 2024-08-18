@@ -36,9 +36,7 @@ public class UserBoardServiceImpl implements UserBoardService {
         map.put("keyword", keyword);
         map.put("countPerPage", countPerPage);
         map.put("startNo", startNo);
-        System.out.println("공지사항 검색 서비스>>>>"+map.toString());
         List<Board> list = userBoardMapper.getAllKeyword(map);
-        System.out.println("공지사항 검색 서비스 리스트>>>>"+ list.toString());
         return list;
     }
 
@@ -119,6 +117,7 @@ public class UserBoardServiceImpl implements UserBoardService {
         Board board = userBoardMapper.myAskDetail(boardKey);
         return board;
     }
+  
     //내문의 삭제
     @Override
     public void myAskDelete(int boardKey) {

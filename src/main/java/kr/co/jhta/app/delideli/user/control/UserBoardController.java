@@ -106,6 +106,7 @@ public class UserBoardController {
                 model.addAttribute("user", userAccount);
             }
         }
+      
         //조회수업뎃
         userBoardService.updateHitNotice(num);
         Board board = userBoardService.readOneNotice(num);

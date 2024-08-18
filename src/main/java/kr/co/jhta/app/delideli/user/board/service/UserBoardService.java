@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface UserBoardService {
     // 공지사항 목록
-    List<Board> getBoardList(int countPerPage, int currentPage);
+    List<Board> getBoardList(int countPerPage, int startNo);
     //공지사항 검색 목록
-    List<Board> getAllKeyword(int countPerPage, int currentPage, String keyword);
+    List<Board> getAllKeyword(int countPerPage, int startNo, String keyword);
   
     //공지사항 총갯수
     int getTotalNotice();
@@ -28,7 +28,7 @@ public interface UserBoardService {
     //이벤트 검색키워드 총갯수
     int getTotalKeywordEvent(String keyword);
     //이벤트 검색 목록
-    List<Board> getAllKeywordEvent(int countPerPage, int currentPage, String keyword);
+    List<Board> getAllKeywordEvent(int countPerPage, int startNo, String keyword);
 
     //내문의 목록
     List<Board> getMyAskList(int userKey);
@@ -38,8 +38,10 @@ public interface UserBoardService {
     Board myAskDetail(int boardKey);
     //내문의 글삭제
     void myAskDelete(int boardKey);
+  
     //이벤트 상세보기 조회수업데이트
     void updateHitEvent(int num);
     //공지사항 상세보기 조회수업데이트
     void updateHitNotice(int num);
+  
 }
