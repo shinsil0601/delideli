@@ -1,6 +1,7 @@
 package kr.co.jhta.app.delideli.user.control;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.co.jhta.app.delideli.common.security.CustomAuthenticationDetails;
 import kr.co.jhta.app.delideli.common.security.JwtTokenProvider;
@@ -512,7 +513,6 @@ public class UserController {
 
         return "/user/mypage/myCoupon";
     }
-
 
     // 페이지네이션 처리 메서드
     private ArrayList<StoreInfo> paginateStores(ArrayList<StoreInfo> allStores, int page, int pageSize) {
