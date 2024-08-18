@@ -218,13 +218,15 @@ function searchStores() {
                 address: guestAddress,
                 page: 1,
                 pageSize: 8
+            },
+            success: function(data) {
+                $('#storeList').html($(data).find('#storeList').html());  // 가게 목록만 갱신
+                history.pushState({}, null, '/user/category/0?address=' + encodeURIComponent(guestAddress));
+                location.reload(); // 페이지 새로고침
+            },
+            error: function(xhr, status, error) {
+                alert("전체 목록을 불러오는데 실패했습니다.");
             }
-        }).done(function(data) {
-            $('#storeList').html($(data).find('#storeList').html());  // 가게 목록만 갱신
-            history.pushState({}, null, '/user/category/0?address=' + encodeURIComponent(guestAddress));
-        }).fail(function(xhr, status, error) {
-           // console.error("전체 목록 요청 중 오류 발생:", error);  // 오류 메시지 출력
-            alert("전체 목록을 불러오는데 실패했습니다.");
         });
         return;
     }
@@ -238,13 +240,15 @@ function searchStores() {
             address: guestAddress,
             page: 1,
             pageSize: 8
+        },
+        success: function(data) {
+            $('#storeList').html($(data).find('#storeList').html());  // 가게 목록만 갱신
+            history.pushState({}, null, '/user/search?query=' + encodeURIComponent(query) + '&address=' + encodeURIComponent(guestAddress));
+            location.reload(); // 페이지 새로고침
+        },
+        error: function(xhr, status, error) {
+            alert("검색 결과를 불러오는데 실패했습니다.");
         }
-    }).done(function(data) {
-        $('#storeList').html($(data).find('#storeList').html());  // 가게 목록만 갱신
-        history.pushState({}, null, '/user/search?query=' + encodeURIComponent(query) + '&address=' + encodeURIComponent(guestAddress));
-    }).fail(function(xhr, status, error) {
-        //console.error("검색 중 오류 발생:", error);  // 오류 메시지 출력
-        alert("검색 결과를 불러오는데 실패했습니다.");
     });
 }
 

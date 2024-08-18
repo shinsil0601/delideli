@@ -24,4 +24,15 @@ public class UserCouponServiceImpl implements UserCouponService {
     public void removeCoupon(int couponKey, int userKey) {
         userCouponMapper.deleteCouponByKeyAndUser(couponKey, userKey);
     }
+
+    @Override
+    public ArrayList<Coupon> getCouponsByUserKeyWithPaging(int userKey, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        return userCouponMapper.getCouponsByUserKeyWithPaging(userKey, offset, pageSize);
+    }
+
+    @Override
+    public int getTotalCouponsByUserKey(int userKey) {
+        return userCouponMapper.getTotalCouponsByUserKey(userKey);
+    }
 }

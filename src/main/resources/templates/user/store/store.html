@@ -95,7 +95,6 @@
                 <button id="searchButton" onclick="searchStores()">검색</button>
             </div>
 
-
             <!-- 로그인시 카테고리 -->
             <div th:if="${user != null}">
                 <h3>카테고리 목록</h3>
@@ -154,21 +153,9 @@
                 </div>
             </div>
 
-            <!-- 페이지네이션 -->
-            <div>
-                <ul>
-                    <li th:if="${currentPage > 1}">
-                        <a th:href="@{'/user/category/' + ${categoryId} + '?page=' + ${currentPage - 1} + '&pageSize=' + ${pageSize}}">이전</a>
-                    </li>
-                    <li th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
-                        <a th:href="@{'/user/category/' + ${categoryId} + '?page=' + ${pageNum} + '&pageSize=' + ${pageSize}}"
-                           th:text="${pageNum}"></a>
-                    </li>
-                    <li th:if="${currentPage < totalPages}">
-                        <a th:href="@{'/user/category/' + ${categoryId} + '?page=' + ${currentPage + 1} + '&pageSize=' + ${pageSize}}">다음</a>
-                    </li>
-                </ul>
-            </div>
+            <!-- Start:Pagination -->
+            <th:block th:include="inc/user/pagination :: boardPagination (${type})"></th:block>
+            <!-- End:Pagination -->
 
             <script src="/user/js/module/store.js"></script>
         </main>
