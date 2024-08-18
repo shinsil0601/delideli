@@ -359,4 +359,9 @@
     width: 14rem;
     padding: 0.8rem 0;
 }
-/* CheckAccount */
+/* myOrder */
+.myOrder__radio-con {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
