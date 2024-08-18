@@ -68,13 +68,15 @@ $(document).ready(function() {
 
     // 프로필 이미지 미리보기
     $("#userProfile").change(function() {
-        var input = this;
+        const input = this;
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
+            const reader = new FileReader();
             reader.onload = function(e) {
-                $("#profilePreview").attr("src", e.target.result);
+                $("#profilePreview").css("background-image", `url(${e.target.result})`);
             }
             reader.readAsDataURL(input.files[0]);
+        } else {
+            $("#profilePreview").css("background-image", `url('/user/images/profile-default.png')`);
         }
     });
 
