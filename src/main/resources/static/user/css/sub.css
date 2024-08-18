@@ -216,3 +216,146 @@
 .myCoupon__con table {
     margin-top: 0;
 }
+/* myAddress */
+.myAddress__con {
+    position: relative;
+}
+.myAddress__main {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    padding: 4rem;
+    background: var(--mainColor);
+    border-radius: 2rem;
+    box-shadow: var(--box-shadow-100);
+}
+.myAddress__icon {
+    font-size: var(--font-size-40);
+    color: var(--gray-600);
+}
+.myAddress_name {
+    font-size: var(--font-size-32);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.myAddress_desc {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    padding-top: 1rem;
+    color: var(--gray-600);
+}
+.myAddress__main .myAddress__icon {
+    color: var(--failedColor);
+}
+.myAddress__main myAddress__info {
+    color: var(--subColor);
+}
+.myAddress__items {
+    padding-top: 4rem;
+    display: grid;
+    gap: 4rem;
+}
+.myAddress__items > li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    padding: 4rem;
+    background: var(--whiteColor);
+    border-radius: 2rem;
+    border-radius: 2rem;
+    box-shadow: var(--box-shadow-100);
+}
+.myAddress__btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 4rem;
+    display: flex;
+    gap: 1rem;
+}
+.myAddress__btn button {
+    padding: 0.8rem 1.6rem;
+    transition: .3s;
+    border: none;
+    border-radius: 0.8rem;
+}
+.myAddress__btn button:hover {
+    opacity: 0.8;
+}
+.myAddress__btn--1 {
+    background: var(--mainColor);
+    color: var(--subColor);
+}
+.myAddress__btn--2 {
+    background: var(--gray-700);
+    color: var(--whiteColor);
+}
+.myAddress__btn--3 {
+    background: var(--gray-400);
+    color: var(--whiteColor);
+}
+.myAddress__add-btn {
+    padding-top: 2rem;
+    display: flex;
+    justify-content: right;
+}
+.myAddress__add-btn button {
+    padding: 0.8rem 1.6rem;
+    background: var(--subColor);
+    color: var(--whiteColor);
+    transition: .3s;
+}
+.myAddress__add-btn button:hover {
+    opacity: 0.8;
+}
+.myAddress__modal {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    padding: 4rem;
+    background: var(--whiteColor);
+    box-shadow: var(--box-shadow-300);
+    border-radius: 2rem;
+}
+.myAddress__modal--title {
+    text-align: center;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--subColor);
+}
+.myAddress__modal--input-wrap {
+    padding: 2rem 0;
+    display: grid;
+    gap: 2rem;
+}
+.myAddress__modal--input-box {
+    display: grid;
+    gap: 1rem;
+}
+.myAddress__modal--input-box label {
+    font-size: var(--font-size-14);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.myAddress__modal--input-box > input {
+    width: 40rem;
+}
+.myAddress__modal--input-btn {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr 14rem;
+}
+.myAddress__modal--btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+.myAddress__modal--btn button {
+    width: 14rem;
+    padding: 0.8rem 0;
+}

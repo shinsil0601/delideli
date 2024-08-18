@@ -16,7 +16,7 @@ function checkform() {
         buyer_name: userName,
         buyer_email: "gildong@gmail.com",
     }, function (resp) {
-        console.log(resp);
+        //console.log(resp);
         if (resp.success) {
             $.ajax({
                 url: "/user/charge",
@@ -26,8 +26,8 @@ function checkform() {
                     userKey: userKey
                 },
                 success: function (result) {
-                    console.log(result);
-                    console.log("성공콘솔 " + result.success);
+                    //console.log(result);
+                    //console.log("성공콘솔 " + result.success);
                     if (result.success) {
                         // 결제 성공 시 사용자 포인트를 업데이트
                         var currentPointElement = document.getElementById('userPoint');
@@ -41,7 +41,7 @@ function checkform() {
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.log(status);
+                    //console.log(status);
                     alert("결제 처리 중 오류가 발생했습니다: " + error);
                 }
             });

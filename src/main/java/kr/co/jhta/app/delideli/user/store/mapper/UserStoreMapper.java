@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @Repository
 @Mapper
@@ -19,4 +20,6 @@ public interface UserStoreMapper {
     StoreInfo getStoreInfoById(int storeInfoKey);
 
     ArrayList<StoreInfo> getLikedStores(int userKey);
+
+    ArrayList<StoreInfo> getStoresByCategory(Map<String, Object> params);
 }

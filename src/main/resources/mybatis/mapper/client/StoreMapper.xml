@@ -49,4 +49,8 @@
                  )
     </insert>
 
+    <select id="getAllStore" resultMap="StoreInfoResultMap" parameterType="int">
+        SELECT * FROM storeInfo WHERE client_key = #{clientKey}
+    </select>
+
 </mapper>

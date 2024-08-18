@@ -140,12 +140,12 @@ function execDaumPostcodeForGuest() {
 function updateCategoryLinks() {
     var guestAddress = $('#guestAddress').val() || $('#displayedGuestAddress').text() || "";
 
-    console.log("Updating category links with address: " + guestAddress); // 디버깅용 로그 추가
+    //console.log("Updating category links with address: " + guestAddress); // 디버깅용 로그 추가
     $('.category-link').each(function() {
         var $link = $(this);
         var baseUrl = $link.data('base-url');
         var updatedHref = baseUrl + "?address=" + encodeURIComponent(guestAddress);
-        console.log("Updated link: " + updatedHref); // 디버깅용 로그 추가
+        //console.log("Updated link: " + updatedHref); // 디버깅용 로그 추가
         $link.attr('href', updatedHref);
     });
 }
@@ -157,7 +157,7 @@ $(document).ready(function() {
     // 이벤트 위임을 사용하여 동적으로 생성된 링크에도 이벤트 핸들러가 적용되도록 설정
     $(document).on('click', '.category-link', function(e) {
         e.preventDefault(); // 기본 동작 막기
-        console.log("Category link clicked: " + $(this).attr('href')); // 디버깅용 로그 추가
+       // console.log("Category link clicked: " + $(this).attr('href')); // 디버깅용 로그 추가
         updateCategoryLinks();  // 카테고리 클릭 시 링크 갱신
         window.location.href = $(this).attr('href'); // 주소를 포함한 링크로 이동
     });
@@ -218,13 +218,15 @@ function searchStores() {
                 address: guestAddress,
                 page: 1,
                 pageSize: 8
+            },
+            success: function(data) {
+                $('#storeList').html($(data).find('#storeList').html());  // 가게 목록만 갱신
+                history.pushState({}, null, '/user/category/0?address=' + encodeURIComponent(guestAddress));
+                location.reload(); // 페이지 새로고침
+            },
+            error: function(xhr, status, error) {
+                alert("전체 목록을 불러오는데 실패했습니다.");
             }
-        }).done(function(data) {
-            $('#storeList').html($(data).find('#storeList').html());  // 가게 목록만 갱신
-            history.pushState({}, null, '/user/category/0?address=' + encodeURIComponent(guestAddress));
-        }).fail(function(xhr, status, error) {
-            console.error("전체 목록 요청 중 오류 발생:", error);  // 오류 메시지 출력
-            alert("전체 목록을 불러오는데 실패했습니다.");
         });
         return;
     }
@@ -238,13 +240,15 @@ function searchStores() {
             address: guestAddress,
             page: 1,
             pageSize: 8
+        },
+        success: function(data) {
+            $('#storeList').html($(data).find('#storeList').html());  // 가게 목록만 갱신
+            history.pushState({}, null, '/user/search?query=' + encodeURIComponent(query) + '&address=' + encodeURIComponent(guestAddress));
+            location.reload(); // 페이지 새로고침
+        },
+        error: function(xhr, status, error) {
+            alert("검색 결과를 불러오는데 실패했습니다.");
         }
-    }).done(function(data) {
-        $('#storeList').html($(data).find('#storeList').html());  // 가게 목록만 갱신
-        history.pushState({}, null, '/user/search?query=' + encodeURIComponent(query) + '&address=' + encodeURIComponent(guestAddress));
-    }).fail(function(xhr, status, error) {
-        console.error("검색 중 오류 발생:", error);  // 오류 메시지 출력
-        alert("검색 결과를 불러오는데 실패했습니다.");
     });
 }
 

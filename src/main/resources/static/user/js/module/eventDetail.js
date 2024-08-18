@@ -33,10 +33,10 @@ function getCommentList() {
             renderComments(result, null, $("#comment__view"), userKey);
         },
         error: function (xhr, status, error) {
-            console.error("AJAX 요청 실패");
-            console.error("상태: " + status);
-            console.error("오류: " + error);
-            console.error("응답: " + xhr.responseText);
+            //console.error("AJAX 요청 실패");
+            //console.error("상태: " + status);
+            //console.error("오류: " + error);
+            //console.error("응답: " + xhr.responseText);
             // console.log("userKey: " + userKey + ", boardKey: " + boardKey);
         },
         complete: function () {
@@ -92,10 +92,10 @@ function renderComments(comments, parentId, parentElement, currentUserKey) {
                     location.reload();
                 },
                 error: function (xhr, status, error) {
-                    console.error("AJAX 요청 실패");
-                    console.error("상태: " + status);
-                    console.error("오류: " + error);
-                    console.error("응답: " + xhr.responseText);
+                    //console.error("AJAX 요청 실패");
+                    //console.error("상태: " + status);
+                    //console.error("오류: " + error);
+                    //console.error("응답: " + xhr.responseText);
                 }
             });
         });
@@ -132,10 +132,10 @@ function renderComments(comments, parentId, parentElement, currentUserKey) {
                             location.reload();
                         },
                         error: function (xhr, status, error) {
-                            console.error("AJAX 요청 실패");
-                            console.error("상태: " + status);
-                            console.error("오류: " + error);
-                            console.error("응답: " + xhr.responseText);
+                            //console.error("AJAX 요청 실패");
+                            //console.error("상태: " + status);
+                            //console.error("오류: " + error);
+                            //console.error("응답: " + xhr.responseText);
                         }
                     });
                 });
@@ -155,10 +155,10 @@ function renderComments(comments, parentId, parentElement, currentUserKey) {
                             location.reload();
                         },
                         error: function (xhr, status, error) {
-                            console.error("AJAX 요청 실패");
-                            console.error("상태: " + status);
-                            console.error("오류: " + error);
-                            console.error("응답: " + xhr.responseText);
+                            //console.error("AJAX 요청 실패");
+                            //console.error("상태: " + status);
+                            //console.error("오류: " + error);
+                            //console.error("응답: " + xhr.responseText);
                         }
                     });
                 }

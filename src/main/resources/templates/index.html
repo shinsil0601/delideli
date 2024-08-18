@@ -53,467 +53,43 @@
                     <div class="mainCategory__top">
                         <div class="mainCategory__label">
                             <div class="mainCategory__label--img">
-                                <img src="" alt="카테고리이미지">
+                                <img th:src="@{${selectedCategory.categoryImg}}" alt="카테고리이미지">
                             </div>
-                            <p class="mainCategory__label--name">category</p>
+                            <p class="mainCategory__label--name" th:text="${selectedCategory.categoryName}">카테고리명</p>
                         </div>
-                        <a href="#none" class="mainCategory__allLink">
+                        <a href="/user/category/0" class="mainCategory__allLink">
                             전체보기
                             <i class="fa-solid fa-caret-right"></i>
                         </a>
                     </div>
                     <!-- 카테고리 목록-->
                     <ul class="mainCategory__items">
-                        <li class="active">
-                            category1
-                        </li>
-                        <li>
-                            category2
-                        </li>
-                        <li>
-                            category3
+                        <li th:each="category, iterStat : ${categoryList}"
+                            th:classappend="${iterStat.index == 0} ? 'active'"
+                            th:text="${category.categoryName}"
+                            th:data-category-id="${category.categoryKey}">
                         </li>
                     </ul>
                     <!-- 해당 카테고리 가게 목록 -->
                     <div class="mainCategory__shop-con">
                         <div class="mainCategory__shop active">
-                            <ul class="mctgShop__items">
+                            <ul class="mctgShop__items" th:each="store, iterStat : ${storeList}">
+                                <!-- 가게 리스트 출력 -->
                                 <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
+                                    <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}">
+                                    <div class="mctgShop__img"
+                                             th:style="'background-image: url(' + (${store.storeProfileImg != null ? store.storeProfileImg : '/path/to/default/image.jpg'}) + ');'"></div>
                                         <div class="mctgShop__info">
                                             <span class="mctgShop__info--review">
                                                 <i class="fa-solid fa-star"></i>
-                                                4.5(100)
+                                                <span th:text="${store.averageRating != null ? store.averageRating : 0}"></span>
+                                                (<span th:text="${store.reviewCount != null ? store.reviewCount : 0}"></span>)
                                             </span>
                                             <h3 class="mctgShop__info--name">
-                                                Shop Name1
+                                                [[${store.storeName}]]
                                             </h3>
                                             <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name1
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name1
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name1
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name1
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name1
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name1
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name1
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="mainCategory__shop">
-                            <ul class="mctgShop__items">
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name2
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name2
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name2
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name2
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name2
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name2
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name2
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name2
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="mainCategory__shop">
-                            <ul class="mctgShop__items">
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name3
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name3
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name3
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name3
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name3
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name3
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name3
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#none">
-                                        <div class="mctgShop__img" style="background-image: url()"></div>
-                                        <div class="mctgShop__info">
-                                            <span class="mctgShop__info--review">
-                                                <i class="fa-solid fa-star"></i>
-                                                4.5(100)
-                                            </span>
-                                            <h3 class="mctgShop__info--name">
-                                                Shop Name3
-                                            </h3>
-                                            <ul class="mctgShop__info--desc">
-                                                <li>배달팁 : 1,000 ~ 3,000</li>
-                                                <li>배달시간 : 40분</li>
+                                                <li>배달팁 : [[${store.deliveryAmount1}]] ~ [[${store.deliveryAmount3}]]</li>
                                             </ul>
                                         </div>
                                     </a>
@@ -521,7 +97,6 @@
                             </ul>
                         </div>
                     </div>
-                </div>
             </section>
             <!-- Main Client -->
             <section class="mainClient__wrap">
@@ -645,6 +220,7 @@
                     </div>
                 </article>
             </section>
+            <script src="/common/js/index.js"></script>
         </main>
         <!-- End:Main -->
 
