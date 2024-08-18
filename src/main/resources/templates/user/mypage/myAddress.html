@@ -28,30 +28,73 @@
             <h2 class="subPage__title">내 주소관리</h2>
             <div class="myAddress__con">
                 <div class="myAddress__main">
-                    <span class="myAddress__icon"></span>
-                    <div class="myAddress__info">
-                        <h3 class="myAddress_name"></h3>
-                        <p class="myAddress__desc"></p>
+                    <span class="myAddress__icon">
+                        <i class="fa-solid fa-map-pin"></i>
+                    </span>
+                    <div class="myAddress__info" th:each="address : ${addressList}" th:if="${address.defaultAddress}">
+                        <h3 class="myAddress_name">대표주소지</h3>
+                        <p class="myAddress__desc">
+                            [[${address.address}]], [[${address.addrDetail}]]
+                        </p>
                     </div>
                 </div>
-                <ul class="myAddress__items">
+                <ul class="myAddress__items" th:each="address, iterStat : ${addressList}" th:unless="${address.defaultAddress}">
                     <li>
-                        <span class="myAddress__icon"></span>
+                        <span class="myAddress__icon">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </span>
                         <div class="myAddress__info">
-                            <h3 class="myAddress_name"></h3>
-                            <p class="myAddress__desc"></p>
+                            <h3 class="myAddress_name">
+                                주소지 [[${iterStat.count}]]
+                            </h3>
+                            <p class="myAddress__desc">
+                                [[${address.address}]], [[${address.addrDetail}]]
+                            </p>
                         </div>
                         <div class="myAddress__btn">
-                            <button class="myAddress__btn--1">대표등록</button>
-                            <button class="myAddress__btn--2">수정</button>
-                            <button class="myAddress__btn--3">삭제</button>
+                            <button type="button" class="myAddress__btn--1" th:if="${!address.defaultAddress}" th:data-address-key="${address.userAddressKey}" onclick="setDefaultAddress(this)">대표등록</button>
+                            <button type="button" class="myAddress__btn--2" th:data-address-key="${address.userAddressKey}" th:data-address="${address.address}" th:data-addr-detail="${address.addrDetail}" th:data-zipcode="${address.zipcode}" onclick="showModifyAddressModal(this)">수정</button>
+                            <button type="button" class="myAddress__btn--3" th:data-address-key="${address.userAddressKey}" onclick="deleteAddress(this)">삭제</button>
                         </div>
                     </li>
                 </ul>
                 <div class="myAddress__add-btn">
-                    <button>주소 추가</button>
+                    <button type="button" onclick="showAddAddressModal()">주소지 추가</button>
                 </div>
             </div>
+
+            <!-- 주소 모달창 -->
+            <div id="addressModal" class="myAddress__modal">
+                <div>
+                    <h2 id="modalTitle" class="myAddress__modal--title">주소 추가</h2>
+                    <form id="addressForm">
+                        <input type="hidden" id="addressKey" name="addressKey">
+                        <div class="myAddress__modal--input-wrap">
+                            <div class="myAddress__modal--input-box">
+                                <label for="newZipcode">우편번호</label>
+                                <div class="myAddress__modal--input-btn">
+                                    <input type="text" id="newZipcode" name="newZipcode" readonly>
+                                    <button type="button" class="myAddress__btn--1" onclick="execDaumPostcode()">주소 찾기</button>
+                                </div>
+                            </div>
+                            <div class="myAddress__modal--input-box">
+                                <label for="newAddress">주소</label>
+                                <input type="text" id="newAddress" name="newAddress" readonly>
+                            </div>
+                            <div class="myAddress__modal--input-box">
+                                <label for="newAddrDetail">상세 주소</label>
+                                <input type="text" id="newAddrDetail" name="newAddrDetail">
+                            </div>
+                        </div>
+                        <div class="myAddress__modal--btn">
+                            <button type="button" class="myAddress__btn--2" onclick="saveAddress()">저장</button>
+                            <button type="button" class="myAddress__btn--3" onclick="closeAddressModal()">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <script src="/user/js/module/myAddress.js"></script>
         </div>
     </main>
     <!-- End:Main -->
