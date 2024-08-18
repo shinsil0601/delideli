@@ -1,37 +1,19 @@
-<form id="modifyUserForm" action="/user/modifyUser" method="post" enctype="multipart/form-data">
-    <label for="userId">사용자 ID:</label>
-    <input type="text" id="userId" name="userId" th:value="${user.userId}" readonly>
+<form method="post" action="/user/updatePassword">
+    <input type="hidden" name="userId" th:value="${user.userId}">
+    <input type="hidden" name="currentUserPw" th:value="${user.userPw}">
+    <label for="userPw">현재 비밀번호:</label>
+    <input type="password" id="userPw" name="userPw" required>
     <br>
-    <label for="userName">이름:</label>
-    <input type="text" id="userName" name="userName" th:value="${user.userName}" required>
+    <label for="newUserPw">새 비밀번호:</label>
+    <input type="password" id="newUserPw" name="newPassword" required>
     <br>
-    <label for="userNickname">닉네임:</label>
-    <input type="text" id="userNickname" name="userNickname" th:value="${user.userNickname}" required>
+    <label for="checkUserPw">새 비밀번호 확인:</label>
+    <input type="password" id="checkUserPw" name="confirmPassword" required>
     <br>
-    <label for="userBirth">생년월일:</label>
-    <input type="text" id="userBirth" name="userBirth" th:value="${user.userBirth}" required>
+    <span id="passwordMessage"></span>
     <br>
-    <label for="userPhone">전화번호:</label>
-    <input type="text" id="userPhone" name="userPhone" th:value="${user.userPhone}" required>
-    <br>
-    <label for="userEmail">이메일:</label>
-    <input type="email" id="userEmail" name="userEmail" th:value="${user.userEmail}" required>
-    <input type="hidden" id="currentUserEmail" th:value="${user.userEmail}">
-    <span id="userEmailMessage" class="error-message"></span>
-    <button type="button" id="sendCodeButton" style="display:none;">인증 코드 전송</button>
-    <br>
-    <label for="verificationCode" style="display:none;">인증 코드:</label>
-    <input type="text" id="verificationCode" name="verificationCode" style="display:none;" required>
-    <button type="button" id="verifyCodeButton" style="display:none;">인증 코드 확인</button>
-    <br>
-    <label for="userProfile">프로필 이미지:</label>
-    <img id="profilePreview" th:src="@{${user.userProfile}}" alt="User Profile" style="max-width: 100px; max-height: 100px;">
-    <input type="file" id="userProfile" name="userProfile" accept="image/*">
-    <br>
-    <button type="submit" id="ModifyButton" disabled>수정</button>
-    <li><a href="/user/myPage">뒤로가기</a></li>
+    <button type="submit">비밀번호 변경</button>
 </form>
-<div id="message" class="success-message"></div>
-<div id="errorMessage" class="error-message"></div>
+<div id="errorMessage" style="color: red;" th:if="${errorMessage}" th:text="${errorMessage}"></div>
 
-<script src="/user/js/module/modifyUser.js"></script>
+<script src="/user/js/module/updatePw.js"></script>
