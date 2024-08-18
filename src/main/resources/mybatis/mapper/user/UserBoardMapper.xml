@@ -52,7 +52,7 @@
         FROM board
         WHERE board_type = "공지"
         ORDER BY board_key DESC
-        LIMIT #{endNo} OFFSET #{startNo}
+        LIMIT #{countPerPage} OFFSET #{startNo}
     </select>
 
     <!-- 공지사항 검색 -->
@@ -63,10 +63,9 @@
         file_attach1, file_attach2, file_attach3, file_attach4, board_hits
         FROM board
         WHERE board_type = "공지" AND
-        (board_title LIKE CONCAT('%', #{keyword}, '%')
-        OR board_contents LIKE CONCAT('%', #{keyword}, '%'))
+        (board_title LIKE CONCAT('%', #{keyword}, '%'))
         ORDER BY board_key DESC
-        LIMIT #{endNo} OFFSET #{startNo}
+        LIMIT #{countPerPage} OFFSET #{startNo}
     </select>
 
     <!-- 공지사항 총개시물수 -->
@@ -80,8 +79,7 @@
     <select id="getTotalKeyword" resultType="int">
         SELECT COUNT(*) cnt
         FROM board
-        WHERE (board_title LIKE CONCAT('%', #{keyword}, '%')
-        OR board_contents LIKE CONCAT('%', #{keyword}, '%'))
+        WHERE (board_title LIKE CONCAT('%', #{keyword}, '%'))
         AND board_type = "공지"
     </select>
 
@@ -104,7 +102,7 @@
         FROM board
         WHERE board_type = "이벤트"
         ORDER BY board_key DESC
-        LIMIT #{endNo} OFFSET #{startNo}
+        LIMIT #{countPerPage} OFFSET #{startNo}
     </select>
 
     <!-- 이벤트 상세 -->
@@ -143,8 +141,7 @@
     <select id="getTotalKeywordEvent" resultType="int">
         SELECT COUNT(*) cnt
         FROM board
-        WHERE (board_title LIKE CONCAT('%', #{keyword}, '%')
-        OR board_contents LIKE CONCAT('%', #{keyword}, '%'))
+        WHERE (board_title LIKE CONCAT('%', #{keyword}, '%'))
         AND board_type = "이벤트"
     </select>
 
@@ -156,10 +153,9 @@
         file_attach1, file_attach2, file_attach3, file_attach4, board_hits
         FROM board
         WHERE board_type = "이벤트" AND
-        (board_title LIKE CONCAT('%', #{keyword}, '%')
-        OR board_contents LIKE CONCAT('%', #{keyword}, '%'))
+        (board_title LIKE CONCAT('%', #{keyword}, '%'))
         ORDER BY board_key DESC
-        LIMIT #{endNo} OFFSET #{startNo}
+        LIMIT #{countPerPage} OFFSET #{startNo}
     </select>
 
     <!-- 이벤트 댓글 수정 -->
@@ -220,5 +216,18 @@
         DELETE FROM board WHERE board_key = #{boardKey}
     </delete>
 
+    <!-- 이벤트 상세보기 조회수 증가 -->
+    <update id="updateHitEvent" parameterType="int">
+        UPDATE board
+        SET board_hits = board_hits + 1
+        WHERE board_key = #{board_key}
+    </update>
+
+    <!-- 공지사항 상세보기 조회수 증가 -->
+    <update id="updateHitNotice" parameterType="int">
+        UPDATE board
+        SET board_hits = board_hits + 1
+        WHERE board_key = #{board_key}
+    </update>
 
 </mapper>

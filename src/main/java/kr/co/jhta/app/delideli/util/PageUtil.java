@@ -23,8 +23,10 @@ public class PageUtil {
 		boolean prev = currentPage > 2 ? true : false;
 		// 다음
 		boolean next = currentPage + 2 >= totalPage ? false : true;
-		// map.put("키", "밸류"); 
-		
+		// 5 페이지 앞으로 이동
+		int jumpPage = currentPage + 5 >= totalPage ? totalPage : currentPage + 5;
+
+		// map.put("키", "밸류");
 		map.put("currentPage", currentPage);
 		map.put("totalNumber", totalNumber);
 		map.put("countPerPage", countPerPage);
@@ -35,6 +37,7 @@ public class PageUtil {
 		map.put("endPageNo", endPageNo);
 		map.put("prev", prev);
 		map.put("next", next);
+		map.put("jumpPage", jumpPage);
 
 		return map;
 	}
