@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -90,6 +91,14 @@ public class UserStoreServiceImpl implements UserStoreService {
             throw new IllegalArgumentException("해당하는 메뉴를 찾을 수 없습니다: storeInfoKey=" + storeInfoKey + ", menuName=" + menuName);
         }
         return menuKey;
+    }
+
+    @Override
+    public ArrayList<StoreInfo> getStoresByCategory(int firstCategoryId, int i) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("categoryId", firstCategoryId);
+        params.put("limit", i);
+        return userStoreMapper.getStoresByCategory(params);
     }
 
 }
