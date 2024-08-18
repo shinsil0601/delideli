@@ -32,7 +32,7 @@ public class StoreInfo {
     private LocalDateTime storeUpdate;
 
     private Integer deliveryTime; // 배달 시간 (분 단위)
-    private Double averageRating; // 평균 리뷰 점수
+    private String averageRating; // 평균 리뷰 점수
     private int reviewCount;      // 리뷰 개수
     private Menu firstMenu;       // 첫 번째 메뉴 정보
 

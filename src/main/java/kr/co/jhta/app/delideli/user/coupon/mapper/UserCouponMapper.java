@@ -11,4 +11,8 @@ public interface UserCouponMapper {
     ArrayList<Coupon> getCouponsByUserKey(int userKey);
 
     void deleteCouponByKeyAndUser(int couponKey, int userKey);
+
+    ArrayList<Coupon> getCouponsByUserKeyWithPaging(int userKey, int offset, int pageSize);
+
+    int getTotalCouponsByUserKey(int userKey);
 }
