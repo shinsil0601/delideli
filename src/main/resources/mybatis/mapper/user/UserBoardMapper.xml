@@ -51,7 +51,7 @@
         file_attach1, file_attach2, file_attach3, file_attach4, board_hits
         FROM board
         WHERE board_type = "공지"
-        ORDER BY board_key DESC
+        ORDER BY board_status, board_key DESC
         LIMIT #{countPerPage} OFFSET #{startNo}
     </select>
 
@@ -101,7 +101,7 @@
         file_attach1, file_attach2, file_attach3, file_attach4, board_hits
         FROM board
         WHERE board_type = "이벤트"
-        ORDER BY board_key DESC
+        ORDER BY board_progress_status DESC, board_key DESC
         LIMIT #{countPerPage} OFFSET #{startNo}
     </select>
 
@@ -154,7 +154,7 @@
         FROM board
         WHERE board_type = "이벤트" AND
         (board_title LIKE CONCAT('%', #{keyword}, '%'))
-        ORDER BY board_key DESC
+        ORDER BY board_progress_status DESC, board_key DESC
         LIMIT #{countPerPage} OFFSET #{startNo}
     </select>
 
