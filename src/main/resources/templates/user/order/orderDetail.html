@@ -20,34 +20,86 @@
 
         <!-- Start:Main -->
         <main id="mainpage__wrap">
-            <div>
-                <input type="hidden" name="storeInfoKey" id="storeInfoKey" th:value="${store.storeInfoKey}">
-                <input type="hidden" name="userKey" id="userKey" th:value="${user.userKey}">
-
-                <div th:text="${order.statusMessage}"></div><br>
-                <div th:text="'가게명: ' + ${store.storeName}"></div><br>
-                <div th:text="'가게 주소: ' + ${store.storeAddress} + ' ' + ${store.storeAddrDetail}"></div>
-                <div th:text="'가게 번호: ' + ${store.storePhone}"></div>
-                <div th:text="'주문일시: ' + ${order.formattedOrderDate}"></div>
-                <div th:text="'주문번호: ' + ${order.orderNo}"></div><br>
-
-                <div th:each="menu : ${order.orderDetails}">
-                    <span class="menu-item" th:data-menu-name="${menu.menuName}" th:data-quantity="${menu.quantity}" th:data-option-name="${menu.optionName}">
-                    <span class="menu-name" th:data-menu-name="${menu.menuName}" th:text="'메인 메뉴 : ' + ${menu.menuName}"></span><br>
-                    <span class="menu-quantity" th:data-quantity="${menu.quantity}" th:text="'수량 : ' + ${menu.quantity}"></span><br>
-                    <span class="menu-option" th:data-option-name="${menu.optionName}" th:text="'옵션 : ' + ${menu.optionName}"></span>
-                    <br>
+            <div class="subPage__wrap">
+                <!-- Start:subNav -->
+                <th:block th:include="inc/user/subNav :: subNav"></th:block>
+                <!-- End:subNav -->
+                <h2 class="subPage__title">주문내역</h2>
+                <div class="orderDetail__con">
+                    <input type="hidden" name="storeInfoKey" id="storeInfoKey" th:value="${store.storeInfoKey}">
+                    <input type="hidden" name="userKey" id="userKey" th:value="${user.userKey}">
+                    <div class="orderDeatil__box">
+                        <div class="orderDetail__left">
+                            <div class="orderDetail__L-top">
+                                <span class="orderDetail__status">[[${order.statusMessage}]]</span>
+                                <p class="orderDetail__code">[[${order.orderNo}]]</p>
+                            </div>
+                            <div class="orderDetail__cnt">
+                                <h3 class="orderDetail__shop-name">[[${store.storeName}]]</h3>
+                                <ul class="orderDetail__menu--items">
+                                    <li th:each="menu : ${order.orderDetails}">
+                                        <th:block th:data-menu-name="${menu.menuName}" th:data-quantity="${menu.quantity}" th:data-option-name="${menu.optionName}"></th:block>
+                                        <h4 th:data-menu-name="${menu.menuName}">메뉴 : [[${menu.menuName}]]</h4>
+                                        <p th:data-quantity="${menu.quantity}">수량 : [[${menu.quantity}]]</p>
+                                        <p th:data-option-name="${menu.optionName}">옵션 : [[${menu.optionName}]]</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <ul class="orderDetail__info">
+                                <li>
+                                <span class="orderDetaile__info-left">
+                                    주문일시
+                                </span>
+                                    <span class="orderDetaile__info-right">
+                                    [[${order.formattedOrderDate}]]
+                                </span>
+                                </li>
+                                <li>
+                                <span class="orderDetaile__info-left">
+                                    결제방식
+                                </span>
+                                    <span class="orderDetaile__info-right">
+                                    [[${order.uorderPayment}]]
+                                </span>
+                                </li>
+                                <li>
+                                <span class="orderDetaile__info-left">
+                                    주문금액
+                                </span>
+                                    <span class="orderDetaile__info-right">
+                                    [[${order.uorderPrice}]]
+                                </span>
+                                </li>
+                            </ul>
+                            <div class="orderDetail__price">
+                            <span class="orderDetail__price-left">
+                                총 결제 금액
+                            </span>
+                                <span class="orderDetail__price-right">
+                                [[${order.uorderPrice}]]
+                            </span>
+                            </div>
+                        </div>
+                        <div class="orderDetail__right">
+                            <div class="orderDetail__desc-box">
+                                <span>가게 요청사항</span>
+                                <p>
+                                    [[${order.shopDesc}]]
+                                </p>
+                            </div>
+                            <div class="orderDetail__desc-box">
+                                <span>배달 요청사항</span>
+                                <p>
+                                    [[${order.riderDesc}]]
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="orderDeatil__btn">
+                        <button type="button" class="orderDeatil__btn--1" th:onclick="'location.href=\'' + @{/user/myOrder} + '\''">목록으로</button>
+                        <button type="button" id="sameMenuButton" class="orderDeatil__btn--2">같은메뉴담기</button>
+                    </div>
                 </div>
-                <br>
-
-                <div th:text="'결제방식: ' + ${order.uorderPayment}"></div>
-                <div th:text="'총 결제금액: ' + ${order.uorderPrice} + '원'"></div><br>
-                <div th:text="'가게 요청사항: ' + ${order.shopDesc}"></div><br>
-                <div th:text="'배달 요청사항: ' + ${order.riderDesc}"></div><br>
-
-                <!-- "같은 메뉴 담기" 버튼을 맨 아래로 이동 -->
-                <button id="sameMenuButton">같은 메뉴 담기</button>
-
                 <script src="/user/js/module/orderDetail.js"></script>
             </div>
         </main>
