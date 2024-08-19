@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ClientMenuGroup {
     private int menuGroupKey;
+    private int storeInfoKey;
     private String menuGroupName;
     private LocalDateTime menuGroupRegdate;
     private LocalDateTime menuGroupUpdate;

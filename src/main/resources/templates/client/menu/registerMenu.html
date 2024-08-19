@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>사장님 - 메뉴 수정</title>
+        <title>사장님 - 메뉴 등록</title>
         <!-- Include:공통 CSS -->
         <th:block th:include="inc/common/common-css :: commonCss"></th:block>
         <!-- Include:Client CSS -->
@@ -28,43 +28,34 @@
 
                 <!-- Start:Contents -->
                 <section class="contents">
-                    <form action="/client/updateMenu" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="menuKey" id="menuKey" th:value="${menu.menuKey}">
-                        <input type="hidden" name="storeKey" id="storeKey" th:value="${menu.storeInfoKey}">
-                        <input type="hidden" name="currentMenuImg" th:value="${menu.menuImg}">
+                    <form action="/client/registerMenu" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="storeKey" id="storeKey" th:value="${storeKey}">
                         <div>
                             <label for="menuImage">메뉴 이미지</label>
-                            <input type="file" id="menuImage" name="menuImg">
-                            <div>
-                                <img th:src="@{/images/{menuImg}(menuImg=${menu.menuImg})}" alt="Menu Image" style="max-width: 200px; max-height: 200px;">
-                            </div>
+                            <input type="file" id="menuImage" name="menuImage" accept="image/*">
                         </div>
                         <div>
                             <label for="menuName">메뉴명</label>
-                            <input type="text" id="menuName" name="menuName" th:value="${menu.menuName}" placeholder="메뉴명을 입력해주세요.">
+                            <input type="text" id="menuName" name="menuName" placeholder="메뉴명을 입력해주세요.">
                         </div>
                         <div>
                             <label for="category">카테고리</label>
-                            <select id="category" name="menuGroupKey">
-                                <option th:each="group : ${menuGroup}"
-                                        th:value="${group.menuGroupKey}"
-                                        th:text="${group.menuGroupName}"
-                                        th:attr="selected=${group.menuGroupKey == menu.menuGroupKey}">
-                                </option>
+                            <select id="category" name="category">
+                                <option th:each="group : ${menuGroup}" th:value="${group.menuGroupKey}" th:text="${group.menuGroupName}"></option>
                             </select>
                             <button type="button" id="addCategory">카테고리 추가</button>
                         </div>
                         <div>
-                            <label for="menuPrice">금액</label>
-                            <input type="text" id="menuPrice" name="menuPrice" th:value="${menu.menuPrice}" placeholder="금액을 입력해주세요.">
+                            <label for="price">금액</label>
+                            <input type="text" id="price" name="price" placeholder="금액을 입력해주세요.">
                         </div>
                         <div>
-                            <button type="submit">메뉴 수정</button>
-                            <a th:href="@{/client/menu/{storeKey}(storeKey=${menu.storeInfoKey})}">취소</a>
+                            <button type="submit">메뉴 등록</button>
+                            <a th:href="@{/client/menu/{storeKey}(storeKey=${storeKey})}">취소</a>
                         </div>
                     </form>
 
-                    <script src="/client/js/module/updateMenu.js"></script>
+                    <script src="/client/js/module/registerMenu.js"></script>
                 </section>
                 <!-- End:Contents -->
             </main>

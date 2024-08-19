@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>옵션 그룹 추가</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Client CSS -->
+        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+    <h3>옵션 그룹 추가</h3>
+    <form id="optionGroupForm">
+        <input type="hidden" name="optionGroupKey" id="optionGroupKey" th:value="${optionGroup.optionGroupKey}">
+        <input type="hidden" name="menuKey" id="menuKey" th:value="${optionGroup.menuKey}">
+
+        <label for="optionGroupName">옵션 그룹명:</label>
+        <input type="text" id="optionGroupName" name="optionGroupName" th:value="${optionGroup.optionGroupName}">
+        <br>
+
+        <label>필수 여부</label>
+        <div>
+            <input type="radio" id="requiredYes" name="required" value="true" th:checked="${optionGroup.required ? 'checked' : ''}">
+            <label for="requiredYes">옵션을 반드시 선택해야 주문이 가능해요</label>
+        </div>
+        <div>
+            <input type="radio" id="requiredNo" name="required" value="false" th:checked="${!optionGroup.required ? 'checked' : ''}">
+            <label for="requiredNo">옵션을 선택하지 않아도 주문이 가능해요</label>
+        </div>
+        <br>
+
+        <label for="minSelectOption">최소 수:</label>
+        <input type="number" id="minSelectOption" name="minSelectOption" min="0" th:value="${optionGroup.minSelectOption}">
+        <br><br>
+        <label for="maxSelectOption">최대 수:</label>
+        <input type="number" id="maxSelectOption" name="maxSelectOption" min="1" th:value="${optionGroup.maxSelectOption}">
+        <br>의 옵션을 고객이 선택할 수 있어요<br>
+
+        <button type="button" id="saveOptionGroup">옵션 그룹 수정</button>
+        <button type="button" onclick="window.close()">취소</button>
+    </form>
+    <script src="/client/js/module/updateOptionGroup.js"></script>
+    </body>
+</html>

@@ -13,7 +13,7 @@ import java.util.Map;
 public interface ClientStoreMapper {
     void insertStore(ClientStoreInfo store);
 
-    ArrayList<StoreInfo> getAllStore(int clientKey);
+    ArrayList<ClientStoreInfo> getAllStore(int clientKey);
 
     //사장님 가게 목록 리스트
     List<ClientStoreInfo> getStoreList(String clientId);

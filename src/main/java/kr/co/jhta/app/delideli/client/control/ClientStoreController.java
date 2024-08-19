@@ -54,32 +54,13 @@ public class ClientStoreController {
         ArrayList<ClientCategory> category = clientCategoryService.getAllCategory();
         model.addAttribute("client", clientAccount);
         model.addAttribute("category", category);
+        model.addAttribute("on", "list");
 
         return "/client/store/store.register";
     }
 
     @PostMapping("/storeRegister")
-    public ResponseEntity<Map<String, Object>> registerStore(
-            @AuthenticationPrincipal User user,
-            @RequestParam("store-name") String storeName,
-            @RequestParam("categories") String[] categories,
-            @RequestParam("newAddress") String address,
-            @RequestParam("newZipcode") String zipcode,
-            @RequestParam("newAddrDetail") String addrDetail,
-            @RequestParam("store-phone") String storePhone,
-            @RequestParam("min-amount") String minAmount,
-            @RequestParam("orderAmount1") String orderAmount1,
-            @RequestParam("deliveryFee1") String deliveryFee1,
-            @RequestParam("orderAmount2") String orderAmount2,
-            @RequestParam("deliveryFee2") String deliveryFee2,
-            @RequestParam("deliveryFee3") String deliveryFee3,
-            @RequestParam("openTime") String openTime,
-            @RequestParam("closeTime") String closeTime,
-            @RequestParam("storeInfo") String storeInfo,
-            @RequestParam("originInfo") String originInfo,
-            @RequestParam("businessLicense") MultipartFile businessLicense,
-            @RequestParam("operatingPermit") MultipartFile operatingPermit,
-            @RequestParam("storeProfile") MultipartFile storeProfile) {
+    public ResponseEntity<Map<String, Object>> registerStore(@AuthenticationPrincipal User user, @RequestParam("store-name") String storeName, @RequestParam("categories") String[] categories, @RequestParam("newAddress") String address, @RequestParam("newZipcode") String zipcode, @RequestParam("newAddrDetail") String addrDetail, @RequestParam("store-phone") String storePhone, @RequestParam("min-amount") String minAmount, @RequestParam("orderAmount1") String orderAmount1, @RequestParam("deliveryFee1") String deliveryFee1, @RequestParam("orderAmount2") String orderAmount2, @RequestParam("deliveryFee2") String deliveryFee2, @RequestParam("deliveryFee3") String deliveryFee3, @RequestParam("openTime") String openTime, @RequestParam("closeTime") String closeTime, @RequestParam("storeInfo") String storeInfo, @RequestParam("originInfo") String originInfo, @RequestParam("businessLicense") MultipartFile businessLicense, @RequestParam("operatingPermit") MultipartFile operatingPermit, @RequestParam("storeProfile") MultipartFile storeProfile) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -156,7 +137,6 @@ public class ClientStoreController {
         return "client/images/uploads/" + uniqueFilename;
     }
 
-
     @GetMapping("/storeList")
     public String storeList(@AuthenticationPrincipal User user, Model model,
                             @RequestParam(value = "keytype", required = false) String keytype,
@@ -164,6 +144,8 @@ public class ClientStoreController {
                             @RequestParam(name = "page", defaultValue = "1") int page) {
 
         ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+
+        ArrayList<ClientStoreInfo> storeInfo = clientStoreService.getAllStore(clientAccount.getClientKey());
 
         List<ClientStoreInfo> list = new ArrayList<>();;
         Map<String, Object> map = new HashMap<>();
@@ -386,14 +368,13 @@ public class ClientStoreController {
         }
 
         model.addAttribute("client", clientAccount);
+        model.addAttribute("store", storeInfo);
         model.addAttribute("map", map);
         model.addAttribute("list", list);
+        model.addAttribute("on", "list");
 
         return "client/store/store.list";
     }
-
-
-
 
     //가게 영업 일시정지버튼 DB값 변경
     @PostMapping("/storePause/{storeInfoKey}")
