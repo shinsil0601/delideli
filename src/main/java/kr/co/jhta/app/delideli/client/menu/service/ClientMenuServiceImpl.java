@@ -2,7 +2,9 @@ package kr.co.jhta.app.delideli.client.menu.service;
 
 import kr.co.jhta.app.delideli.client.menu.domain.ClientMenu;
 import kr.co.jhta.app.delideli.client.menu.domain.ClientMenuGroup;
+import kr.co.jhta.app.delideli.client.menu.domain.ClientOptionGroup;
 import kr.co.jhta.app.delideli.client.menu.mapper.ClientMenuMapper;
+import kr.co.jhta.app.delideli.client.menu.mapper.ClientOptionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ public class ClientMenuServiceImpl implements ClientMenuService {
 
     @Autowired
     private final ClientMenuMapper clientMenuMapper;
+    @Autowired
+    private ClientOptionMapper clientOptionMapper;
 
     public ClientMenuServiceImpl(ClientMenuMapper clientMenuMapper) {
         this.clientMenuMapper = clientMenuMapper;
@@ -35,11 +39,24 @@ public class ClientMenuServiceImpl implements ClientMenuService {
 
     @Override
     public void deleteMenu(int menuKey) {
+        ArrayList<ClientOptionGroup> optionGroups = clientOptionMapper.getAllOptionGroupByMenuKey(menuKey);
+        for (ClientOptionGroup optionGroup : optionGroups) {
+            clientOptionMapper.deleteOptionbyOptionGroupKey(optionGroup.getOptionGroupKey());
+            clientOptionMapper.deleteOptionGroup(optionGroup.getOptionGroupKey());
+        }
         clientMenuMapper.deleteMenu(menuKey);
     }
 
     @Override
     public void deleteMenuGroup(int menuGroupKey) {
+        ArrayList<ClientMenu> menus = clientMenuMapper.getAllMenuByGroupKey(menuGroupKey);
+        for (ClientMenu menu : menus) {
+            ArrayList<ClientOptionGroup> optionGroups = clientOptionMapper.getAllOptionGroupByMenuKey(menu.getMenuKey());
+            for (ClientOptionGroup optionGroup : optionGroups) {
+                clientOptionMapper.deleteOptionbyOptionGroupKey(optionGroup.getOptionGroupKey());
+                clientOptionMapper.deleteOptionGroup(optionGroup.getOptionGroupKey());
+            }
+        }
         clientMenuMapper.deleteMenusByGroupKey(menuGroupKey);
         clientMenuMapper.deleteMenuGroup(menuGroupKey);
     }
@@ -62,5 +79,10 @@ public class ClientMenuServiceImpl implements ClientMenuService {
     @Override
     public void addMenu(ClientMenu clientMenu) {
         clientMenuMapper.addMenu(clientMenu);
+    }
+
+    @Override
+    public void updateMenu(ClientMenu menu) {
+        clientMenuMapper.updateMenu(menu);
     }
 }

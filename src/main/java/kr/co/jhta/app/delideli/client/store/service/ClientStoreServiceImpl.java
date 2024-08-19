@@ -3,7 +3,6 @@ package kr.co.jhta.app.delideli.client.store.service;
 import kr.co.jhta.app.delideli.client.store.domain.ClientStoreInfo;
 import kr.co.jhta.app.delideli.client.store.mapper.ClientStoreMapper;
 import kr.co.jhta.app.delideli.client.store.mapper.StoreCategoryMapper;
-import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,7 @@ public class ClientStoreServiceImpl implements ClientStoreService {
     }
 
     @Override
-    public ArrayList<StoreInfo> getAllStore(int clientKey) {
+    public ArrayList<ClientStoreInfo> getAllStore(int clientKey) {
         return clientStoreMapper.getAllStore(clientKey);
     }
 }

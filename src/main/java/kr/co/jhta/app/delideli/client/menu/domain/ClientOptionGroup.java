@@ -15,6 +15,7 @@ public class ClientOptionGroup {
     private int menuKey;
     private String optionGroupName;
     private boolean required;
+    private int minSelectOption;
     private int maxSelectOption;
     private Date optionGroupRegdate;
     private Date optionGroupUpdate;

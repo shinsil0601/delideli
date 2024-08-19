@@ -10,5 +10,5 @@ import java.util.ArrayList;
 public interface ClientStoreMapper {
     void insertStore(ClientStoreInfo store);
 
-    ArrayList<StoreInfo> getAllStore(int clientKey);
+    ArrayList<ClientStoreInfo> getAllStore(int clientKey);
 }

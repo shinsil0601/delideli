@@ -1,7 +1,6 @@
 package kr.co.jhta.app.delideli.client.store.service;
 
 import kr.co.jhta.app.delideli.client.store.domain.ClientStoreInfo;
-import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
 
 import java.util.ArrayList;
 
@@ -10,5 +9,5 @@ public interface ClientStoreService {
 
     void insertStoreCategory(int storeInfoKey, int i);
 
-    ArrayList<StoreInfo> getAllStore(int clientKey);
+    ArrayList<ClientStoreInfo> getAllStore(int clientKey);
 }

@@ -21,6 +21,7 @@
         <result property="menuKey" column="menu_key"/>
         <result property="optionGroupName" column="option_group_name"/>
         <result property="required" column="required"/>
+        <result property="minSelectOption" column="min_select_option"/>
         <result property="maxSelectOption" column="max_select_option"/>
         <result property="optionGroupRegdate" column="option_group_regdate"/>
         <result property="optionGroupUpdate" column="option_group_update"/>
@@ -35,4 +36,57 @@
         WHERE
         og.menu_key = #{menuKey} ORDER BY og.option_group_key, o.option_key
     </select>
+
+    <insert id="addOptionGroup" parameterType="kr.co.jhta.app.delideli.client.menu.domain.ClientOptionGroup">
+        INSERT INTO option_group (menu_key, option_group_name, required, min_select_option, max_select_option)
+        VALUES (#{menuKey}, #{optionGroupName}, #{required}, #{minSelectOption}, #{maxSelectOption})
+    </insert>
+
+
+    <select id="getOptionGroupByKey" parameterType="int" resultMap="OptionGroupResultMap">
+        SELECT * FROM option_group WHERE option_group_key = #{optionGroupKey}
+    </select>
+
+    <update id="updateOptionGroup" parameterType="kr.co.jhta.app.delideli.client.menu.domain.ClientOptionGroup">
+        UPDATE option_group
+        SET
+        option_group_name = #{optionGroupName},
+        required = #{required},
+        min_select_option = #{minSelectOption},
+        max_select_option = #{maxSelectOption},
+        option_group_update = NOW()
+        WHERE
+        option_group_key = #{optionGroupKey}
+    </update>
+
+    <delete id="deleteOptionGroup" parameterType="int">
+        DELETE FROM option_group
+        WHERE option_group_key = #{optionGroupKey}
+    </delete>
+
+    <insert id="addOption" parameterType="kr.co.jhta.app.delideli.client.menu.domain.ClientOption">
+        INSERT INTO `option` (option_group_key, option_name, option_price)
+        VALUES (#{optionGroupKey}, #{optionName}, #{optionPrice})
+    </insert>
+
+    <update id="updateOptionStatus" parameterType="map">
+        UPDATE `option`
+        SET option_status = #{optionStatus}
+        WHERE option_key = #{optionKey}
+    </update>
+
+    <delete id="deleteOptionByOptionKey" parameterType="int">
+        DELETE FROM `option`
+        WHERE option_key = #{optionKey}
+    </delete>
+
+    <delete id="deleteOptionbyOptionGroupKey" parameterType="int">
+        DELETE FROM `option`
+        WHERE option_group_key = #{optionGroupKey}
+    </delete>
+
+    <select id="getAllOptionGroupByMenuKey" parameterType="int" resultMap="OptionGroupResultMap">
+        SELECT * FROM option_group WHERE menu_key = #{menuKey}
+    </select>
+
 </mapper>

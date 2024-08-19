@@ -24,4 +24,6 @@ public interface ClientMenuService {
     void addMenuGroup(ClientMenuGroup clientMenuGroup);
 
     void addMenu(ClientMenu clientMenu);
+
+    void updateMenu(ClientMenu menu);
 }

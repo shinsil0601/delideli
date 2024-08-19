@@ -27,4 +27,8 @@ public interface ClientMenuMapper {
     void addMenuGroup(ClientMenuGroup clientMenuGroup);
 
     void addMenu(ClientMenu clientMenu);
+
+    ArrayList<ClientMenu> getAllMenuByGroupKey(int menuGroupKey);
+
+    void updateMenu(ClientMenu menu);
 }
