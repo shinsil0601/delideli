@@ -292,7 +292,7 @@ public class ClientController {
         model.addAttribute("client", clientAccount);
         model.addAttribute("on", "myPage");
         model.addAttribute("active", "changePw");
-        return "/client/mypage/changePwLogin";
+        return "client/mypage/changePwLogin";
     }
 
     // 마이페이지(비밀번호변경)
