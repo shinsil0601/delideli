@@ -83,7 +83,7 @@ public class UserBoardController {
         model.addAttribute("list", list);
         model.addAttribute("map", map);
 
-        return "/user/board/notice.list";
+        return "user/board/notice.list";
     }
 
     // 공지사항 상세보기
@@ -111,7 +111,7 @@ public class UserBoardController {
         userBoardService.updateHitNotice(num);
         Board board = userBoardService.readOneNotice(num);
         model.addAttribute("board", board);
-        return "/user/board/notice.view";
+        return "user/board/notice.view";
     }
 
     // 이벤트 목록
