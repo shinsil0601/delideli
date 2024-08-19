@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사장님 - 메뉴 등록</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Client CSS -->
+        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Client JS -->
+        <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+
+    </head>
+    <body>
+        <div class="client-wrap">
+            <!-- Start:Aside -->
+            <th:block th:include="inc/client/aside :: clientAside"></th:block>
+            <!-- End:Aside -->
+
+            <!-- Start:Main -->
+            <main id="mainpage__wrap">
+                <!-- Start:Header -->
+                <th:block th:include="inc/client/header :: clientHeader"></th:block>
+                <!-- End:Header -->
+
+                <!-- Start:Contents -->
+                <section class="contents">
+                    <form action="/client/registerMenu" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="storeKey" id="storeKey" th:value="${storeKey}">
+                        <div>
+                            <label for="menuImage">메뉴 이미지</label>
+                            <input type="file" id="menuImage" name="menuImage" accept="image/*">
+                        </div>
+                        <div>
+                            <label for="menuName">메뉴명</label>
+                            <input type="text" id="menuName" name="menuName" placeholder="메뉴명을 입력해주세요.">
+                        </div>
+                        <div>
+                            <label for="category">카테고리</label>
+                            <select id="category" name="category">
+                                <option th:each="group : ${menuGroup}" th:value="${group.menuGroupKey}" th:text="${group.menuGroupName}"></option>
+                            </select>
+                            <button type="button" id="addCategory">카테고리 추가</button>
+                        </div>
+                        <div>
+                            <label for="price">금액</label>
+                            <input type="text" id="price" name="price" placeholder="금액을 입력해주세요.">
+                        </div>
+                        <div>
+                            <button type="submit">메뉴 등록</button>
+                            <a th:href="@{/client/menu/{storeKey}(storeKey=${storeKey})}">취소</a>
+                        </div>
+                    </form>
+
+                    <script src="/client/js/module/registerMenu.js"></script>
+                </section>
+                <!-- End:Contents -->
+            </main>
+            <!-- End:Main -->
+        </div>
+    </body>
+</html>

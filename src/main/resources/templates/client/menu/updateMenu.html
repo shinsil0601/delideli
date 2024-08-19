@@ -28,7 +28,43 @@
 
                 <!-- Start:Contents -->
                 <section class="contents">
-                    <div th:text="${menu.menuName}"></div>
+                    <form action="/client/updateMenu" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="menuKey" id="menuKey" th:value="${menu.menuKey}">
+                        <input type="hidden" name="storeKey" id="storeKey" th:value="${menu.storeInfoKey}">
+                        <input type="hidden" name="currentMenuImg" th:value="${menu.menuImg}">
+                        <div>
+                            <label for="menuImage">메뉴 이미지</label>
+                            <input type="file" id="menuImage" name="menuImg">
+                            <div>
+                                <img th:src="@{/images/{menuImg}(menuImg=${menu.menuImg})}" alt="Menu Image" style="max-width: 200px; max-height: 200px;">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="menuName">메뉴명</label>
+                            <input type="text" id="menuName" name="menuName" th:value="${menu.menuName}" placeholder="메뉴명을 입력해주세요.">
+                        </div>
+                        <div>
+                            <label for="category">카테고리</label>
+                            <select id="category" name="menuGroupKey">
+                                <option th:each="group : ${menuGroup}"
+                                        th:value="${group.menuGroupKey}"
+                                        th:text="${group.menuGroupName}"
+                                        th:attr="selected=${group.menuGroupKey == menu.menuGroupKey}">
+                                </option>
+                            </select>
+                            <button type="button" id="addCategory">카테고리 추가</button>
+                        </div>
+                        <div>
+                            <label for="menuPrice">금액</label>
+                            <input type="text" id="menuPrice" name="menuPrice" th:value="${menu.menuPrice}" placeholder="금액을 입력해주세요.">
+                        </div>
+                        <div>
+                            <button type="submit">메뉴 수정</button>
+                            <a th:href="@{/client/menu/{storeKey}(storeKey=${menu.storeInfoKey})}">취소</a>
+                        </div>
+                    </form>
+
+                    <script src="/client/js/module/updateMenu.js"></script>
                 </section>
                 <!-- End:Contents -->
             </main>

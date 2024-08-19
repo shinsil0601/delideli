@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>사용자 - 메인페이지</title>
+        <title>사용자 - 주문내역</title>
         <!-- Include:공통 CSS -->
         <th:block th:include="inc/common/common-css :: commonCss"></th:block>
         <!-- Include:User CSS -->
@@ -20,78 +20,117 @@
 
         <!-- Start:Main -->
         <main id="mainpage__wrap">
-
-            <!-- 진행중, 진행완료 선택 -->
-            <div>
-                <input type="radio" id="in-progress" name="order-tab" checked onclick="switchTab('in-progress')">
-                <label for="in-progress">진행중</label>
-                <input type="radio" id="completed" name="order-tab" onclick="switchTab('completed')">
-                <label for="completed">진행완료</label>
+            <div class="subPage__wrap">
+                <!-- Start:subNav -->
+                <th:block th:include="inc/user/subNav :: subNav"></th:block>
+                <!-- End:subNav -->
+                <h2 class="subPage__title">주문내역</h2>
+                <div class="myOrder__con">
+                    <!-- 진행중, 진행완료 선택 -->
+                    <div class="myOrder__radio-con">
+                        <div class="myOrder__radio-box">
+                            <input type="radio" id="in-progress" name="order-tab" checked onclick="switchTab('in-progress')">
+                            <label for="in-progress">진행중</label>
+                        </div>
+                        <div class="myOrder__radio-box">
+                            <input type="radio" id="completed" name="order-tab" onclick="switchTab('completed')">
+                            <label for="completed">진행완료</label>
+                        </div>
+                    </div>
+                    <!-- 진행중 -->
+                    <div id="in-progress-orders" style="display:block;" class="myOrder__order-con">
+                        <ul class="myOrder__order-items">
+                            <li th:each="order : ${inProgressOrders}">
+                                <a th:href="'/user/orderDetail/' + ${order.orderKey}">
+                                    <div class="myOrder__status-box">
+                                        <span class="myOrder__status">
+                                            [[${order.statusMessage}]]
+                                        </span>
+                                        <span class="myOrder__delivery" th:if="${order.orderMethod == '배달접수' || order.orderMethod == '배달중'}">
+                                            배달 도착 예정시간 : [[${order.orderEstimatedTime}]]
+                                        </span>
+                                    </div>
+                                    <div class="myOrder__info-list">
+                                        <div class="myOrder__info-box">
+                                            <span>주문번호</span>
+                                            [[${order.orderNo}]]
+                                        </div>
+                                        <div class="myOrder__info-box">
+                                            <span>가게명</span>
+                                            [[${order.storeName}]]
+                                        </div>
+                                        <div class="myOrder__info-box">
+                                            <span>주문일자</span>
+                                            [[${order.formattedOrderDate}]]
+                                        </div>
+                                        <div class="myOrder__info-box">
+                                            <span>메뉴</span>
+                                            <th:block th:if="${order.orderDetails.size() == 1}">
+                                                [[${order.orderDetails[0].menuName}]]
+                                            </th:block>
+                                            <th:block th:if="${order.orderDetails.size() != 1}">
+                                                [[${order.orderDetails[0].menuName}]] 외 [[${order.orderDetails.size() - 1}]]개
+                                            </th:block>
+                                        </div>
+                                        <div class="myOrder__info-box">
+                                            <span>총가격</span>
+                                            [[${order.uorderPrice}]]원
+                                        </div>
+                                    </div>
+                                    <div class="myOrder__btn">
+                                        <button th:if="${order.orderMethod == '배달' || order.orderMethod == '포장'}"
+                                                th:data-order-key="${order.orderKey}" onclick="cancelOrder(this)">
+                                            주문취소
+                                        </button>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 진행완료 -->
+                    <div id="completed-orders" style="display:none;" class="myOrder__order-con">
+                        <ul class="myOrder__order-items">
+                            <li th:each="order : ${completedOrders}">
+                                <a th:href="'/user/orderDetail/' + ${order.orderKey}">
+                                    <div class="myOrder__status-box">
+                                    <span class="myOrder__status">
+                                        [[${order.statusMessage}]]
+                                    </span>
+                                    </div>
+                                    <div class="myOrder__info-list">
+                                        <div class="myOrder__info-box">
+                                            <span>주문번호</span>
+                                            [[${order.orderNo}]]
+                                        </div>
+                                        <div class="myOrder__info-box">
+                                            <span>가게명</span>
+                                            [[${order.storeName}]]
+                                        </div>
+                                        <div class="myOrder__info-box">
+                                            <span>주문일자</span>
+                                            [[${order.formattedOrderDate}]]
+                                        </div>
+                                        <div class="myOrder__info-box">
+                                            <span>메뉴</span>
+                                            <th:block th:if="${order.orderDetails.size() == 1}">
+                                                [[${order.orderDetails[0].menuName}]]
+                                            </th:block>
+                                            <th:block th:if="${order.orderDetails.size() != 1}">
+                                                [[${order.orderDetails[0].menuName}]] 외 [[${order.orderDetails.size() - 1}]]개
+                                            </th:block>
+                                        </div>
+                                        <div class="myOrder__info-box">
+                                            <span>총가격</span>
+                                            [[${order.uorderPrice}]]원
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <script src="/user/js/module/myOrder.js"></script>
             </div>
-
-            <!-- 진행중 -->
-            <div id="in-progress-orders" style="display:block;">
-                <ul>
-                    <li th:each="order : ${inProgressOrders}">
-                        <a th:href="'/user/orderDetail/' + ${order.orderKey}">
-                            <div>
-                                <span th:text="'주문번호: ' + ${order.orderNo}"></span>
-                            </div>
-                            <div>
-                                <span th:text="'가게명: ' + ${order.storeName}"></span>
-                            </div>
-                            <div>
-                                <span th:text="'주문일자: ' + ${order.formattedOrderDate}"></span>
-                            </div>
-                            <div>
-                                <span th:text="'메뉴: ' + ${order.orderDetails[0].menuName} + '(외 ' + (${order.orderDetails.size() - 1}) + '개)'"></span>
-                            </div>
-                            <div>
-                                <span th:text="'총가격: ' + ${order.uorderPrice} + '원'"></span>
-                            </div>
-                            <div>
-                                <span th:text="${order.statusMessage}"></span><br/>
-                                <span th:if="${order.orderMethod == '배달접수' || order.orderMethod == '배달중'}"
-                                      th:text="'배달 도착 예정시간 : ' + ${order.orderEstimatedTime}"></span>
-                                <button th:if="${order.orderMethod == '배달' || order.orderMethod == '포장'}"
-                                        th:data-order-key="${order.orderKey}"
-                                        onclick="cancelOrder(this)">주문취소
-                                </button>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 진행완료 -->
-            <div id="completed-orders" style="display:none;">
-                <ul>
-                    <li th:each="order : ${completedOrders}">
-                        <a th:href="'/user/orderDetail/' + ${order.orderKey}">
-                            <div>
-                                <span th:text="'주문번호: ' + ${order.orderNo}"></span>
-                            </div>
-                            <div>
-                                <span th:text="'가게명: ' + ${order.storeName}"></span>
-                            </div>
-                            <div>
-                                <span th:text="'주문일자: ' + ${order.formattedOrderDate}"></span>
-                            </div>
-                            <div>
-                                <span th:text="'메뉴: ' + ${order.orderDetails[0].menuName} + '(외 ' + (${order.orderDetails.size() - 1}) + '개)'"></span>
-                            </div>
-                            <div>
-                                <span th:text="'총가격: ' + ${order.uorderPrice} + '원'"></span>
-                            </div>
-                            <div>
-                                <span th:text="${order.statusMessage}"></span>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <script src="/user/js/module/myOrder.js"></script>
         </main>
         <!-- End:Main -->
 

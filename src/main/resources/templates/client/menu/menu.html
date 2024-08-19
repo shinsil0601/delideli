@@ -31,6 +31,9 @@
                 <!-- Start:Contents -->
                 <section class="contents">
                     <form th:action="@{/client/menu/{storeKey}(storeKey=${storeKey})}" method="get">
+                        <a th:href="@{/client/menuRegister/{storeKey}(storeKey=${storeKey})}">
+                            메뉴 등록
+                        </a>
                         <div>
                             <select name="filter">
                                 <option value="menuName" th:selected="${filter == 'menuName'}">메뉴명</option>
@@ -58,13 +61,13 @@
                                     <span th:text="${menu.menuPrice}">메뉴 가격</span>원
                                     <br>
                                     <span th:text="'상태 : ' + ${menu.menuStatus}"></span><br>
-                                    <!-- 상태에 일치하는 놈이 색이 나오게 해줄 수 있나 (상태 변경 버튼임) -->
                                     <button class="status-btn" data-status="판매중" th:classappend="${menu.menuStatus == '판매중' ? 'active' : ''}" th:data-menukey="${menu.menuKey}">판매중</button>
                                     <button class="status-btn" data-status="하루품절" th:classappend="${menu.menuStatus == '하루품절' ? 'active' : ''}" th:data-menukey="${menu.menuKey}">하루품절</button>
                                     <button class="status-btn" data-status="숨김" th:classappend="${menu.menuStatus == '숨김' ? 'active' : ''}" th:data-menukey="${menu.menuKey}">숨김</button>
                                     <!-- 메뉴 삭제 버튼 -->
                                     <button class="delete-menu-btn" th:data-menukey="${menu.menuKey}">메뉴 삭제</button>
                                     <a th:href="@{/client/updateMenu/{menuKey}(menuKey=${menu.menuKey})}">메뉴 수정</a>
+                                    <a th:href="@{/client/registerMenuOption/{menuKey}(menuKey=${menu.menuKey})}">옵션 관리</a>
                                     <br>
                                 </li>
                                 <br>

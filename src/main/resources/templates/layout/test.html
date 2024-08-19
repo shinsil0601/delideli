@@ -1,30 +1,28 @@
-<a href="/user/myAddress">주소관리</a><br>
-<a href="/user/checkAccount">내 정보 수정</a><br>
-<a href="/user/updatePw">비밀번호 변경</a><br>
-<a href="/user/myOrder">주문내역</a><br>
-<a href="/user/myReview">내 리뷰관리</a><br>
-<a href="/user/myLike">찜목록</a><br>
-<a href="/user/myCart">장바구니</a><br>
-<a href="/user/myAsk">내 문의확인</a><br>
-<a href="/user/withdrawal">회원탈퇴</a>
-<br><br><br>
-<table>
-    <thead>
-    <tr>
-        <th>번호</th>
-        <th>쿠폰명</th>
-        <th>쿠폰할인금액</th>
-        <th>사용가능시작일</th>
-        <th>사용가능종료일</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="coupon : ${coupon}">
-        <td th:text="${coupon.couponKey}"></td>
-        <td class="coupon-name" th:text="${coupon.couponName}"></td>
-        <td class="price" th:text="'-' + ${#numbers.formatInteger(coupon.couponPrice,3,'POINT')} + '원'"></td>
-        <td th:text="${#temporals.format(coupon.couponStartDate, 'yyyy/MM/dd')}"></td>
-        <td th:text="${#temporals.format(coupon.couponEndDate, 'yyyy/MM/dd')}"></td>
-    </tr>
-    </tbody>
-</table>
+<form th:action="@{/user/saveReview}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="orderKey" th:value="${order.orderKey}">
+    <input type="hidden" name="storeInfoKey" th:value="${storeInfo.storeInfoKey}">
+    <input type="hidden" name="clientKey" th:value="${storeInfo.clientKey}">
+
+    <div>
+        <label>가게 이름:</label>
+        <span th:text="${storeInfo.storeName}"></span>
+    </div>
+
+    <div>
+        <label>별점:</label>
+        <input type="number" name="reviewRating" min="1" max="5" required>
+    </div>
+
+    <div>
+        <label>리뷰 내용:</label>
+        <textarea name="reviewDesc" required></textarea>
+    </div>
+
+    <div>
+        <label>사진 업로드:</label>
+        <input type="file" name="reviewPhoto1">
+        <input type="file" name="reviewPhoto2">
+    </div>
+
+    <button type="submit">리뷰 등록하기</button>
+</form>
