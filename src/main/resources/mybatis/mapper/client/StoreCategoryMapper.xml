@@ -20,4 +20,10 @@
         VALUES (#{storeInfoKey}, #{categoryKey})
     </insert>
 
+    <!-- 기존 가게 카테고리 삭제 -->
+    <delete id="deleteStoreCategories" parameterType="int">
+        DELETE FROM store_category
+        WHERE storeInfo_key = #{storeInfoKey}
+    </delete>
+
 </mapper>
