@@ -58,7 +58,7 @@ $(document).ready(function(){
                 Counter: $(this).text(),
             },
             {
-                duration: 4000,
+                duration: 2000,
                 easing: "swing",
                 step: function(now) {
                     now = Number(Math.ceil(now)).toLocaleString('en');

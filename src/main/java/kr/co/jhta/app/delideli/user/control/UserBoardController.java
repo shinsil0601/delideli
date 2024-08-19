@@ -83,7 +83,7 @@ public class UserBoardController {
         model.addAttribute("list", list);
         model.addAttribute("map", map);
 
-        return "/user/board/notice.list";
+        return "user/board/notice.list";
     }
 
     // 공지사항 상세보기
@@ -111,7 +111,7 @@ public class UserBoardController {
         userBoardService.updateHitNotice(num);
         Board board = userBoardService.readOneNotice(num);
         model.addAttribute("board", board);
-        return "/user/board/notice.view";
+        return "user/board/notice.view";
     }
 
     // 이벤트 목록
@@ -158,7 +158,7 @@ public class UserBoardController {
         model.addAttribute("list", list);
         model.addAttribute("map", map);
 
-        return "/user/board/event.list";
+        return "user/board/event.list";
     }
 
     // 이벤트 상세보기
@@ -185,7 +185,7 @@ public class UserBoardController {
             }
         }
         model.addAttribute("board", board);
-        return "/user/board/event.view";
+        return "user/board/event.view";
     }
 
     // 댓글 삽입
@@ -196,7 +196,7 @@ public class UserBoardController {
             model.addAttribute("user", userAccount);
         }
         userCommentService.getCommentsByBoardKey(comment);
-        return "redirect:/user/eventDetail/" + comment.getBoardKey();
+        return "redirect:user/eventDetail/" + comment.getBoardKey();
     }
 
     // 댓글 조회 ajax 처리
@@ -255,7 +255,7 @@ public class UserBoardController {
         List<Board> list = userBoardService.getMyAskList(userAccount.getUserKey());
         model.addAttribute("list", list);
 
-        return "/user/mypage/myAsk";
+        return "user/mypage/myAsk";
     }
 
     //내문의 글작성 창이동
@@ -263,7 +263,7 @@ public class UserBoardController {
     public String myAskWrite(@AuthenticationPrincipal User user, Model model) {
         UserAccount userAccount = userService.findUserById(user.getUsername());
         model.addAttribute("user", userAccount);
-        return "/user/mypage/myAskWrite";
+        return "user/mypage/myAskWrite";
     }
 
     //내문의 글작성
@@ -273,7 +273,7 @@ public class UserBoardController {
         board.setUserKey(userAccount.getUserKey());
         userBoardService.myAskWrite(board);  // Board 객체를 매개변수로 전달
 
-        return "redirect:/user/myAsk";
+        return "redirect:user/myAsk";
     }
 
     //내문의 상세보기
@@ -283,14 +283,14 @@ public class UserBoardController {
         Board board = userBoardService.myAskDetail(boardKey);
         model.addAttribute("user", userAccount);
         model.addAttribute("board", board);
-        return "/user/mypage/myAskDetail";
+        return "user/mypage/myAskDetail";
     }
 
     // 내문의 글 삭제
     @GetMapping("/myAskDelete/{boardKey}")
     public String deleteMyAsk(@PathVariable int boardKey) {
         userBoardService.myAskDelete(boardKey);
-        return "redirect:/user/myAsk";
+        return "redirect:user/myAsk";
     }
 
 }
