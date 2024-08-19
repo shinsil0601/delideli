@@ -5,4 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface StoreCategoryMapper {
     void insertStoreCategory(int storeInfoKey, int categoryKey);
+
+    void deleteStoreCategories(int storeInfoKey);
 }
