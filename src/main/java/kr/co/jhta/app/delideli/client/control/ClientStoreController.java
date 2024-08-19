@@ -56,7 +56,7 @@ public class ClientStoreController {
         model.addAttribute("category", category);
         model.addAttribute("on", "list");
 
-        return "/client/store/store.register";
+        return "client/store/store.register";
     }
 
     @PostMapping("/storeRegister")
