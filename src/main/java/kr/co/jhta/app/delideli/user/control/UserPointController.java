@@ -28,7 +28,7 @@ public class UserPointController {
     public String charge(@AuthenticationPrincipal User user, Model model) {
         UserAccount userAccount = userService.findUserById(user.getUsername());
         model.addAttribute("user", userAccount);
-        return "/user/mypage/myPoint";
+        return "user/mypage/myPoint";
     }
 
     //포인트 충전
