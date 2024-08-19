@@ -364,4 +364,197 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    padding-bottom: 4rem;
+}
+.myOrder__order-items {
+    display: grid;
+    gap: 4rem;
+    grid-template-columns: repeat(3, 1fr);
+}
+.myOrder__order-items > li {
+    transition: .3s;
+}
+.myOrder__order-items > li:hover {
+    transform: translateY(-1rem);
+}
+.myOrder__order-items > li > a {
+    display: block;
+    padding: 2rem;
+    background: var(--whiteColor);
+    border-radius: 2rem;
+    box-shadow: var(--box-shadow-100);
+    transition: .3s;
+}
+.myOrder__order-items > li:hover > a {
+    background: var(--gray-100);
+}
+.myOrder__status-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.myOrder__status {
+    display: inline-block;
+    padding: 0.8rem;
+    background: var(--teal-500);
+    border-radius: 0.8rem;
+    font-size: var(--font-size-14);
+    font-weight: 700;
+    color: var(--whiteColor);
+}
+.myOrder__delivery {
+    font-size: var(--font-size-14);
+    font-weight: 500;
+}
+.myOrder__info-list {
+    padding: 2rem 0;
+    display: grid;
+    gap: 2rem;
+}
+.myOrder__info-box {
+    font-size: var(--font-size-14);
+}
+.myOrder__info-box span {
+    display: block;
+    font-weight: 700;
+    color: var(--gray-600);
+}
+.myOrder__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+.myOrder__btn button {
+    border-radius: 0.8rem;
+    padding: 0.8rem 0;
+    width: 14rem;
+    background: var(--mainColor);
+    font-size: var(--font-size-14);
+    font-weight: 700;
+    color: var(--whiteColor);
+}
+/* OrderDeatil */
+.orderDeatil__box {
+    display: grid;
+    gap: 2.4rem;
+    grid-template-columns: repeat(2, 1fr);
+}
+.orderDetail__left {
+    padding: 4rem;
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    border-radius: 2rem;
+}
+.orderDetail__L-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.orderDetail__status {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--whiteColor);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+    font-weight: 700;
+    color: var(--gray-600);
+}
+.orderDetail__code {
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.orderDetail__cnt {
+    padding: 4rem 0 2rem;
+}
+.orderDetail__shop-name {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+    padding-bottom: 1.6rem;
+    border-bottom: 1px solid var(--gray-900);
+}
+.orderDetail__menu--items > li {
+    display: grid;
+    gap: 0.6rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+.orderDetail__menu--items > li h4 {
+    font-weight: 500;
+    color: var(--gray-900);
+}
+.orderDetail__menu--items > li p {
+    font-size: var(--font-size-14);
+    font-weight: 500;
+    color: var(--gray-600);
+}
+.orderDetail__info {
+    padding: 0rem 0 4rem;
+}
+.orderDetail__info > li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.orderDetaile__info-left {
+    color: var(--gray-600);
+}
+.orderDetail__price {
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--gray-200);
+    font-size: var(--font-size-24);
+}
+.orderDetail__price-left {
+    font-weight: 500;
+    color: var(--gray-600);
+}
+.orderDetail__price-right {
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.orderDetaile__info-right {
+    color: var(--gray-900);
+    font-weight: 700;
+}
+.orderDetail__right {
+    display: grid;
+    gap: 2rem;
+}
+.orderDetail__desc-box span {
+    display: block;
+    padding-bottom: 2rem;
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.orderDetail__desc-box p {
+    padding: 1.6rem 0.8rem;
+    height: 24rem;
+    background: var(--whiteColor);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+}
+.orderDeatil__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    padding-top: 6rem;
+}
+.orderDeatil__btn button {
+    border-radius: 0.8rem;
+    width: 14rem;
+    padding: 1.6rem 0;
+    font-weight: 700;
+    color: var(--whiteColor);
+}
+.orderDeatil__btn--1 {
+    background: var(--gray-400);
+}
+.orderDeatil__btn--2 {
+    background: var(--mainColor);
 }

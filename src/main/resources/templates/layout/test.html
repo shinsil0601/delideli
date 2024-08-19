@@ -1,71 +1,33 @@
-<!-- 진행중, 진행완료 선택 -->
 <div>
-    <input type="radio" id="in-progress" name="order-tab" checked onclick="switchTab('in-progress')">
-    <label for="in-progress">진행중</label>
-    <input type="radio" id="completed" name="order-tab" onclick="switchTab('completed')">
-    <label for="completed">진행완료</label>
-</div>
+    <input type="hidden" name="storeInfoKey" id="storeInfoKey" th:value="${store.storeInfoKey}">
+    <input type="hidden" name="userKey" id="userKey" th:value="${user.userKey}">
 
-<!-- 진행중 -->
-<div id="in-progress-orders" style="display:block;">
-    <ul>
-        <li th:each="order : ${inProgressOrders}">
-            <a th:href="'/user/orderDetail/' + ${order.orderKey}">
-                <div>
-                    <span th:text="'주문번호: ' + ${order.orderNo}"></span>
-                </div>
-                <div>
-                    <span th:text="'가게명: ' + ${order.storeName}"></span>
-                </div>
-                <div>
-                    <span th:text="'주문일자: ' + ${order.formattedOrderDate}"></span>
-                </div>
-                <div>
-                    <span th:text="'메뉴: ' + ${order.orderDetails[0].menuName} + '(외 ' + (${order.orderDetails.size() - 1}) + '개)'"></span>
-                </div>
-                <div>
-                    <span th:text="'총가격: ' + ${order.uorderPrice} + '원'"></span>
-                </div>
-                <div>
-                    <span th:text="${order.statusMessage}"></span><br/>
-                    <span th:if="${order.orderMethod == '배달접수' || order.orderMethod == '배달중'}"
-                          th:text="'배달 도착 예정시간 : ' + ${order.orderEstimatedTime}"></span>
-                    <button th:if="${order.orderMethod == '배달' || order.orderMethod == '포장'}"
-                            th:data-order-key="${order.orderKey}"
-                            onclick="cancelOrder(this)">주문취소
-                    </button>
-                </div>
-            </a>
-        </li>
-    </ul>
-</div>
+    <div th:text="${order.statusMessage}"></div><br>
+    <div th:text="'가게명: ' + ${store.storeName}"></div><br>
+    <div th:text="'가게 주소: ' + ${store.storeAddress} + ' ' + ${store.storeAddrDetail}"></div>
+    <div th:text="'가게 번호: ' + ${store.storePhone}"></div>
+    <div th:text="'주문일시: ' + ${order.formattedOrderDate}"></div>
+    <div th:text="'주문번호: ' + ${order.orderNo}"></div><br>
 
-<!-- 진행완료 -->
-<div id="completed-orders" style="display:none;">
-    <ul>
-        <li th:each="order : ${completedOrders}">
-            <a th:href="'/user/orderDetail/' + ${order.orderKey}">
-                <div>
-                    <span th:text="'주문번호: ' + ${order.orderNo}"></span>
-                </div>
-                <div>
-                    <span th:text="'가게명: ' + ${order.storeName}"></span>
-                </div>
-                <div>
-                    <span th:text="'주문일자: ' + ${order.formattedOrderDate}"></span>
-                </div>
-                <div>
-                    <span th:text="'메뉴: ' + ${order.orderDetails[0].menuName} + '(외 ' + (${order.orderDetails.size() - 1}) + '개)'"></span>
-                </div>
-                <div>
-                    <span th:text="'총가격: ' + ${order.uorderPrice} + '원'"></span>
-                </div>
-                <div>
-                    <span th:text="${order.statusMessage}"></span>
-                </div>
-            </a>
-        </li>
-    </ul>
-</div>
+    <div th:each="menu : ${order.orderDetails}">
+                    <span class="menu-item" th:data-menu-name="${menu.menuName}" th:data-quantity="${menu.quantity}" th:data-option-name="${menu.optionName}">
+                        <br>
+                    <span class="menu-name" th:data-menu-name="${menu.menuName}" th:text="'메인 메뉴 : ' + ${menu.menuName}"></span>
+                        <br>
+                    <span class="menu-quantity" th:data-quantity="${menu.quantity}" th:text="'수량 : ' + ${menu.quantity}"></span>
+                        <br>
+                    <span class="menu-option" th:data-option-name="${menu.optionName}" th:text="'옵션 : ' + ${menu.optionName}"></span>
+                    <br>
+    </div>
+    <br>
 
-<script src="/user/js/module/myOrder.js"></script>
+    <div th:text="'결제방식: ' + ${order.uorderPayment}"></div>
+    <div th:text="'총 결제금액: ' + ${order.uorderPrice} + '원'"></div><br>
+    <div th:text="'가게 요청사항: ' + ${order.shopDesc}"></div><br>
+    <div th:text="'배달 요청사항: ' + ${order.riderDesc}"></div><br>
+
+    <!-- "같은 메뉴 담기" 버튼을 맨 아래로 이동 -->
+    <button id="sameMenuButton">같은 메뉴 담기</button>
+
+    <script src="/user/js/module/orderDetail.js"></script>
+</div>
