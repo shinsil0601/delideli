@@ -1,33 +1,28 @@
-<div>
-    <input type="hidden" name="storeInfoKey" id="storeInfoKey" th:value="${store.storeInfoKey}">
-    <input type="hidden" name="userKey" id="userKey" th:value="${user.userKey}">
+<form th:action="@{/user/saveReview}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="orderKey" th:value="${order.orderKey}">
+    <input type="hidden" name="storeInfoKey" th:value="${storeInfo.storeInfoKey}">
+    <input type="hidden" name="clientKey" th:value="${storeInfo.clientKey}">
 
-    <div th:text="${order.statusMessage}"></div><br>
-    <div th:text="'가게명: ' + ${store.storeName}"></div><br>
-    <div th:text="'가게 주소: ' + ${store.storeAddress} + ' ' + ${store.storeAddrDetail}"></div>
-    <div th:text="'가게 번호: ' + ${store.storePhone}"></div>
-    <div th:text="'주문일시: ' + ${order.formattedOrderDate}"></div>
-    <div th:text="'주문번호: ' + ${order.orderNo}"></div><br>
-
-    <div th:each="menu : ${order.orderDetails}">
-                    <span class="menu-item" th:data-menu-name="${menu.menuName}" th:data-quantity="${menu.quantity}" th:data-option-name="${menu.optionName}">
-                        <br>
-                    <span class="menu-name" th:data-menu-name="${menu.menuName}" th:text="'메인 메뉴 : ' + ${menu.menuName}"></span>
-                        <br>
-                    <span class="menu-quantity" th:data-quantity="${menu.quantity}" th:text="'수량 : ' + ${menu.quantity}"></span>
-                        <br>
-                    <span class="menu-option" th:data-option-name="${menu.optionName}" th:text="'옵션 : ' + ${menu.optionName}"></span>
-                    <br>
+    <div>
+        <label>가게 이름:</label>
+        <span th:text="${storeInfo.storeName}"></span>
     </div>
-    <br>
 
-    <div th:text="'결제방식: ' + ${order.uorderPayment}"></div>
-    <div th:text="'총 결제금액: ' + ${order.uorderPrice} + '원'"></div><br>
-    <div th:text="'가게 요청사항: ' + ${order.shopDesc}"></div><br>
-    <div th:text="'배달 요청사항: ' + ${order.riderDesc}"></div><br>
+    <div>
+        <label>별점:</label>
+        <input type="number" name="reviewRating" min="1" max="5" required>
+    </div>
 
-    <!-- "같은 메뉴 담기" 버튼을 맨 아래로 이동 -->
-    <button id="sameMenuButton">같은 메뉴 담기</button>
+    <div>
+        <label>리뷰 내용:</label>
+        <textarea name="reviewDesc" required></textarea>
+    </div>
 
-    <script src="/user/js/module/orderDetail.js"></script>
-</div>
+    <div>
+        <label>사진 업로드:</label>
+        <input type="file" name="reviewPhoto1">
+        <input type="file" name="reviewPhoto2">
+    </div>
+
+    <button type="submit">리뷰 등록하기</button>
+</form>

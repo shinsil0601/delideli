@@ -558,3 +558,197 @@
 .orderDeatil__btn--2 {
     background: var(--mainColor);
 }
+/* myReview */
+.myReview__btn-con {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+}
+.myReview__btn-con button {
+    padding: 1.6rem 0;
+}
+.myReview__btn-con button.active {
+    background: var(--mainColor);
+    color: var(--subColor);
+}
+.myReview__items--N {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+    padding-top: 4rem;
+}
+.myReview__item--N {
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    padding: 2rem;
+    border-radius: 2rem;
+}
+.myReview__N--date {
+    font-size: var(--font-size-14);
+    padding-bottom: 1rem;
+}
+.myReview__N--Name {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.myReview__N--Menu {
+    padding-top: 1rem;
+    font-size: var(--font-size-18);
+    font-weight: 500;
+    color: var(--gray-600);
+}
+.myReview__N--link {
+    padding-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+}
+.myReview__N--link > a {
+    display: inline-block;
+    padding: 1rem;
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    border-radius: 0.8rem;
+    font-weight: 700;
+    color: var(--gray-600);
+    transition: .3s;
+}
+.myReview__N--link > a:hover {
+    background: var(--gray-100);
+}
+.myReview__items--Y {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    padding-top: 4rem;
+}
+.myReview__item--Y {
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    padding: 2rem;
+    border-radius: 2rem;
+}
+.myReview__Y--img {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+.myReview__Y--img img {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 2rem;
+    border: 1px solid var(--gray-100);
+}
+.myReview__Y--rating {
+    padding-top: 1rem;
+    font-size: var(--font-size-14);
+}
+.rating-on {
+    color: var(--mainColor);
+}
+.myReview__Y--date {
+    padding-top: 0.4rem;
+    font-size: var(--font-size-14);
+    font-weight: 500;
+    color: var(--gray-400);
+}
+.myReview__Y--menu {
+    padding-top: 0.4rem;
+    font-size: var(--font-size-18);
+    font-weight: 500;
+    color: var(--gray-600);
+}
+.myReview__Y--cnt {
+    padding: 2rem 0;
+}
+.myReview__Y--title {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.myReview__Y--desc {
+    padding-top: 1rem;
+}
+.myReview__y--client {
+    padding-top: 2rem;
+    border-top: 1px solid var(--gray-200);
+}
+.myReview__y--client h3 {
+    font-weight: 700;
+    color: var(--blue-500);
+}
+.myReview__y--client p {
+    padding-top: 1rem;
+}
+.writeReview__con {
+    position: relative;
+    margin: 0 auto;
+    padding: 2rem;
+    background: var(--whiteColor);
+    border-radius: 2rem;
+    box-shadow: var(--box-shadow-100);
+    max-width: 44rem;
+}
+.writeReview__storeName {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+    padding-bottom: 3.2rem;
+}
+.writeReview__input-con {
+    display: grid;
+    gap: 2rem;
+}
+.writeReview__input-box {
+    display: grid;
+    gap: 1rem;
+}
+.writeReview__input-box label {
+    font-size: var(--font-size-14);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.writeReview__input-box input[type="number"] {
+    width: 40rem;
+}
+.writeReview__input-box textarea {
+    width: 40rem;
+}
+.writeReview__img-con {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.writeReview__img {
+    width: 15rem;
+    height: 15rem;
+    border-radius: 2rem;
+    background: var(--gray-100);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.writeReview__img p {
+    font-weight: 700;
+    text-align: center;
+}
+.writeReview__img img {
+    width: 100%;
+    height: 100%;
+}
+.writeReview__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding-top: 4rem;
+}
+.writeReview__btn button {
+    border: none;
+    width: 14rem;
+    padding: 1.6rem 0;
+    background: var(--mainColor);
+    color: var(--subColor);
+}

@@ -238,14 +238,14 @@ public class ClientController {
     }
 
     // 메인 페이지로 이동
-    @GetMapping("/storeList")
+   /* @GetMapping("/storeList")
     public String storeList(@AuthenticationPrincipal User user, Model model) {
         ClientAccount clientAccount = clientService.findClientById(user.getUsername());
         ArrayList<StoreInfo> storeInfo = clientStoreService.getAllStore(clientAccount.getClientKey());
         model.addAttribute("client", clientAccount);
         model.addAttribute("store", storeInfo);
         return "client/store/store.list";
-    }
+    }*/
 
     // 로그아웃
     @GetMapping("/logout")
