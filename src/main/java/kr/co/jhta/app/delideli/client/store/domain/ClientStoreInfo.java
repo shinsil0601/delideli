@@ -32,4 +32,10 @@ public class ClientStoreInfo {
     private boolean storePause;
     private LocalDateTime storeRegdate;
     private LocalDateTime storeUpdate;
+
+    // 포맷된 시간 필드를 추가
+    private String formattedOpenTime;
+    private String formattedCloseTime;
+    //영업상태 추가 필드
+    private String businessStatus;
 }

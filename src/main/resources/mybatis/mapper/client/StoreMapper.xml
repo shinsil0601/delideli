@@ -53,4 +53,89 @@
         SELECT * FROM storeInfo WHERE client_key = #{clientKey}
     </select>
 
+    <!-- 사장님 가게 전체목록 -->
+    <select id="getStoreList" parameterType="String" resultMap="StoreInfoResultMap">
+        SELECT storeInfo_key, c.client_key, store_name, store_address, store_zipcode, store_addrs_detail, store_phone,
+               min_order_amount, order_amount1, delivery_amount1, order_amount2, delivery_amount2, order_amount3,
+               open_time, close_time, store_detail_info, store_origin_info, store_business_registration_file,
+               store_business_report_file, store_profile_img, store_access, store_delete, store_regdate, store_update, store_pause
+        FROM storeInfo s JOIN client_account c
+                              ON s.client_key = c.client_key
+        WHERE c.client_id = #{clientId}
+
+
+    </select>
+
+    <!--사장님 가게 영업일시정지 업데이트-->
+    <update id="updateStorePause" parameterType="map">
+        UPDATE storeInfo
+        SET store_pause = #{pause}
+        WHERE storeInfo_key = #{storeInfoKey}
+    </update>
+
+    <!-- 사장님 가게 일시정지 상태 조회 -->
+    <select id="getStorePauseState" parameterType="int" resultType="boolean">
+        SELECT store_pause
+        FROM storeInfo
+        WHERE storeInfo_key = #{storeInfoKey}
+    </select>
+
+    <!-- 가게 목록 페이징 처리 -->
+    <select id="getPagedStoreList" resultMap="StoreInfoResultMap" parameterType="hashmap">
+        SELECT *
+        FROM storeInfo
+        WHERE client_key = #{clientKey}
+        ORDER BY storeInfo_key DESC
+            LIMIT #{endNo} OFFSET #{startNo}
+    </select>
+
+    <!-- 검색어에 따른 가게 목록 페이징 처리 -->
+    <select id="getPagedKeywordStoreList" resultMap="StoreInfoResultMap" parameterType="hashmap">
+        SELECT *
+        FROM storeInfo
+        WHERE client_key = #{clientKey}
+          AND store_name LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY storeInfo_key DESC
+            LIMIT #{endNo} OFFSET #{startNo}
+    </select>
+
+    <!-- 전체 가게 수 반환 -->
+    <select id="getTotalStore" resultType="int" parameterType="long">
+        SELECT COUNT(*)
+        FROM storeInfo
+        WHERE client_key = #{clientKey}
+    </select>
+
+    <!-- 검색어에 따른 가게 수 반환 -->
+    <select id="getTotalKeywordStore" resultType="int" parameterType="hashmap">
+        SELECT COUNT(*)
+        FROM storeInfo
+        WHERE client_key = #{clientKey}
+          AND store_name LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+    <!-- 승인 여부에 따른 목록 페이징 처리 -->
+    <select id="getPagedByAccessStatus" resultMap="StoreInfoResultMap" parameterType="hashmap">
+        SELECT *
+        FROM storeInfo
+        WHERE client_key = #{clientKey}
+          AND store_access = #{accessStatus}
+        ORDER BY storeInfo_key DESC
+            LIMIT #{countPerPage} OFFSET #{startNo}
+    </select>
+
+    <!-- 승인 여부에 따른 총 게시물 수 -->
+    <select id="getTotalByAccessStatus" resultType="int" parameterType="hashmap">
+        SELECT COUNT(*)
+        FROM storeInfo
+        WHERE client_key = #{clientKey}
+          AND store_access = #{accessStatus}
+    </select>
+
+    <!-- 전체 가게 목록 가져오기 -->
+    <select id="getAllStores" resultMap="StoreInfoResultMap" parameterType="long">
+        SELECT *
+        FROM storeInfo
+        WHERE client_key = #{clientKey}
+    </select>
 </mapper>
