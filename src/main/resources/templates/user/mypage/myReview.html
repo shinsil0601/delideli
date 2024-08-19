@@ -20,67 +20,102 @@
 
         <!-- Start:Main -->
         <main id="mainpage__wrap">
-            <div class="review-container">
-                <div class="review-header">
-                    <h1>리뷰 관리</h1>
-                    <div>
-                        <button onclick="showReviewList('available')" th:text="'작성 가능한 리뷰 (' + ${availableForReviewOrders.size()} + ')'"></button>
-                        <button onclick="showReviewList('written')" th:text="'작성한 리뷰 (' + ${writtenReviewOrders.size()} + ')'"></button>
+            <div class="subPage__wrap">
+                <!-- Start:subNav -->
+                <th:block th:include="inc/user/subNav :: subNav"></th:block>
+                <!-- End:subNav -->
+                <h2 class="subPage__title">리뷰 관리</h2>
+                <div class="myReview__con">
+                    <!-- Tab메뉴 -->
+                    <div class="myReview__btn-con">
+                        <button type="button" onclick="showReviewList('available')" class="myReview__btn-con--1 active">
+                            미작성 리뷰 ([[${availableForReviewOrders.size()}]])
+                        </button>
+                        <button type="button" onclick="showReviewList('written')" class="myReview__btn-con--2">
+                            작성 완료 리뷰 ([[${writtenReviewOrders.size()}]])
+                        </button>
                     </div>
-                </div>
-                <div id="available-review-list" class="review-list" style="display: block;">
-                    <!-- 작성 가능한 리뷰 목록 -->
-                    <div th:each="order : ${availableForReviewOrders}" class="review-item">
-                        <div class="review-store" th:text="${order.storeInfo.storeName}"></div>
-                        <div class="review-date" th:text="${order.formattedOrderDate}"></div>
-                        <div class="review-detail">
-                            <div th:if="${#lists.size(order.orderDetails) > 1}">
-                                <div th:text="${order.orderDetails.get(0).menuName} + ' 외 ' + (${#lists.size(order.orderDetails) - 1}) + '개'"></div>
-                            </div>
-                            <div th:if="${#lists.size(order.orderDetails) == 1}">
-                                <div th:text="${order.orderDetails.get(0).menuName} + ' x ' + ${order.orderDetails.get(0).quantity}"></div>
-                            </div>
-                            <a th:href="@{/user/writeReview(orderKey=${order.orderKey})}" class="review-write-button">리뷰 쓰기</a>
-                        </div>
-                    </div>
-                </div>
 
-                <div id="written-review-list" class="review-list" style="display: none;">
-                    <!-- 작성된 리뷰 목록 -->
-                    <div th:each="order : ${writtenReviewOrders}" class="review-item">
-                        <div class="review-store" th:text="${order.storeInfo.storeName}"></div>
-                        <div class="review-date" th:text="${order.formattedOrderDate}"></div>
-                        <div class="review-detail">
-                            <div th:if="${#lists.size(order.orderDetails) > 1}">
-                                <div th:text="${order.orderDetails.get(0).menuName} + ' 외 ' + (${#lists.size(order.orderDetails) - 1}) + '개'"></div>
+                    <!-- 미작성리뷰 -->
+                    <div class="myReview__items--N" id="available-review-list">
+                        <div class="myReview__item--N" th:each="order : ${availableForReviewOrders}">
+                            <p class="myReview__N--date">
+                                주문일자 : [[${order.formattedOrderDate}]]
+                            </p>
+                            <h3 class="myReview__N--Name">
+                                [[${order.storeInfo.storeName}]]
+                            </h3>
+                            <th:block th:if="${#lists.size(order.orderDetails) > 1}">
+                                <div class="myReview__N--Menu">
+                                    [[${order.orderDetails.get(0).menuName}]] 외 [[${#lists.size(order.orderDetails) - 1}]]개
+                                </div>
+                            </th:block>
+                            <th:block th:if="${#lists.size(order.orderDetails) == 1}">
+                                <div class="myReview__N--Menu">
+                                    [[${order.orderDetails.get(0).menuName}]] x [[${order.orderDetails.get(0).quantity}]]
+                                </div>
+                            </th:block>
+                            <div class="myReview__N--link">
+                                <a th:href="@{/user/writeReview(orderKey=${order.orderKey})}">리뷰 쓰기</a>
                             </div>
-                            <div th:if="${#lists.size(order.orderDetails) == 1}">
-                                <div th:text="${order.orderDetails.get(0).menuName} + ' x ' + ${order.orderDetails.get(0).quantity}"></div>
+                        </div>
+                    </div>
+
+                    <!-- 작성완료리뷰 -->
+                    <div class="myReview__items--Y" id="written-review-list" style="display: none;">
+                        <div class="myReview__item--Y" th:each="order : ${writtenReviewOrders}">
+                            <div class="myReview__Y--img">
+                                <th:block th:if="${order.review.reviewPhoto1}">
+                                    <img th:src="@{${order.review.reviewPhoto1}}" alt="리뷰 이미지 1">
+                                </th:block>
+                                <th:block th:if="${order.review.reviewPhoto2}">
+                                    <img th:src="@{${order.review.reviewPhoto2}}" alt="리뷰 이미지 2">
+                                </th:block>
                             </div>
-                            <!-- 리뷰 별점 -->
-                            <div class="review-rating">
-                                <!-- 5개의 별을 표시하기 위한 반복문 -->
-                                <span th:each="i : ${#numbers.sequence(1, 5)}">
-                                    <span th:text="${i <= order.review.reviewRating.intValue()} ? '★' : '☆'"></span>
-                                </span>
+                            <div class="myReview__Y--info">
+                                <div class="myReview__Y--rating">
+                                    <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                        <th:block th:if="${i <= order.review.reviewRating.intValue()}">
+                                            <span class="rating-on">
+                                                <i class="fa-solid fa-star"></i>
+                                            </span>
+                                        </th:block>
+                                        <th:block th:if="${i > order.review.reviewRating.intValue()}">
+                                            <span class="rating-off">
+                                                <i class="fa-solid fa-star"></i>
+                                            </span>
+                                        </th:block>
+                                    </th:block>
+                                </div>
+                                <div class="myReview__Y--date">
+                                    [[${order.formattedOrderDate}]]
+                                </div>
+                                <div class="myReview__Y--menu">
+                                    <th:block th:if="${#lists.size(order.orderDetails) > 1}">
+                                        [[${order.orderDetails.get(0).menuName}]] 외 [[${#lists.size(order.orderDetails) - 1}]]개
+                                    </th:block>
+                                    <th:block th:if="${#lists.size(order.orderDetails) == 1}">
+                                        [[${order.orderDetails.get(0).menuName}]] x [[${order.orderDetails.get(0).quantity}]]
+                                    </th:block>
+                                </div>
+                                <div class="myReview__Y--cnt">
+                                    <h3 class="myReview__Y--title">
+                                        [[${order.storeInfo.storeName}]]
+                                    </h3>
+                                    <p class="myReview__Y--desc">
+                                        [[${order.review.reviewDesc}]]
+                                    </p>
+                                </div>
+                                <div class="myReview__y--client" th:if="${order.review.reviewComment}">
+                                    <h3>사장님 답변</h3>
+                                    <p>[[${order.review.reviewComment}]]</p>
+                                </div>
                             </div>
-                            <!-- 리뷰 이미지 -->
-                            <div th:if="${order.review.reviewPhoto1}">
-                                <img th:src="@{${order.review.reviewPhoto1}}" alt="리뷰 이미지 1">
-                            </div>
-                            <div th:if="${order.review.reviewPhoto2}">
-                                <img th:src="@{${order.review.reviewPhoto2}}" alt="리뷰 이미지 2">
-                            </div>
-                            <!-- 리뷰 내용 -->
-                            <div th:text="'리뷰 내용 : ' + ${order.review.reviewDesc}"></div>
-                            <!-- 사장님 답변 -->
-                            <div th:if="${order.review.reviewComment}" th:text="'사장님 답변 : ' + ${order.review.reviewComment}"></div>
                         </div>
                     </div>
                 </div>
+                <script src="/user/js/module/myReview.js"></script>
             </div>
-
-            <script src="/user/js/module/myReview.js"></script>
         </main>
         <!-- End:Main -->
 

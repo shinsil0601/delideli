@@ -8,15 +8,12 @@
         <div class="aside__nav">
             <ul class="aside__nav--depth1">
                 <li>
-                    <a href="#none" th:classappend="${on == 'list'} ? on : ''">
+                    <a href="/client/storeList" th:classappend="${on == 'list'} ? on : ''">
                         <span class="aside__nav--title">
                             <i class="fa-solid fa-store"></i>
                             가게목록
                         </span>
                     </a>
-                    <ul>
-
-                    </ul>
                 </li>
                 <li>
                     <a href="#none" th:classappend="${on == 'myPage'} ? on : ''">

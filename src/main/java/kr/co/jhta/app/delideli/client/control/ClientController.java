@@ -238,17 +238,6 @@ public class ClientController {
         return clientService.checkClientEmailExists(email);
     }
 
-    // 메인 페이지로 이동
-    @GetMapping("/storeList")
-    public String storeList(@AuthenticationPrincipal User user, Model model) {
-        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
-        ArrayList<ClientStoreInfo> storeInfo = clientStoreService.getAllStore(clientAccount.getClientKey());
-        model.addAttribute("client", clientAccount);
-        model.addAttribute("store", storeInfo);
-        model.addAttribute("on", "list");
-        return "client/store/store.list";
-    }
-
     // 로그아웃
     @GetMapping("/logout")
     public String logout(HttpServletResponse response) {

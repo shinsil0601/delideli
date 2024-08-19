@@ -1,71 +1,28 @@
-<!-- 진행중, 진행완료 선택 -->
-<div>
-    <input type="radio" id="in-progress" name="order-tab" checked onclick="switchTab('in-progress')">
-    <label for="in-progress">진행중</label>
-    <input type="radio" id="completed" name="order-tab" onclick="switchTab('completed')">
-    <label for="completed">진행완료</label>
-</div>
+<form th:action="@{/user/saveReview}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="orderKey" th:value="${order.orderKey}">
+    <input type="hidden" name="storeInfoKey" th:value="${storeInfo.storeInfoKey}">
+    <input type="hidden" name="clientKey" th:value="${storeInfo.clientKey}">
 
-<!-- 진행중 -->
-<div id="in-progress-orders" style="display:block;">
-    <ul>
-        <li th:each="order : ${inProgressOrders}">
-            <a th:href="'/user/orderDetail/' + ${order.orderKey}">
-                <div>
-                    <span th:text="'주문번호: ' + ${order.orderNo}"></span>
-                </div>
-                <div>
-                    <span th:text="'가게명: ' + ${order.storeName}"></span>
-                </div>
-                <div>
-                    <span th:text="'주문일자: ' + ${order.formattedOrderDate}"></span>
-                </div>
-                <div>
-                    <span th:text="'메뉴: ' + ${order.orderDetails[0].menuName} + '(외 ' + (${order.orderDetails.size() - 1}) + '개)'"></span>
-                </div>
-                <div>
-                    <span th:text="'총가격: ' + ${order.uorderPrice} + '원'"></span>
-                </div>
-                <div>
-                    <span th:text="${order.statusMessage}"></span><br/>
-                    <span th:if="${order.orderMethod == '배달접수' || order.orderMethod == '배달중'}"
-                          th:text="'배달 도착 예정시간 : ' + ${order.orderEstimatedTime}"></span>
-                    <button th:if="${order.orderMethod == '배달' || order.orderMethod == '포장'}"
-                            th:data-order-key="${order.orderKey}"
-                            onclick="cancelOrder(this)">주문취소
-                    </button>
-                </div>
-            </a>
-        </li>
-    </ul>
-</div>
+    <div>
+        <label>가게 이름:</label>
+        <span th:text="${storeInfo.storeName}"></span>
+    </div>
 
-<!-- 진행완료 -->
-<div id="completed-orders" style="display:none;">
-    <ul>
-        <li th:each="order : ${completedOrders}">
-            <a th:href="'/user/orderDetail/' + ${order.orderKey}">
-                <div>
-                    <span th:text="'주문번호: ' + ${order.orderNo}"></span>
-                </div>
-                <div>
-                    <span th:text="'가게명: ' + ${order.storeName}"></span>
-                </div>
-                <div>
-                    <span th:text="'주문일자: ' + ${order.formattedOrderDate}"></span>
-                </div>
-                <div>
-                    <span th:text="'메뉴: ' + ${order.orderDetails[0].menuName} + '(외 ' + (${order.orderDetails.size() - 1}) + '개)'"></span>
-                </div>
-                <div>
-                    <span th:text="'총가격: ' + ${order.uorderPrice} + '원'"></span>
-                </div>
-                <div>
-                    <span th:text="${order.statusMessage}"></span>
-                </div>
-            </a>
-        </li>
-    </ul>
-</div>
+    <div>
+        <label>별점:</label>
+        <input type="number" name="reviewRating" min="1" max="5" required>
+    </div>
 
-<script src="/user/js/module/myOrder.js"></script>
+    <div>
+        <label>리뷰 내용:</label>
+        <textarea name="reviewDesc" required></textarea>
+    </div>
+
+    <div>
+        <label>사진 업로드:</label>
+        <input type="file" name="reviewPhoto1">
+        <input type="file" name="reviewPhoto2">
+    </div>
+
+    <button type="submit">리뷰 등록하기</button>
+</form>
