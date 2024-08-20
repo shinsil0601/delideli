@@ -1,0 +1,45 @@
+<th:block th:fragment="clientAsideOrder">
+    <aside id="aside">
+        <h1 class="aside__logo">
+            <a href="/client/storeList">
+                <img src="/client/images/logo-white.png" alt="딜리델리흰색로고">
+            </a>
+        </h1>
+        <div class="aside__nav">
+            <ul class="aside__nav--depth1">
+                <li>
+                    <a th:href="@{/client/waitOrder/{storeInfoKey}(storeInfoKey=${storeInfoKey})}" th:classappend="${on == 'waitOrder'} ? on : ''">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-store"></i>
+                            접수 대기
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/client/processingOrder/{storeInfoKey}(storeInfoKey=${storeInfoKey})}" th:classappend="${on == 'processingOrder'} ? on : ''">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-store"></i>
+                            처리중
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/client/successOrder/{storeInfoKey}(storeInfoKey=${storeInfoKey})}" th:classappend="${on == 'successOrder'} ? on : ''">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-store"></i>
+                            완료
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/client/searchOrder/{storeInfoKey}(storeInfoKey=${storeInfoKey})}" th:classappend="${on == 'searchOrder'} ? on : ''">
+                        <span class="aside__nav--title">
+                            <i class="fa-solid fa-store"></i>
+                            주문 조회
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+</th:block>
