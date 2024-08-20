@@ -108,81 +108,28 @@
                 <article class="mainBoard__item">
                     <div class="mainBoard__top">
                         <h3>공지사항</h3>
-                        <a href="#none">
+                        <a href="/user/notice">
                             전체보기
                             <i class="fa-solid fa-angle-right"></i>
                         </a>
                     </div>
-                    <ul class="mainBoard__notice">
+                    <!-- 공지사항 최대4개 리스트 출력 -->
+                    <ul class="mainBoard__notice" th:each="notice : ${noticeList}">
                         <li>
-                            <a href="#none">
+                            <a th:href="@{/user/detail/{num}(num=${notice.boardKey})}">
                                 <span class="mainNotice__ctg">공지</span>
                                 <ul class="mainNotice__info">
                                     <li>
                                         <i class="fa-solid fa-calendar-days"></i>
-                                        2024-07-20
+                                        [[${notice.boardUpdate}]]
                                     </li>
                                     <li>
                                         <i class="fa-solid fa-eye"></i>
-                                        117
+                                        [[${notice.boardHits}]]
                                     </li>
                                 </ul>
                                 <h3 class="mainNotice__title">
-                                    Notice Title
-                                </h3>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#none">
-                                <span class="mainNotice__ctg">공지</span>
-                                <ul class="mainNotice__info">
-                                    <li>
-                                        <i class="fa-solid fa-calendar-days"></i>
-                                        2024-07-20
-                                    </li>
-                                    <li>
-                                        <i class="fa-solid fa-eye"></i>
-                                        117
-                                    </li>
-                                </ul>
-                                <h3 class="mainNotice__title">
-                                    Notice Title
-                                </h3>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#none">
-                                <span class="mainNotice__ctg">공지</span>
-                                <ul class="mainNotice__info">
-                                    <li>
-                                        <i class="fa-solid fa-calendar-days"></i>
-                                        2024-07-20
-                                    </li>
-                                    <li>
-                                        <i class="fa-solid fa-eye"></i>
-                                        117
-                                    </li>
-                                </ul>
-                                <h3 class="mainNotice__title">
-                                    Notice Title
-                                </h3>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#none">
-                                <span class="mainNotice__ctg">공지</span>
-                                <ul class="mainNotice__info">
-                                    <li>
-                                        <i class="fa-solid fa-calendar-days"></i>
-                                        2024-07-20
-                                    </li>
-                                    <li>
-                                        <i class="fa-solid fa-eye"></i>
-                                        117
-                                    </li>
-                                </ul>
-                                <h3 class="mainNotice__title">
-                                    Notice Title
+                                    [[${notice.boardTitle}]]
                                 </h3>
                             </a>
                         </li>
@@ -192,22 +139,15 @@
                 <article class="mainBoard__item">
                     <div class="mainBoard__top">
                         <h3>이벤트</h3>
-                        <a href="#none">
+                        <a href="/user/event">
                             전체보기
                             <i class="fa-solid fa-angle-right"></i>
                         </a>
                     </div>
+                    <!-- 이벤트 최대3개 이미지 배너 출력 -->
                     <div class="mainEvent__con">
                         <ul class="mainEvent__items swiper-wrapper">
-                            <li class="mainEvent__item swiper-slide" style="background-image: url();">
-                                <p>Banner1</p>
-                            </li>
-                            <li class="mainEvent__item swiper-slide" style="background-image: url();">
-                                <p>Banner2</p>
-                            </li>
-                            <li class="mainEvent__item swiper-slide" style="background-image: url();">
-                                <p>Banner3</p>
-                            </li>
+                            <li class="mainEvent__item swiper-slide" th:each="eventImg: ${eventImage}" th:style="'background-image: url(' + ${eventImg.boardThumbnail} + ');'"></li>
                         </ul>
                         <div class="mainEvent__prevNext">
                             <button class="mainEvent__prevNext--prev">
