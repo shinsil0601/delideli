@@ -473,7 +473,7 @@ input[type=checkbox]:before {
     position: relative;
     width: 100%;
     height: 56.8rem;
-    background: var(--gray-300) no-repeat center/cover;
+    background: no-repeat center/cover;
     border-radius: 2rem;
 }
 .mainEvent__item > p {
