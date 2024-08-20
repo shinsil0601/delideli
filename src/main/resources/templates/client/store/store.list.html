@@ -13,41 +13,6 @@
         <!-- Include:Client JS -->
         <th:block th:include="inc/client/client-js :: clientJs"></th:block>
         <!-- JS: 토글 버튼 클릭 시 처리 -->
-        <script th:inline="javascript">
-            $(document).ready(function () {
-                $('.toggle-btn').click(function () {
-                    var $button = $(this);
-                    var storeKey = $button.data('store-key');
-
-                    $.ajax({
-                        url: '/client/storePause/' + storeKey,
-                        type: 'POST',
-                        success: function (response) {
-                            var $statusCell = $button.closest('tr').find('td:nth-child(4)');
-
-                            // 서버 응답에 따라 상태 열과 버튼 텍스트를 업데이트
-                            if (response === "일시정지") {
-                                $statusCell.text('일시정지');
-                                $button.text('OFF');
-                            } else if (response === "영업중") {
-                                $statusCell.text('영업중');
-                                $button.text('ON');
-                            }
-
-                            // 상태에 따라 버튼 활성화/비활성화
-                            if ($statusCell.text() === '영업종료') {
-                                $button.prop('disabled', true);  // 영업종료 시 버튼 비활성화
-                            } else {
-                                $button.prop('disabled', false); // 영업중 또는 일시정지 시 버튼 활성화
-                            }
-                        },
-                        error: function () {
-                            alert('오류가 발생했습니다. 다시 시도해주세요.');
-                        }
-                    });
-                });
-            });
-        </script>
 
     </head>
     <body>
@@ -66,84 +31,89 @@
                 <section class="contents">
                     <a href="/client/storeRegister">가게 등록</a>
                     <hr>
-
-                    <!--가게 검색-->
                     <form th:action="@{/client/storeList}" method="get">
-                        <select name="keytype">
-                            <option>가게이름</option>
-                            <option>승인여부</option>
-                            <option>영업상태</option>
-                        </select>
-                        <input type="text" name="keyword" id="">
-                        <button type="submit">검색</button>
+                        <div>
+                            <input type="text" name="keyword" th:value="${keyword}" placeholder="가게명 검색">
+                            <select name="storeAccess">
+                                <option value="">전체 (승인 여부)</option>
+                                <option value="true" th:selected="${storeAccess == 'true'}">승인</option>
+                                <option value="false" th:selected="${storeAccess == 'false'}">승인 대기</option>
+                            </select>
+                            <select name="businessStatus">
+                                <option value="">전체 (상태)</option>
+                                <option value="영업중" th:selected="${businessStatus == '영업중'}">영업중</option>
+                                <option value="일시정지" th:selected="${businessStatus == '일시정지'}">일시정지</option>
+                                <option value="삭제 대기" th:selected="${businessStatus == '삭제 대기'}">삭제 대기</option>
+                                <option value="마감" th:selected="${businessStatus == '마감'}">마감</option>
+                            </select>
+                            <button type="submit">검색</button>
+                        </div>
                     </form>
                     <hr>
-
                     <table>
+                        <thead>
                         <tr>
                             <th>가게명</th>
                             <th>오픈시간</th>
                             <th>마감시간</th>
                             <th>상태</th>
-                            <th>가게일시정지</th>
+                            <th>가게 일시정지</th>
                             <th>승인여부</th>
                             <th>주문관리</th>
-                            <th colspan="2">관리</th>
+                            <th>관리</th>
                         </tr>
-                        <tr th:each="store : ${list}">
-                            <!-- 가게 이름 -->
-                            <td th:text="${store.storeName}"></td>
-
-                            <!-- 포맷된 오픈 시간 -->
-                            <td th:text="${store.formattedOpenTime}"></td>
-
-                            <!-- 포맷된 마감 시간 -->
-                            <td th:text="${store.formattedCloseTime}"></td>
-
-                            <!-- 영업 상태는 서버에서 계산된 businessStatus를 사용 -->
-                            <td th:text="${store.businessStatus}"></td>
-
-                            <!-- 가게 일시정지 버튼 -->
-                            <td>
-                                <button th:attr="data-store-key=${store.storeInfoKey}"
-                                        th:text="${store.businessStatus == '일시정지' ? 'OFF' : 'ON'}"
-                                        class="toggle-btn"
-                                        th:disabled="${store.businessStatus == '영업종료'}">
-                                </button>
-                            </td>
-
-                            <!-- 승인 여부 -->
-                            <td th:text="${store.storeAccess}"></td>
-
-                            <!-- 이동 버튼 -->
-                            <td><button>이동</button></td>
-
-                            <!-- 관리 옵션 (수정 및 삭제) -->
-                            <td colspan="2">
-                                <a th:href="@{storeEdit/{storeInfoKey}(storeInfoKey=${store.storeInfoKey})}" th:text="수정"></a>
-                                <a th:href="@{storeDelete/{storeInfoKey}(storeInfoKey=${store.storeInfoKey})}" th:text="삭제"></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <nav>
-                                    <ul>
-                                        <th:block th:if="${map.prev}">
-                                            <li><a th:href="@{/client/storeList(page=${map.startPageNo})}">이전</a></li>
-                                        </th:block>
-                                        <li th:each="i : ${#numbers.sequence(map.startPageNo, map.endPageNo)}">
-                                            <a th:href="@{/client/storeList(page=${i}, keyword=${keyword})}" th:text="${i}"></a>
-                                        </li>
-                                        <th:block th:if="${map.next}">
-                                            <li><a th:href="@{/client/storeList(page=${map.endPageNo})}">다음</a></li>
-                                        </th:block>
-                                    </ul>
-                                </nav>
-                            </td>
-                        </tr>
-
+                        </thead>
+                        <tbody>
+                        <th:block th:each="store : ${store}">
+                            <tr>
+                                <td th:text="${store.storeName}">가게명</td>
+                                <td th:text="${store.formattedOpenTime}">오후 12시</td>
+                                <td th:text="${store.formattedCloseTime}">오전 12시</td>
+                                <td th:text="${store.storeDelete ? '삭제 대기' : store.businessStatus}">영업중</td>
+                                <td>
+                                    <button th:data-store-id="${store.storeInfoKey}"
+                                            th:classappend="${store.storePause ? 'toggle-on' : 'toggle-off'}"
+                                            onclick="toggleStorePause(this)">
+                                        <span th:text="${store.storePause ? 'ON' : 'OFF'}"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <span th:if="${store.storeAccess}" th:text="'승인'">승인</span>
+                                    <span th:if="${!store.storeAccess}" th:text="'승인 대기'" style="color: red;">승인 대기</span>
+                                </td>
+                                <td>
+                                    <a href="/client/storeOrders" th:href="@{/client/storeOrders/{storeInfoKey}(storeInfoKey=${store.storeInfoKey})}">이동</a>
+                                </td>
+                                <td>
+                                    <a href="/client/storeEdit" th:href="@{/client/storeEdit/{storeInfoKey}(storeInfoKey=${store.storeInfoKey})}">수정</a>
+                                    <button th:data-store-id="${store.storeInfoKey}"
+                                            onClick="toggleStoreDelete(this)"
+                                            th:text="${store.storeDelete ? '삭제 취소' : '삭제'}">
+                                    </button>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
                     </table>
 
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <ul>
+                            <li th:if="${map.prev}">
+                                <a th:href="@{/client/storeList(page=${currentPage - 1}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}">이전</a>
+                            </li>
+                            <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
+                                <li th:classappend="${i == currentPage ? 'active' : ''}">
+                                    <a th:href="@{/client/storeList(page=${i}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}" th:text="${i}">1</a>
+                                </li>
+                            </th:block>
+                            <li th:if="${map.next}">
+                                <a th:href="@{/client/storeList(page=${currentPage + 1}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}">다음</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <script src="/client/js/module/store.list.js"></script>
                 </section>
                 <!-- End:Contents -->
             </main>
