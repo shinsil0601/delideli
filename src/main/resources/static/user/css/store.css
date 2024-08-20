@@ -4,6 +4,116 @@
     max-width: 144rem;
     padding: 6rem 0 12rem;
 }
+/* store - 검색박스 */
+.sp__search-con {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    padding-bottom: 4rem;
+}
+.sp__search-adr-input-box {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.search__add-value {
+    position: relative;
+    min-width: 32rem;
+    padding: 1rem 1.6rem 1rem 1.6rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+    line-height: 1;
+}
+.sp__search-adr-input-box button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10rem;
+    height: 4.2rem;
+    background: var(--gray-600);
+    color: var(--whiteColor);
+}
+.guest-addr__con {
+    padding-top: 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+.guest-addr__input-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.guest-addr__con input {
+    width: 20rem;
+    height: 4.2rem;
+    font-size: var(--font-size-14);
+}
+.guest-addr__con button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 6rem;
+    height: 4.2rem;
+    padding: 1.6rem 1rem;
+    font-size: var(--font-size-14);
+}
+.guest-addr__btn {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.addr-select__con {
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.addr-select__con select {
+    border: 1px solid var(--gray-200);
+    height: 4.2rem;
+    padding: 1rem;
+    border-radius: 0.8rem;
+}
+.addr-select__con button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 6rem;
+    height: 4.2rem;
+    padding: 1.6rem 1rem;
+    font-size: var(--font-size-14);
+}
+#addressSelect {
+
+}
+.sp__search-store-box {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.sp__search-store-input-box {
+    position: relative;
+}
+.sp__search-store-input-box span {
+    position: absolute;
+    left: 1.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.sp__search-store-input-box input {
+    width: 32rem;
+    padding: 1rem 1.6rem 1rem 4rem;
+}
+.sp__search-store-box button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10rem;
+    height: 4.2rem;
+    background: var(--gray-600);
+    color: var(--whiteColor);
+}
 /* store - 카테고리 */
 .sp__ctg {
     padding-bottom: 4rem;

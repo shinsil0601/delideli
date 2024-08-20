@@ -23,7 +23,86 @@
         <main id="mainpage__wrap">
             <div class="storePage__wrap">
                 <!-- 검색박스 -->
-                <div class="sp__search-con"></div>
+                <div class="sp__search-con">
+                    <!-- 주소 -->
+                    <div class="sp__search-adr-box">
+                        <th:block th:if="${user == null}">
+                            <!-- 비로그인 -->
+                            <div class="sp__search-adr-input-box">
+                                <p class="search__add-value" id="displayedGuestAddress">
+                                    [[${selectedAddress != null ? selectedAddress : '현재 입력된 주소가 없습니다.'}]]
+                                </p>
+                                <button type="button" onclick="showGuestAddressModal()">주소변경</button>
+                            </div>
+                            <!-- 주소 입력 모달창 -->
+                            <div id="guestAddressModal" style="display: none;">
+                                <form id="guestAddressForm">
+                                    <div class="guest-addr__con">
+                                        <div class="guest-addr__input-box">
+                                            <input type="text" id="guestAddress" name="guestAddress" readonly required>
+                                            <button type="button" onclick="execDaumPostcodeForGuest()">주소 찾기</button>
+                                        </div>
+                                        <input type="text" id="guestAddrDetail" name="guestAddrDetail">
+                                        <div class="guest-addr__btn">
+                                            <button type="button" onclick="applyGuestAddress()">적용</button>
+                                            <button type="button" onclick="closeGuestAddressModal()">취소</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </th:block>
+
+                        <th:block th:if="${user != null}">
+                            <!-- 로그인 -->
+                            <div th:each="address : ${addressList}" th:if="${address.defaultAddress}" class="sp__search-adr-input-box">
+                                <p class="search__add-value" id="loginOn-addr">
+                                    [[${address.address}]] [[${address.addrDetail}]]
+                                </p>
+                                <button type="button" onclick="toggleAddressList()">주소변경</button>
+                            </div>
+                            <!-- 주소 리스트 박스 -->
+                            <div id="addressListBox" style="display: none;">
+                                <div class="addr-select__con">
+                                    <select id="addressSelect" onchange="selectAddress()">
+                                        <option value="" disabled selected>주소를 선택하세요</option>
+                                        <option th:each="address : ${addressList}"
+                                                th:value="${address.userAddressKey}"
+                                                th:text="${address.address} + ' ' + ${address.addrDetail}">
+                                        </option>
+                                    </select>
+                                    <button onclick="showAddAddressModal()">주소 추가</button>
+                                </div>
+                            </div>
+                            <!-- 주소 입력 모달창 -->
+                            <div id="addAddressModal" style="display: none;">
+                                <form id="addressForm">
+                                    <div class="guest-addr__con">
+                                        <div class="guest-addr__input-box">
+                                            <input type="text" id="newZipcode" name="newZipcode" readonly required>
+                                            <button type="button" onclick="execDaumPostcode()">주소 찾기</button>
+                                        </div>
+                                        <input type="text" id="newAddress" name="newAddress">
+                                        <input type="text" id="newAddrDetail" name="newAddrDetail">
+                                        <div class="guest-addr__btn">
+                                            <button type="button" onclick="saveAddress()">적용</button>
+                                            <button type="button" onclick="closeAddAddressModal()">취소</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </th:block>
+                    </div>
+                    <!-- 가게 -->
+                    <div class="sp__search-store-box">
+                        <div class="sp__search-store-input-box">
+                            <span>
+                                <i class="fa-solid fa-utensils"></i>
+                            </span>
+                            <input type="text" id="storeSearchInput" placeholder="가게명을 입력하세요" />
+                        </div>
+                        <button type="button" id="searchButton" onclick="searchStores()">검색</button>
+                    </div>
+                </div>
                 <!-- 카테고리 -->
                 <div class="sp__ctg-con">
                     <th:block th:if="${user != null}">
