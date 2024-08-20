@@ -1,6 +1,6 @@
 function openEditCartItemWindow(cartKey) {
     const url = '/user/editCartItem/' + cartKey;
-    window.open(url, 'editCartItemWindow', 'width=400,height=600');
+    window.open(url, 'editCartItemWindow', 'width=720,height=720');
 }
 
 function deleteCartItem(cartKey) {

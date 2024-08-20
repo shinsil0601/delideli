@@ -752,3 +752,324 @@
     background: var(--mainColor);
     color: var(--subColor);
 }
+/* myLike */
+.myLike__itmes {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(4, 1fr);
+}
+.myLike__itmes > li > a {
+    display: block;
+}
+.myLike__img {
+    width: 100%;
+    height: 34.5rem;
+    border-radius: 2rem;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+}
+.myLike__img img {
+    width: 100%;
+    height: 100%;
+}
+.myLike__rating {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    font-size: var(--font-size-14);
+    color: var(--gray-900);
+    padding-top: 1rem;
+}
+.myLike__rating i {
+    color: var(--mainColor);
+}
+.myLike__name {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.myLike__info {
+    display: flex;
+    gap: 0.4rem;
+}
+.myLike__info > li {
+    font-size: var(--font-size-14);
+    color: var(--gray-400);
+}
+/* myCart */
+.myCart__shop-items {
+    display: grid;
+    gap: 4rem;
+}
+.myCart__shop-items > li {
+    padding: 4rem;
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    border-radius: 2rem;
+}
+.myCart__top {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+.myCart__top h3 {
+    font-size: var(--font-size-32);
+    font-weight: 700;
+    color: var(--subColor);
+}
+.myCart__top p {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+}
+.myCart__menu-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 2rem 0;
+}
+.myCart__menu-items > li {
+    padding: 2rem;
+    border-radius: 2rem;
+    box-shadow: var(--box-shadow-100);
+}
+.myCart__img {
+    width: 14rem;
+    height: 14rem;
+    border-radius: 2rem;
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+}
+.myCart__img img {
+    width: 100%;
+    height: 100%;
+}
+.myCart__menu {
+    padding: 2rem 0;
+}
+.myCart__menu h3 {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+}
+.myCart__menu p {
+    font-weight: 500;
+    color: var(--gray-400);
+}
+.myCart__info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.myCart__btn {
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+.myCart__btn button {
+    padding: 1rem;
+    border-radius: 0.8rem;
+    font-size: var(--font-size-14);
+}
+.myCart__btn--1 {
+    background: var(--gray-600);
+    color: var(--whiteColor);
+}
+.myCart__total {
+    display: grid;
+    justify-content: flex-end;
+    gap: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--gray-200);
+}
+.myCart__total h4 {
+    font-size: var(--font-size-32);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.myCart__total-btn {
+    display: flex;
+    justify-content: flex-end;
+    gap: 2rem;
+}
+.myCart__total-btn button {
+    padding: 1.6rem;
+}
+.myCart__total-btn--1 {
+    background: var(--gray-600);
+    color: var(--whiteColor);
+}
+.myCart__total-btn--2 {
+    background: var(--mainColor);
+    color: var(--subColor);
+}
+/* editCart */
+.editCart__wrap {
+    position: relative;
+    width: 72rem;
+    padding: 4rem;
+    background: var(--whiteColor);
+}
+.editCart__con {
+    display: grid;
+    gap: 2rem;
+}
+.editCart__top {
+    display: grid;
+    justify-content: center;
+}
+.editCart__img {
+    width: 20rem;
+    height: 20rem;
+    border-radius: 2rem;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+}
+.editCart__img img {
+    width: 100%;
+    height: 100%;
+}
+.editCart__title {
+    font-size: var(--font-size-32);
+    font-weight: 700;
+    color: var(--gray-900);
+    text-align: center;
+    padding-top: 2rem;
+}
+.editCart__price {
+    font-size: var(--font-size-24);
+    text-align: center;
+}
+.editCart__option-box h3 {
+    font-size: var(--font-size-24);
+    font-weight: 500;
+    color: var(--gray-900);
+}
+.editCart__option-items {
+    padding-top: 1rem;
+    display: grid;
+    gap: 2rem;
+}
+.editCart__option-name {
+    font-size: var(--font-size-24);
+    font-weight: 500;
+}
+.editCart__option-menu {
+    padding-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.editCart__option-menu label {
+    font-size: var(--font-size-18);
+    font-weight: 500;
+}
+.editCart__total-box h3 {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.editCart__total-cnt {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+}
+.editCart__total-cnt p {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+}
+.editCart__total-cnt p span {
+    color: var(--gray-900);
+}
+.editCart__total-btn {
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.editCart__total-btn button {
+    padding: 1.6rem;
+    width: 14rem;
+    background: var(--mainColor);
+    font-size: var(--font-size-24);
+    color: var(--subColor);
+}
+/* myAsk */
+.myAsk__links {
+    padding-top: 4rem;
+    display: flex;
+    justify-content: flex-end;
+}
+.myAsk__links > a {
+    display: inline-block;
+    padding: 0.8rem 1.6rem;
+    background: var(--subColor);
+    color: var(--whiteColor);
+    border-radius: 0.8rem;
+    transition: .3s;
+}
+.myAsk__links > a:hover {
+    opacity: 0.8;
+}
+.myAsk__con .event__table--cp {
+    font-weight: 700;
+    color: var(--teal-500);
+}
+.myAskWrite__wrap {
+    position: relative;
+    margin: 0 auto;
+    padding: 4rem;
+    border-radius: 2rem;
+    background: var(--whiteColor);
+    box-shadow: var(--box-shadow-100);
+    width: 48rem;
+}
+.myAskWrite__con {
+    display: grid;
+    gap: 4rem;
+}
+.myAskWrite__box {
+    display: grid;
+    gap: 2rem;
+}
+.myAskWrite__box label {
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.myAskWrite__box input {
+    width: 40rem;
+    border-radius: 0.8rem;
+}
+.myAskWrite__box textarea {
+    height: 12rem;
+}
+.myAskWrite__btn {
+    padding-top: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+.myAskWrite__btn button {
+    padding: 0.8rem 1.6rem;
+}
+.myAskWrite__btn--2 {
+    background: var(--mainColor);
+    color: var(--whiteColor);
+}
+.myAskDetail__client {
+    padding: 2rem;
+}
+.myAskDetail__client h4 {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    padding-bottom: 1rem;
+}
+.myAskDetail__client p {
+    padding: 1rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+}
+.myAskDetail--btn-items {
+    gap: 2rem;
+}

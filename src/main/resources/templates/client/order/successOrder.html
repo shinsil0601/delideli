@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사장님 - 주문(처리중)</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Client CSS -->
+        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Client JS -->
+        <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+
+    </head>
+    <body>
+        <div class="client-wrap">
+            <!-- Start:Aside -->
+            <th:block th:include="inc/client/aside-order :: clientAsideOrder"></th:block>
+            <!-- End:Aside -->
+
+            <!-- Start:Main -->
+            <main id="mainpage__wrap">
+                <!-- Start:Header -->
+                <th:block th:include="inc/client/header :: clientHeader"></th:block>
+                <!-- End:Header -->
+
+                <!-- Start:Contents -->
+                <section class="contents">
+                    <div class="order-list">
+                        <div th:each="order : ${successOrderList}">
+                            <div class="order-item">
+                                <div class="order-time">
+                                    <p th:text="${#temporals.format(order.orderRegdate, 'HH:mm')}"></p>
+                                </div>
+                                <div class="order-details">
+                                    <p th:text="${order.orderNo}"></p>
+                                    <p th:text="${order.orderMethod}"></p>
+                                    <p>
+                                        <span th:text="${order.uorderPrice} + '원'"></span>
+                                        <span th:text="${order.uorderPayment == '포인트 결제' ? '결제 완료' : order.uorderPayment == '현금' ? '후불/현금' : '후불/카드'}"></span>
+                                    </p>
+                                    <div th:each="orderDetail : ${order.clientOrderDetails}">
+                                        <p th:text="${orderDetail.menuName} + ' ' + ${orderDetail.quantity} + '개'"></p>
+                                    </div>
+                                    <p th:text="${order.address}"></p>
+                                </div>
+                                <div class="order-actions">
+                                    <button type="button" th:attr="data-orderkey=${order.orderKey}" onclick="openOrderDetail(this)">상세보기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Start:Pagination -->
+                    <th:block th:include="inc/client/pagination-order :: OrderListPagination (${type})"></th:block>
+                    <!-- End:Pagination -->
+
+                    <script src="/client/js/module/successOrder.js"></script>
+                </section>
+                <!-- End:Contents -->
+            </main>
+            <!-- End:Main -->
+        </div>
+    </body>
+</html>

@@ -20,6 +20,8 @@ function validateCommentForm() {
 function getCommentList() {
     const userKey = $('input[name=userKey]').val();
     const boardKey = $('input[name=boardKey]').val();
+    console.log(`userKey: ${userKey}`);
+    console.log(`boardKey: ${boardKey}`);
     $.ajax({
         type: 'GET',
         url: '/user/getCommentList',
@@ -33,7 +35,7 @@ function getCommentList() {
             renderComments(result, null, $("#comment__view"), userKey);
         },
         error: function (xhr, status, error) {
-            //console.error("AJAX 요청 실패");
+            // console.error("AJAX 요청 실패");
             //console.error("상태: " + status);
             //console.error("오류: " + error);
             //console.error("응답: " + xhr.responseText);

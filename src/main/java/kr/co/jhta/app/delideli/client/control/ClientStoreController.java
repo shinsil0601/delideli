@@ -150,6 +150,7 @@ public class ClientStoreController {
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("on", "list");
+        model.addAttribute("type", "storeList");
 
         return "client/store/store.list";
     }

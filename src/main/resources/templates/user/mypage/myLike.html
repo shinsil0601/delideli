@@ -20,34 +20,40 @@
 
         <!-- Start:Main -->
         <main id="mainpage__wrap">
-            <a href="/user/myAddress">주소관리</a><br>
-            <a href="/user/checkAccount">내 정보 수정</a><br>
-            <a href="/user/updatePw">비밀번호 변경</a><br>
-            <a href="/user/myOrder">주문내역</a><br>
-            <a href="/user/myReview">내 리뷰관리</a><br>
-            <a href="/user/myLike">찜목록</a><br>
-            <a href="/user/myCart">장바구니</a><br>
-            <a href="/user/myAsk">내 문의확인</a><br>
-            <a href="/user/withdrawal">회원탈퇴</a>
-            <br><br><br>
-            <div class="store-list">
-                <div th:each="store : ${storeList}">
-                    <div class="store-item">
-                        <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}">
-                            <img th:src="${store.storeProfileImg}" alt="가게 이미지">
-                            <p th:text="${store.storeName}"></p>
-                            <p th:text="'평점: ' + ${store.averageRating} + '⭐'"></p>
-                            <p th:text="'최소주문금액: ' + ${store.minOrderAmount} + '원'"></p>
-                            <p th:text="'배달비: ' + ${store.deliveryAmount1} + '원'"></p>
-                        </a>
-                    </div>
-                    <br><br>
+            <div class="subPage__wrap">
+                <!-- Start:subNav -->
+                <th:block th:include="inc/user/subNav :: subNav"></th:block>
+                <!-- End:subNav -->
+                <h2 class="subPage__title">찜 목록</h2>
+                <div class="myLike__con">
+                    <ul class="myLike__itmes">
+                        <li th:each="store : ${storeList}">
+                            <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}">
+                                <div class="myLike__img">
+                                    <img th:src="${store.storeProfileImg}" alt="가게 이미지">
+                                </div>
+                                <p class="myLike__rating">
+                                    <i class="fa-solid fa-star"></i> [[${store.averageRating}]]
+                                </p>
+                                <h3 class="myLike__name">
+                                    [[${store.storeName}]]
+                                </h3>
+                                <ul class="myLike__info">
+                                    <li>
+                                        최소주문금액 [[${store.minOrderAmount}]]원
+                                    </li>
+                                    <li>
+                                        배달비 [[${store.deliveryAmount1}]]원
+                                    </li>
+                                </ul>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Start:Pagination -->
+                    <th:block th:include="inc/user/pagination :: boardPagination (${type})"></th:block>
+                    <!-- End:Pagination -->
                 </div>
             </div>
-
-            <!-- Start:Pagination -->
-            <th:block th:include="inc/user/pagination :: boardPagination (${type})"></th:block>
-            <!-- End:Pagination -->
         </main>
         <!-- End:Main -->
 
