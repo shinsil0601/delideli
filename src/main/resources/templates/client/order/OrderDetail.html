@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>주문 상세보기(처리중)</title>
+    </head>
+    <body>
+    <div class="container">
+        <div class="order-details">
+            <p>주문번호: <span th:text="${processingOrderDetail.orderNo}"></span></p>
+            <p>주문내역:</p>
+            <div th:each="orderDetail : ${processingOrderDetail.clientOrderDetails}">
+                <p th:text="${orderDetail.menuName} + ' ' + ${orderDetail.quantity} + '개'"></p>
+                <p th:text="'ㄴ옵션 : (' + ${orderDetail.optionName} + ')'"></p>
+            </div>
+            <p>결제방법: <span th:text="${processingOrderDetail.uorderPayment}"></span></p>
+            <p>결제금액: <span th:text="${processingOrderDetail.uorderPrice} + '원'"></span></p>
+            <p>가게 요청사항: <span th:text="${processingOrderDetail.shopDesc}"></span></p>
+            <p>배달 요청사항: <span th:text="${processingOrderDetail.riderDesc}"></span></p>
+        </div>
+
+        <div class="address-details">
+            <p>주소: <span th:text="${processingOrderDetail.address}"></span></p>
+        </div>
+    </div>
+    </body>
+</html>

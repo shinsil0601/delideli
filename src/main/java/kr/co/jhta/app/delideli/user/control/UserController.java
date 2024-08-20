@@ -70,7 +70,6 @@ public class UserController {
                        @PathVariable(required = false) Integer categoryId,
                        Model model,
                        HttpServletResponse response) {
-
         if (user != null) {
             boolean hasUserRole = user.getAuthorities().stream()
                     .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
