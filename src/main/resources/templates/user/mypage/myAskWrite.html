@@ -20,16 +20,27 @@
 
     <!-- Start:Main -->
     <main id="mainpage__wrap">
-        <h3>문의글작성</h3>
-        <form action="/user/myAskWrite" method="post">
-            <span>제목 : </span>
-            <input type="text" name="boardTitle" id=""> <br>
-            <span>내용 : </span>
-            <textarea name="boardContents" id="" cols="30" rows="10"></textarea><br>
-
-            <button type="submit">작성완료</button>
-        </form>
-        <a href="/user/myAsk">목록으로</a>
+        <div class="subPage__wrap">
+            <h2 class="subPage__title">문의작성</h2>
+            <div class="myAskWrite__wrap">
+                <form action="/user/myAskWrite" method="post">
+                    <div class="myAskWrite__con">
+                        <div class="myAskWrite__box">
+                            <label for="boardTitle">제목</label>
+                            <input type="text" name="boardTitle" id="boardTitle">
+                        </div>
+                        <div class="myAskWrite__box">
+                            <label for="boardContents">내용</label>
+                            <textarea name="boardContents" id="boardContents"></textarea>
+                        </div>
+                    </div>
+                    <div class="myAskWrite__btn">
+                        <button type="button" class="myAskWrite__btn--1" th:onclick="'location.href=\'' + @{/user/myAsk} + '\''">목록으로</button>
+                        <button type="submit" class="myAskWrite__btn--2">작성완료</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </main>
     <!-- End:Main -->
 

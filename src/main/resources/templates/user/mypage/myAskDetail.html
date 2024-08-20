@@ -20,37 +20,45 @@
 
     <!-- Start:Main -->
     <main id="mainpage__wrap">
-        <h3>내문의 상세보기</h3>
-        <table>
-            <tr>
-                <th colspan="2">
-                    <span th:text="${board.boardTitle}"></span>
-                    <span th:if="${board.boardCommentStatus == 1}" style="margin-left: 10px; color: green;">답변완료</span>
-                    <span th:if="${board.boardCommentStatus == 0}" style="margin-left: 10px; color: red;">미완료</span>
-                </th>
-            </tr>
-            <tr>
-                <td></td>
-                <td th:text="${board.boardRegdate}"></td>
-            </tr>
-            <tr>
-                <td colspan="2" th:text="${board.boardContents}"></td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <a th:href="@{/user/myAskDelete/{boardKey}(boardKey=${board.boardKey})}">삭제</a>
-                </td>
-            </tr>
-        </table>
-        <hr>
-        <table th:if="${board.boardCommentStatus == 1}">
-            <tr>
-                <th>관리자</th>
-            </tr>
-            <tr>
-                <td th:text="${board.boardComment}"></td>
-            </tr>
-        </table>
+        <div class="subPage__wrap">
+            <div class="board__wrap">
+                <div class="board__view">
+                    <div class="board__view--top">
+                        <ul class="board__view--info">
+                            <li>
+                                <th:block th:if="${board.boardCommentStatus == 1}">
+                                    <span class="board__view--ctg">답변완료</span>
+                                </th:block>
+                                <th:block th:if="${board.boardCommentStatus == 0}">
+                                    <span class="board__view--ctg" style="background: var(--gray-400); color: var(--gray-900)">미답변</span>
+                                </th:block>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-calendar-days"></i>
+                                [[${board.boardRegdate}]]
+                            </li>
+                        </ul>
+                        <h2 class="board__view--title">
+                            [[${board.boardTitle}]]
+                        </h2>
+                    </div>
+                    <div class="board__view--bottom">
+                        [[${board.boardContents}]]
+                    </div>
+                </div>
+                <div class="myAskDetail__client" th:if="${board.boardCommentStatus == 1}">
+                    <h4>관리자</h4>
+                    <p>
+                        [[${board.boardComment}]]
+                    </p>
+                </div>
+                <div class="board__view--btn-items myAskDetail--btn-items">
+                    <button type="button" class="view-btn1" th:onclick="'location.href=\'' + @{/user/myAsk} + '\''">목록</button>
+                    <button type="button" class="view-btn2" th:onclick="'location.href=\'' + @{/user/myAskDelete/{boardKey}(boardKey=${board.boardKey})} + '\''">삭제하기</button>
+                </div>
+
+            </div>
+        </div>
     </main>
     <!-- End:Main -->
 
