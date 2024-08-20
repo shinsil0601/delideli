@@ -6,6 +6,7 @@ import kr.co.jhta.app.delideli.client.account.domain.ClientAccount;
 import kr.co.jhta.app.delideli.client.dto.ClientDTO;
 import kr.co.jhta.app.delideli.client.account.exception.DuplicateClientIdException;
 import kr.co.jhta.app.delideli.client.account.service.ClientService;
+import kr.co.jhta.app.delideli.client.store.domain.ClientStoreInfo;
 import kr.co.jhta.app.delideli.client.store.service.ClientStoreService;
 import kr.co.jhta.app.delideli.common.security.CustomAuthenticationDetails;
 import kr.co.jhta.app.delideli.common.security.JwtTokenProvider;
@@ -237,16 +238,6 @@ public class ClientController {
         return clientService.checkClientEmailExists(email);
     }
 
-    // 메인 페이지로 이동
-   /* @GetMapping("/storeList")
-    public String storeList(@AuthenticationPrincipal User user, Model model) {
-        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
-        ArrayList<StoreInfo> storeInfo = clientStoreService.getAllStore(clientAccount.getClientKey());
-        model.addAttribute("client", clientAccount);
-        model.addAttribute("store", storeInfo);
-        return "client/store/store.list";
-    }*/
-
     // 로그아웃
     @GetMapping("/logout")
     public String logout(HttpServletResponse response) {
@@ -267,6 +258,7 @@ public class ClientController {
     public String myPage(@AuthenticationPrincipal User user, Model model) {
         ClientAccount clientAccount = clientService.findClientById(user.getUsername());
         model.addAttribute("client", clientAccount);
+        model.addAttribute("on", "myPage");
         return "client/mypage/myPage";
     }
 
@@ -275,6 +267,8 @@ public class ClientController {
     public String clientInfoUpdate(@AuthenticationPrincipal User user, Model model) {
         ClientAccount clientAccount = clientService.findClientById(user.getUsername());
         model.addAttribute("client", clientAccount);
+        model.addAttribute("on", "myPage");
+        model.addAttribute("active", "changeInfo");
         return "client/mypage/infoUpdate";
     }
 
@@ -287,6 +281,7 @@ public class ClientController {
             clientDTO.setClientId(clientAccount.getClientId());
         }
         clientService.modifyClient(clientDTO);
+        model.addAttribute("on", "myPage");
         return "redirect:/client/infoUpdate";
     }
 
@@ -295,7 +290,9 @@ public class ClientController {
     public String changePwLogin(@AuthenticationPrincipal User user, Model model) {
         ClientAccount clientAccount = clientService.findClientById(user.getUsername());
         model.addAttribute("client", clientAccount);
-        return "/client/myPage/changePwLogin";
+        model.addAttribute("on", "myPage");
+        model.addAttribute("active", "changePw");
+        return "client/mypage/changePwLogin";
     }
 
     // 마이페이지(비밀번호변경)
@@ -303,6 +300,7 @@ public class ClientController {
     public String changePwLogin(@AuthenticationPrincipal User user, @ModelAttribute ClientDTO clientDTO,
                                 @RequestParam String clientId, @RequestParam String clientPw1, @RequestParam String newPw1,
                                 Model model, RedirectAttributes redirectAttributes) {
+        model.addAttribute("on", "myPage");
         // 기존 비밀번호와 입력한 비밀번호가 일치하지 않으면 리턴
         if (!passwordEncoder.matches(clientPw1, clientService.findClientById(clientId).getClientPw())) {
             ClientAccount clientAccount = clientService.findClientById(user.getUsername());
@@ -316,8 +314,4 @@ public class ClientController {
         return "redirect:/client/infoUpdate";
     }
 
-
-
-
 }
-
