@@ -9,6 +9,8 @@ import kr.co.jhta.app.delideli.common.service.EmailService;
 import kr.co.jhta.app.delideli.common.service.EmailVerificationService;
 import kr.co.jhta.app.delideli.user.account.domain.UserAccount;
 import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
+import kr.co.jhta.app.delideli.user.board.domain.Board;
+import kr.co.jhta.app.delideli.user.board.service.UserBoardService;
 import kr.co.jhta.app.delideli.user.coupon.domain.Coupon;
 import kr.co.jhta.app.delideli.user.coupon.service.UserCouponService;
 import kr.co.jhta.app.delideli.user.dto.UserDTO;
@@ -64,6 +66,8 @@ public class UserController {
     private final UserCategoryService categoryService;
     @Autowired
     private final UserStoreService storeService;
+    @Autowired
+    private final UserBoardService userBoardService;
 
     @GetMapping({"/home", "/home/{categoryId}"})
     public String home(@AuthenticationPrincipal User user,
@@ -110,6 +114,14 @@ public class UserController {
             store.setReviewCount(userStoreService.getReviewCountForStore(store.getStoreInfoKey()));
         }
         model.addAttribute("storeList", storeList);
+
+        //공지사항 목록 리스트(최대 4개)
+        ArrayList<Board> noticeList = userBoardService.getBoardListIndex();
+        model.addAttribute("noticeList", noticeList);
+
+        //이벤트 배너 이미지(최대3장)
+        ArrayList<Board> eventList = userBoardService.getEventListIndex();
+        model.addAttribute("eventImage", eventList);
 
         log.info("storeList {}", storeList);
 
