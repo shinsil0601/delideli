@@ -47,5 +47,9 @@
         WHERE review_key = #{reviewKey} AND report_review = 0
     </update>
 
-
+    <select id="getReviewByKey" resultMap="ReviewResultMap" parameterType="int">
+        SELECT *
+        FROM review
+        WHERE review_key = #{reviewKey}
+    </select>
 </mapper>

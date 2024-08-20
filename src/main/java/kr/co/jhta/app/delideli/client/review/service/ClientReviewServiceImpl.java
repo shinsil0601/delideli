@@ -34,10 +34,16 @@ public class ClientReviewServiceImpl implements ClientReviewService {
     // 리뷰 신고 처리
     @Override
     public boolean reportReview(int reviewKey) {
-        log.debug("Attempting to report review with key: >>>>>>>>>>>>>> {}", reviewKey);
-        int updatedRows = clientReviewMapper.updateReportReview(reviewKey); // 리뷰 신고 업데이트
-        log.debug("Number of rows updated:>>>>>>>>>>>>>>>>> {}", updatedRows);
-        return updatedRows > 0; // 업데이트 성공 여부 반환
+        int updatedRows = clientReviewMapper.updateReportReview(reviewKey);
+        if (updatedRows > 0) {
+            return true; // 신고 성공
+        } else {
+            ClientReview review = clientReviewMapper.getReviewByKey(reviewKey);
+            if (review != null && review.isReportReview()) {
+                throw new IllegalStateException("이미 신고된 리뷰입니다.");
+            }
+            return false; // 신고 실패
+        }
     }
 
 
