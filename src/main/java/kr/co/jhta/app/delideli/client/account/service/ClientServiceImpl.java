@@ -60,6 +60,13 @@ public class ClientServiceImpl implements ClientService {
         return clientMapper.checkAccessAccount(clientAccount);
     }
 
+    // 계정 탈퇴여부 확인
+    @Override
+    public boolean checkQuitAccount(String clientId, String password) {
+        ClientAccount clientAccount = findClientById(clientId);
+        return clientMapper.checkQuitAccount(clientAccount);
+    }
+
     //사장님 내정보 수정
     @Override
     public void modifyClient(ClientDTO clientDTO) {
@@ -110,6 +117,11 @@ public class ClientServiceImpl implements ClientService {
         ClientAccount clientAccount = findClientById(clientId);
         clientAccount.setClientPw(passwordEncoder.encode(newPw1));
         clientMapper.changePwLogin(clientAccount);
+    }
+
+    @Override
+    public void quitClientAccount(String clientId) {
+        clientMapper.quitClientAccount(clientId);
     }
 
 }
