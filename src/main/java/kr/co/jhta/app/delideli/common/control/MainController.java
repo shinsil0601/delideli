@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import kr.co.jhta.app.delideli.user.account.domain.UserAccount;
 import kr.co.jhta.app.delideli.user.account.mapper.UserMapper;
 import kr.co.jhta.app.delideli.user.account.service.UserService;
+import kr.co.jhta.app.delideli.user.board.domain.Board;
+import kr.co.jhta.app.delideli.user.board.service.UserBoardService;
 import kr.co.jhta.app.delideli.user.review.domain.Review;
 import kr.co.jhta.app.delideli.user.store.domain.Category;
 import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
@@ -30,11 +32,14 @@ public class MainController {
     private final UserCategoryService categoryService;
     @Autowired
     private final UserStoreService storeService;
+    @Autowired
+    private final UserBoardService userBoardService;
 
-    public MainController(UserService userService, UserCategoryService categoryService, UserStoreService storeService) {
+    public MainController(UserService userService, UserCategoryService categoryService, UserStoreService storeService, UserBoardService userBoardService) {
         this.userService = userService;
         this.categoryService = categoryService;
         this.storeService = storeService;
+        this.userBoardService = userBoardService;
     }
 
     @GetMapping("/")
@@ -84,6 +89,13 @@ public class MainController {
         }
         model.addAttribute("storeList", storeList);
 
+        //공지사항 목록 리스트(최대 4개)
+        ArrayList<Board> noticeList = userBoardService.getBoardListIndex();
+        model.addAttribute("noticeList", noticeList);
+
+        //이벤트 배너 이미지(최대3장)
+        ArrayList<Board> eventList = userBoardService.getEventListIndex();
+        model.addAttribute("eventImage", eventList);
 
         return "index";
     }

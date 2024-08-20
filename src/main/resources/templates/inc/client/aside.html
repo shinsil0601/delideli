@@ -8,7 +8,7 @@
         <div class="aside__nav">
             <ul class="aside__nav--depth1">
                 <li>
-                    <a href="#none" class="on">
+                    <a href="/client/storeList" th:classappend="${on == 'list'} ? on : ''">
                         <span class="aside__nav--title">
                             <i class="fa-solid fa-store"></i>
                             가게목록
@@ -16,7 +16,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#none">
+                    <a href="#none" th:classappend="${on == 'myPage'} ? on : ''">
                         <span class="aside__nav--title">
                             <i class="fa-solid fa-user"></i>
                             마이페이지
@@ -27,38 +27,26 @@
                     </a>
                     <ul class="aside__nav--depth2">
                         <li>
-                            <a href="/client/infoUpdate" class="active">내 정보수정</a>
+                            <a href="/client/infoUpdate" th:classappend="${active == 'changeInfo'} ? active : ''">내 정보수정</a>
                         </li>
                         <li>
-                            <a href="/client/changePwLogin">비밀번호 변경</a>
+                            <a href="/client/changePwLogin" th:classappend="${active == 'changePw'} ? active : ''">비밀번호 변경</a>
                         </li>
                         <li>
-                            <a href="#none">탈퇴 신청</a>
+                            <a href="#none" th:classappend="${active == 'quit'} ? active : ''">탈퇴 신청</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#none">
+                    <a href="/client/menu" th:classappend="${on == 'menu'} ? on : ''">
                         <span class="aside__nav--title">
                             <i class="fa-solid fa-utensils"></i>
                             메뉴
                         </span>
                     </a>
-                    <ul>
-                        <!-- 여기에 가게 목록 출력 -->
-                        <th:block th:each="store : ${store}">
-                            <li>
-                                <a th:href="@{/client/menu/{storeKey}(storeKey=${store.storeInfoKey})}"
-                                   th:text="${store.storeName}"
-                                   th:classappend="${store.storeInfoKey == currentStoreKey ? 'active' : ''}"
-                                   th:style="${store.storeInfoKey == currentStoreKey ? 'color:red;' : ''}">
-                                </a>
-                            </li>
-                        </th:block>
-                    </ul>
                 </li>
                 <li>
-                    <a href="#none">
+                    <a href="#none" th:classappend="${on == 'review'} ? on : ''">
                         <span class="aside__nav--title">
                             <i class="fa-solid fa-pen-to-square"></i>
                             리뷰
@@ -66,7 +54,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#none">
+                    <a href="#none" th:classappend="${on == 'money'} ? on : ''">
                         <span class="aside__nav--title">
                             <i class="fa-solid fa-chart-pie"></i>
                             가계부

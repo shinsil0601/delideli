@@ -3,6 +3,7 @@ package kr.co.jhta.app.delideli.client.menu.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
