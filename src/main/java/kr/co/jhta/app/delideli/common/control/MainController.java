@@ -93,6 +93,10 @@ public class MainController {
         ArrayList<Board> noticeList = userBoardService.getBoardListIndex();
         model.addAttribute("noticeList", noticeList);
 
+        //이벤트 배너 이미지(최대3장)
+        ArrayList<Board> eventList = userBoardService.getEventListIndex();
+        model.addAttribute("eventImage", eventList);
+
         return "index";
     }
 }

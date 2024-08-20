@@ -143,4 +143,9 @@ public class UserBoardServiceImpl implements UserBoardService {
         return userBoardMapper.noticeList();
     }
 
+    @Override
+    public ArrayList<Board> getEventListIndex() {
+        return userBoardMapper.eventList();
+    }
+
 }

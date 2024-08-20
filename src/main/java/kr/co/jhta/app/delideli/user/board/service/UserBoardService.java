@@ -47,4 +47,6 @@ public interface UserBoardService {
 
     //공지사항 목록 리스트(최대 4개)
     ArrayList<Board> getBoardListIndex();
+    //이벤트 배너이미지(최대 3개)
+    ArrayList<Board> getEventListIndex();
 }

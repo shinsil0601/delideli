@@ -62,4 +62,6 @@ public interface UserBoardMapper {
     void updateHitNotice(int num);
     //공지사항 목록 리스트(최대 4개)
     ArrayList<Board> noticeList();
+    //이벤트 배너 이미지(최대 3개)
+    ArrayList<Board> eventList();
 }
