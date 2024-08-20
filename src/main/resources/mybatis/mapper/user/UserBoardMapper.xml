@@ -230,4 +230,16 @@
         WHERE board_key = #{board_key}
     </update>
 
+    <!-- 공지사항 목록 리스트(최대 4개) -->
+    <select id="noticeList" resultMap="BoardResultMap">
+        SELECT board_key, user_key, board_type, board_status, board_progress_status, board_title, board_write,
+        board_contents, board_thumbnail, board_comment, board_comment_status, board_start_date,
+        board_end_date, board_regdate, board_comment_date, board_update,
+        file_attach1, file_attach2, file_attach3, file_attach4, board_hits
+        FROM board
+        WHERE board_type = "공지"
+        ORDER BY board_update DESC, board_key DESC
+        LIMIT 4 OFFSET 1
+    </select>
+
 </mapper>

@@ -5,6 +5,7 @@ import kr.co.jhta.app.delideli.user.board.domain.Comment;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,4 +60,6 @@ public interface UserBoardMapper {
 
     //공지사항 상세보기 조회수업데이트
     void updateHitNotice(int num);
+    //공지사항 목록 리스트(최대 4개)
+    ArrayList<Board> noticeList();
 }

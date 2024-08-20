@@ -108,13 +108,32 @@
                 <article class="mainBoard__item">
                     <div class="mainBoard__top">
                         <h3>공지사항</h3>
-                        <a href="#none">
+                        <a href="/user/notice">
                             전체보기
                             <i class="fa-solid fa-angle-right"></i>
                         </a>
                     </div>
-                    <ul class="mainBoard__notice">
+                    <!-- 공지사항 최대4개 리스트 출력 -->
+                    <ul class="mainBoard__notice" th:each="notice : ${noticeList}">
                         <li>
+                            <a th:href="@{detail/{num}(num=${notice.boardKey})}">
+                                <span class="mainNotice__ctg">공지</span>
+                                <ul class="mainNotice__info">
+                                    <li>
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                        [[${notice.boardUpdate}]]
+                                    </li>
+                                    <li>
+                                        <i class="fa-solid fa-eye"></i>
+                                        [[${notice.boardHits}]]
+                                    </li>
+                                </ul>
+                                <h3 class="mainNotice__title">
+                                    [[${notice.boardTitle}]]
+                                </h3>
+                            </a>
+                        </li>
+                        <!--<li>
                             <a href="#none">
                                 <span class="mainNotice__ctg">공지</span>
                                 <ul class="mainNotice__info">
@@ -167,32 +186,14 @@
                                     Notice Title
                                 </h3>
                             </a>
-                        </li>
-                        <li>
-                            <a href="#none">
-                                <span class="mainNotice__ctg">공지</span>
-                                <ul class="mainNotice__info">
-                                    <li>
-                                        <i class="fa-solid fa-calendar-days"></i>
-                                        2024-07-20
-                                    </li>
-                                    <li>
-                                        <i class="fa-solid fa-eye"></i>
-                                        117
-                                    </li>
-                                </ul>
-                                <h3 class="mainNotice__title">
-                                    Notice Title
-                                </h3>
-                            </a>
-                        </li>
+                        </li>-->
                     </ul>
                 </article>
                 <!-- 이벤트 -->
                 <article class="mainBoard__item">
                     <div class="mainBoard__top">
                         <h3>이벤트</h3>
-                        <a href="#none">
+                        <a href="/user/event">
                             전체보기
                             <i class="fa-solid fa-angle-right"></i>
                         </a>

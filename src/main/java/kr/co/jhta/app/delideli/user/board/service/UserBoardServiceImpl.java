@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -134,6 +135,12 @@ public class UserBoardServiceImpl implements UserBoardService {
     @Override
     public void updateHitNotice(int num) {
         userBoardMapper.updateHitNotice(num);
+    }
+
+    //공지사항 목록 리스트(최대 4개)
+    @Override
+    public ArrayList<Board> getBoardListIndex() {
+        return userBoardMapper.noticeList();
     }
 
 }
