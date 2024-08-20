@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>주문 상세보기(접수 대기)</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="order-details">
+                <p>주문번호: <span th:text="${waitOrderDetail.orderNo}"></span></p>
+                <p>주문내역:</p>
+                <div th:each="orderDetail : ${waitOrderDetail.clientOrderDetails}">
+                    <p th:text="${orderDetail.menuName} + ' ' + ${orderDetail.quantity} + '개'"></p>
+                    <p th:text="'ㄴ옵션 : (' + ${orderDetail.optionName} + ')'"></p>
+                </div>
+                <p>결제방법: <span th:text="${waitOrderDetail.uorderPayment}"></span></p>
+                <p>결제금액: <span th:text="${waitOrderDetail.uorderPrice} + '원'"></span></p>
+                <p>가게 요청사항: <span th:text="${waitOrderDetail.shopDesc}"></span></p>
+                <p>배달 요청사항: <span th:text="${waitOrderDetail.riderDesc}"></span></p>
+            </div>
+
+            <div class="address-details">
+                <p>주소: <span th:text="${waitOrderDetail.address}"></span></p>
+                <p>배달 예상시간:</p>
+                <div>
+                    <button onclick="adjustTime(-5)">-5분</button>
+                    <p id="deliveryTime">30분</p>
+                    <button onclick="adjustTime(5)">+5분</button>
+                </div>
+                <div>
+                    <button th:id="acceptButton" th:data-order-key="${waitOrderDetail.orderKey}">접수하기</button>
+                    <button th:id="rejectButton" th:data-order-key="${waitOrderDetail.orderKey}">거절하기</button>
+                </div>
+            </div>
+        </div>
+        <script src="/client/js/module/waitOrderDetail.js"></script>
+    </body>
+</html>
