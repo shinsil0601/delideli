@@ -18,4 +18,11 @@
         SELECT * FROM category
     </select>
 
+    <select id="getStoreCategories" resultMap="CategoryResultMap" parameterType="int">
+        SELECT c.*
+        FROM store_category sc
+        JOIN category c ON sc.category_key = c.category_key
+        WHERE sc.storeInfo_key = #{storeInfoKey}
+    </select>
+
 </mapper>
