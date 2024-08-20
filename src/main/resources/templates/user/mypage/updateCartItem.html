@@ -1,45 +1,65 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>장바구니 아이템 수정</title>
-</head>
-<body>
-<div id="menuDetailContainer" th:data-menu-key="${cartItem.cartKey}">
-    <h2 th:text="${menu.menuName}">메뉴 이름</h2>
-    <img th:src="@{${menu.menuImg}}" alt="메뉴 이미지">
-    <p id="basePrice" th:data-price="${menu.menuPrice}" th:text="${menu.menuPrice} + '원'">메뉴 가격</p>
-
-    <!-- 옵션 그룹과 옵션들을 보여주는 부분 -->
-    <div th:if="${optionGroups != null}">
-        <h3>옵션 선택</h3>
-        <div th:each="group : ${optionGroups}">
-            <p class="option-group-header" th:text="${group.optionGroupName}">옵션 그룹 이름</p>
-            <div style="display: block;">
-                <div th:each="option : ${group.options}">
-                    <label>
-                        <!-- 모든 옵션을 표시하고, selectedOptionKeys에 포함된 옵션만 체크 -->
-                        <input type="checkbox" class="option-checkbox"
-                               th:data-price="${option.optionPrice}"
-                               th:value="${option.optionKey}"
-                               th:checked="${#lists.contains(selectedOptionKeys, option.optionKey)}">
-                        <span th:text="${option.optionName}">옵션 이름</span>
-                        <span th:text="'+' + ${option.optionPrice} + '원'">옵션 가격</span>
-                    </label>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>장바구니 아이템 수정</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:User CSS -->
+        <th:block th:include="inc/user/user-css :: userCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:User JS -->
+        <th:block th:include="inc/user/user-js :: userJs"></th:block>
+    </head>
+    <body>
+        <div class="editCart__wrap">
+            <div class="editCart__con">
+                <div class="editCart__top">
+                    <div class="editCart__img">
+                        <img th:src="@{${menu.menuImg}}" alt="메뉴 이미지">
+                    </div>
+                    <h2 class="editCart__title">
+                        [[${menu.menuName}]]
+                    </h2>
+                    <p class="editCart__price" id="basePrice" th:data-price="${menu.menuPrice}">
+                        [[${menu.menuPrice}]]원
+                    </p>
+                </div>
+                <div class="editCart__option-box" th:if="${optionGroups != null}">
+                    <h3>옵션 선택</h3>
+                    <ul class="editCart__option-items">
+                        <li th:each="group : ${optionGroups}">
+                            <p class="editCart__option-name">
+                                [[${group.optionGroupName}]]
+                            </p>
+                            <div class="editCart__option-menu" th:each="option : ${group.options}">
+                                <input type="checkbox" id="optionCartName" name="optionCartName"
+                                       th:data-price="${option.optionPrice}"
+                                       th:value="${option.optionKey}"
+                                       th:checked="${#lists.contains(selectedOptionKeys, option.optionKey)}">
+                                <label for="optionCartName">
+                                    [[${option.optionName}]] + [[${option.optionPrice}]]원
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="editCart__total-box">
+                    <h3>수량</h3>
+                    <div class="editCart__total-cnt">
+                        <input type="number" id="quantity" name="quantity" th:value="${cartItem.quantity}" min="1">
+                        <p>
+                            총 금액 : <span id="totalPrice">[[${cartItem.totalPrice}]]원</span>
+                        </p>
+                    </div>
+                    <div class="editCart__total-btn">
+                        <button type="button" id="updateCartItemButton">수정하기</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <h3>수량</h3>
-    <input type="number" id="quantity" name="quantity" th:value="${cartItem.quantity}" min="1">
-    <p>총 금액: <span id="totalPrice" th:text="${cartItem.totalPrice} + '원'">0원</span></p>
-
-    <script src="/user/js/module/updateCartItem.js"></script>
-    <!-- 장바구니 수정 버튼 -->
-    <button id="updateCartItemButton">수정하기</button>
-
-</div>
-</body>
+        <script src="/user/js/module/updateCartItem.js"></script>
+    </body>
 </html>

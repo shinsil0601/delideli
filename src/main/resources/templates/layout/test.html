@@ -1,18 +1,32 @@
-<div class="store-list">
-    <div th:each="store : ${storeList}">
-        <div class="store-item">
-            <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}">
-                <img th:src="${store.storeProfileImg}" alt="가게 이미지">
-                <p th:text="${store.storeName}"></p>
-                <p th:text="'평점: ' + ${store.averageRating} + '⭐'"></p>
-                <p th:text="'최소주문금액: ' + ${store.minOrderAmount} + '원'"></p>
-                <p th:text="'배달비: ' + ${store.deliveryAmount1} + '원'"></p>
-            </a>
+<h2 th:text="${menu.menuName}">메뉴 이름</h2>
+<img th:src="@{${menu.menuImg}}" alt="메뉴 이미지">
+<p id="basePrice" th:data-price="${menu.menuPrice}" th:text="${menu.menuPrice} + '원'">메뉴 가격</p>
+
+<!-- 옵션 그룹과 옵션들을 보여주는 부분 -->
+<div th:if="${optionGroups != null}">
+    <h3>옵션 선택</h3>
+    <div th:each="group : ${optionGroups}">
+        <p class="option-group-header" th:text="${group.optionGroupName}">옵션 그룹 이름</p>
+        <div style="display: block;">
+            <div th:each="option : ${group.options}">
+                <label>
+                    <!-- 모든 옵션을 표시하고, selectedOptionKeys에 포함된 옵션만 체크 -->
+                    <input type="checkbox" class="option-checkbox"
+                           th:data-price="${option.optionPrice}"
+                           th:value="${option.optionKey}"
+                           th:checked="${#lists.contains(selectedOptionKeys, option.optionKey)}">
+                    <span th:text="${option.optionName}">옵션 이름</span>
+                    <span th:text="'+' + ${option.optionPrice} + '원'">옵션 가격</span>
+                </label>
+            </div>
         </div>
-        <br><br>
     </div>
 </div>
 
-<!-- Start:Pagination -->
-<th:block th:include="inc/user/pagination :: boardPagination (${type})"></th:block>
-<!-- End:Pagination -->
+<h3>수량</h3>
+<input type="number" id="quantity" name="quantity" th:value="${cartItem.quantity}" min="1">
+<p>총 금액: <span id="totalPrice" th:text="${cartItem.totalPrice} + '원'">0원</span></p>
+
+<script src="/user/js/module/updateCartItem.js"></script>
+<!-- 장바구니 수정 버튼 -->
+<button id="updateCartItemButton">수정하기</button>
