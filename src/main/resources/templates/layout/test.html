@@ -1,31 +1,14 @@
-<h3>내문의 상세보기</h3>
-<table>
-    <tr>
-        <th colspan="2">
-            <span th:text="${board.boardTitle}"></span>
-            <span th:if="${board.boardCommentStatus == 1}" style="margin-left: 10px; color: green;">답변완료</span>
-            <span th:if="${board.boardCommentStatus == 0}" style="margin-left: 10px; color: red;">미완료</span>
-        </th>
-    </tr>
-    <tr>
-        <td></td>
-        <td th:text="${board.boardRegdate}"></td>
-    </tr>
-    <tr>
-        <td colspan="2" th:text="${board.boardContents}"></td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <a th:href="@{/user/myAskDelete/{boardKey}(boardKey=${board.boardKey})}">삭제</a>
-        </td>
-    </tr>
-</table>
-<hr>
-<table th:if="${board.boardCommentStatus == 1}">
-    <tr>
-        <th>관리자</th>
-    </tr>
-    <tr>
-        <td th:text="${board.boardComment}"></td>
-    </tr>
-</table>
+<form id="checkPwForm" action="/user/withdrawal" method="post">
+    <label for="userId">사용자 ID:</label>
+    <input type="text" id="userId" name="userId" th:value="${user.userId}" readonly>
+    <input type="hidden" name="userPw" th:value="${user.userPw}">
+    <br>
+    <label for="userPw">비밀번호:</label>
+    <input type="password" id="userPw" name="userPw" required>
+    <br>
+    <button type="submit">비밀번호 확인</button>
+    <li><a href="/user/myPage">뒤로가기</a></li>
+    <div id="errorMessage" style="color: red;" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+</form>
+
+<script src="/user/js/module/withdrawal.js"></script>

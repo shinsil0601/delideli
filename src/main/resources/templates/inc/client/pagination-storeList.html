@@ -1,0 +1,17 @@
+<th:block th:fragment="StoreListPagination (type)">
+    <ul>
+        <li th:if="${map.prev}">
+            <a th:href="@{/client/storeList(page=${currentPage - 1}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}">이전</a>
+        </li>
+        <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
+            <li th:classappend="${i == currentPage ? 'active' : ''}">
+                <a th:href="@{/client/storeList(page=${i}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}" th:text="${i}">1</a>
+            </li>
+        </th:block>
+        <li th:if="${map.next}">
+            <a th:href="@{/client/storeList(page=${currentPage + 1}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}">다음</a>
+        </li>
+    </ul>
+</th:block>
+
+
