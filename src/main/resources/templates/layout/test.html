@@ -1,33 +1,32 @@
-<div>
-    <input type="hidden" name="storeInfoKey" id="storeInfoKey" th:value="${store.storeInfoKey}">
-    <input type="hidden" name="userKey" id="userKey" th:value="${user.userKey}">
+<h2 th:text="${menu.menuName}">메뉴 이름</h2>
+<img th:src="@{${menu.menuImg}}" alt="메뉴 이미지">
+<p id="basePrice" th:data-price="${menu.menuPrice}" th:text="${menu.menuPrice} + '원'">메뉴 가격</p>
 
-    <div th:text="${order.statusMessage}"></div><br>
-    <div th:text="'가게명: ' + ${store.storeName}"></div><br>
-    <div th:text="'가게 주소: ' + ${store.storeAddress} + ' ' + ${store.storeAddrDetail}"></div>
-    <div th:text="'가게 번호: ' + ${store.storePhone}"></div>
-    <div th:text="'주문일시: ' + ${order.formattedOrderDate}"></div>
-    <div th:text="'주문번호: ' + ${order.orderNo}"></div><br>
-
-    <div th:each="menu : ${order.orderDetails}">
-                    <span class="menu-item" th:data-menu-name="${menu.menuName}" th:data-quantity="${menu.quantity}" th:data-option-name="${menu.optionName}">
-                        <br>
-                    <span class="menu-name" th:data-menu-name="${menu.menuName}" th:text="'메인 메뉴 : ' + ${menu.menuName}"></span>
-                        <br>
-                    <span class="menu-quantity" th:data-quantity="${menu.quantity}" th:text="'수량 : ' + ${menu.quantity}"></span>
-                        <br>
-                    <span class="menu-option" th:data-option-name="${menu.optionName}" th:text="'옵션 : ' + ${menu.optionName}"></span>
-                    <br>
+<!-- 옵션 그룹과 옵션들을 보여주는 부분 -->
+<div th:if="${optionGroups != null}">
+    <h3>옵션 선택</h3>
+    <div th:each="group : ${optionGroups}">
+        <p class="option-group-header" th:text="${group.optionGroupName}">옵션 그룹 이름</p>
+        <div style="display: block;">
+            <div th:each="option : ${group.options}">
+                <label>
+                    <!-- 모든 옵션을 표시하고, selectedOptionKeys에 포함된 옵션만 체크 -->
+                    <input type="checkbox" class="option-checkbox"
+                           th:data-price="${option.optionPrice}"
+                           th:value="${option.optionKey}"
+                           th:checked="${#lists.contains(selectedOptionKeys, option.optionKey)}">
+                    <span th:text="${option.optionName}">옵션 이름</span>
+                    <span th:text="'+' + ${option.optionPrice} + '원'">옵션 가격</span>
+                </label>
+            </div>
+        </div>
     </div>
-    <br>
-
-    <div th:text="'결제방식: ' + ${order.uorderPayment}"></div>
-    <div th:text="'총 결제금액: ' + ${order.uorderPrice} + '원'"></div><br>
-    <div th:text="'가게 요청사항: ' + ${order.shopDesc}"></div><br>
-    <div th:text="'배달 요청사항: ' + ${order.riderDesc}"></div><br>
-
-    <!-- "같은 메뉴 담기" 버튼을 맨 아래로 이동 -->
-    <button id="sameMenuButton">같은 메뉴 담기</button>
-
-    <script src="/user/js/module/orderDetail.js"></script>
 </div>
+
+<h3>수량</h3>
+<input type="number" id="quantity" name="quantity" th:value="${cartItem.quantity}" min="1">
+<p>총 금액: <span id="totalPrice" th:text="${cartItem.totalPrice} + '원'">0원</span></p>
+
+<script src="/user/js/module/updateCartItem.js"></script>
+<!-- 장바구니 수정 버튼 -->
+<button id="updateCartItemButton">수정하기</button>
