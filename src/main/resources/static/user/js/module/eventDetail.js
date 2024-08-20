@@ -20,8 +20,8 @@ function validateCommentForm() {
 function getCommentList() {
     const userKey = $('input[name=userKey]').val();
     const boardKey = $('input[name=boardKey]').val();
-    console.log(`userKey: ${userKey}`);
-    console.log(`boardKey: ${boardKey}`);
+    //console.log(`userKey: ${userKey}`);
+    //console.log(`boardKey: ${boardKey}`);
     $.ajax({
         type: 'GET',
         url: '/user/getCommentList',

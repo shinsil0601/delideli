@@ -1,0 +1,56 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.client.review.mapper.ClientReviewMapper">
+
+    <resultMap id="ReviewResultMap" type="kr.co.jhta.app.delideli.client.review.domain.ClientReview">
+        <id property="reviewKey" column="review_key"/>
+        <result property="userKey" column="user_key"/>
+        <result property="clientKey" column="client_key"/>
+        <result property="storeInfoKey" column="storeInfo_key"/>
+        <result property="orderKey" column="order_key"/>
+        <result property="reviewRating" column="review_rating"/>
+        <result property="reviewDesc" column="review_desc"/>
+        <result property="reviewPhoto1" column="review_photo1"/>
+        <result property="reviewPhoto2" column="review_photo2"/>
+        <result property="reviewRegdate" column="review_regdate"/>
+        <result property="reviewComment" column="review_comment"/>
+        <result property="reportReview" column="report_review"/>
+        <result property="commentRegdate" column="comment_regdate"/>
+        <result property="commentUpdate" column="comment_update"/>
+        <result property="reviewStatus" column="review_status"/>
+        <result property="mnmtRegdate" column="mnmt_regdate"/>
+    </resultMap>
+
+    <select id="getreviewList" resultMap="ReviewResultMap" parameterType="map">
+        SELECT
+            r.review_key, r.user_key, r.client_key, r.storeInfo_key, r.order_key, r.review_rating, r.review_desc, r.review_photo1,
+            r.review_photo2, r.review_regdate, r.review_comment, r.report_review, r.comment_regdate, r.comment_update,
+            r.review_status, r.mnmt_regdate, u.user_id
+        FROM review r JOIN user_account u
+                           ON r.user_key = u.user_key
+                      JOIN client_account ca
+                           ON r.client_key = ca.client_key
+                      JOIN storeInfo si
+                           ON r.storeInfo_key = si.storeInfo_key
+        WHERE r.storeInfo_key = #{storeKey}
+          AND r.client_key = #{clientKey}
+        AND r.review_status = 0
+        ORDER BY r.review_regdate DESC
+    </select>
+
+    <!-- 리뷰 신고 처리 쿼리 -->
+    <update id="updateReportReview" parameterType="int">
+        UPDATE review
+        SET report_review = 1
+        WHERE review_key = #{reviewKey} AND report_review = 0
+    </update>
+
+    <select id="getReviewByKey" resultMap="ReviewResultMap" parameterType="int">
+        SELECT *
+        FROM review
+        WHERE review_key = #{reviewKey}
+    </select>
+
+</mapper>

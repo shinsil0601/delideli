@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사장님 - 가게목록</title>
+    <!-- Include:공통 CSS -->
+    <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+    <!-- Include:Client CSS -->
+    <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+    <!-- Include:공통 JS -->
+    <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+    <!-- Include:Client JS -->
+    <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+    <!-- JS: 토글 버튼 클릭 시 처리 -->
+
+</head>
+<body>
+<div class="client-wrap">
+    <!-- Start:Aside -->
+    <th:block th:include="inc/client/aside :: clientAside"></th:block>
+    <!-- End:Aside -->
+
+    <!-- Start:Main -->
+    <main id="mainpage__wrap">
+        <!-- Start:Header -->
+        <th:block th:include="inc/client/header :: clientHeader"></th:block>
+        <!-- End:Header -->
+
+        <!-- Start:Contents -->
+        <section class="contents">
+            <p th:text="${client.clientName}"></p>
+            <!-- 여기에 가게 목록 출력 -->
+            <th:block th:each="store : ${store}">
+                <li>
+                    <a th:href="@{/client/review/{storeKey}(storeKey=${store.storeInfoKey})}">
+                        <img th:src="${store.storeProfileImg}" alt="가게 이미지">
+                        <div th:text="${store.storeName}"></div>
+                    </a>
+                </li>
+            </th:block>
+        </section>
+        <!-- End:Contents -->
+    </main>
+    <!-- End:Main -->
+</div>
+</body>
+</html>

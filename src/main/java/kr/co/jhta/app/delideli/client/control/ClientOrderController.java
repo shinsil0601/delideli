@@ -1,11 +1,15 @@
 package kr.co.jhta.app.delideli.client.control;
 
+import kr.co.jhta.app.delideli.client.account.domain.ClientAccount;
+import kr.co.jhta.app.delideli.client.account.service.ClientService;
 import kr.co.jhta.app.delideli.client.order.domain.ClientOrder;
 import kr.co.jhta.app.delideli.client.order.service.ClientOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +27,15 @@ public class ClientOrderController {
 
     @Autowired
     private final ClientOrderService clientOrderService;
+    @Autowired
+    private final ClientService clientService;
 
     // 접수대기 주문 목록
     @GetMapping("/waitOrder/{storeInfoKey}")
-    public String waitOrder(@PathVariable("storeInfoKey") int storeInfoKey,
-                              @RequestParam(value = "page", defaultValue = "1") int page,
-                              @RequestParam(value = "pageSize", defaultValue = "3") int pageSize,
-                              Model model) {
+    public String waitOrder(@AuthenticationPrincipal User user, @PathVariable("storeInfoKey") int storeInfoKey,
+                            @RequestParam(value = "page", defaultValue = "1") int page,
+                            @RequestParam(value = "pageSize", defaultValue = "3") int pageSize,
+                            Model model) {
 
         // 총 주문 수를 가져옴
         int totalOrders = clientOrderService.getTotalWaitOrdersByStoreInfoKey(storeInfoKey);
@@ -41,6 +47,9 @@ public class ClientOrderController {
 
         // 페이지네이션 정보 추가
         Map<String, Object> paginationMap = createPaginationMap(page, totalPages);
+
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
         model.addAttribute("map", paginationMap);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", pageSize);
@@ -54,7 +63,9 @@ public class ClientOrderController {
 
     // 주문 상세보기 (접수 대기)
     @GetMapping("/waitOrderDetail/{orderKey}")
-    public String waitOrderDetails(@PathVariable("orderKey") int orderKey, Model model) {
+    public String waitOrderDetails(@AuthenticationPrincipal User user, @PathVariable("orderKey") int orderKey, Model model) {
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
         ClientOrder waitOrderDetail = clientOrderService.getOrderDeatailByOrderKey(orderKey);
         model.addAttribute("waitOrderDetail", waitOrderDetail);
         return "client/order/waitOrderDetail";
@@ -99,7 +110,7 @@ public class ClientOrderController {
 
     // 처리중 주문 목록
     @GetMapping("/processingOrder/{storeInfoKey}")
-    public String processingOrder(@PathVariable("storeInfoKey") int storeInfoKey,
+    public String processingOrder(@AuthenticationPrincipal User user, @PathVariable("storeInfoKey") int storeInfoKey,
                                   @RequestParam(value = "page", defaultValue = "1") int page,
                                   @RequestParam(value = "pageSize", defaultValue = "3") int pageSize,
                                   Model model) {
@@ -114,6 +125,8 @@ public class ClientOrderController {
 
         // 페이지네이션 정보 추가
         Map<String, Object> paginationMap = createPaginationMap(page, totalPages);
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
         model.addAttribute("map", paginationMap);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", pageSize);
@@ -127,7 +140,9 @@ public class ClientOrderController {
 
     // 처리중 주문 상세보기
     @GetMapping("/OrderDetail/{orderKey}")
-    public String processingOrderDetail(@PathVariable("orderKey") int orderKey, Model model) {
+    public String processingOrderDetail(@AuthenticationPrincipal User user, @PathVariable("orderKey") int orderKey, Model model) {
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
         ClientOrder processingOrderDetail = clientOrderService.getOrderDeatailByOrderKey(orderKey);
         model.addAttribute("processingOrderDetail", processingOrderDetail);
         return "client/order/OrderDetail";
@@ -162,7 +177,7 @@ public class ClientOrderController {
 
     // 처리완료 주문
     @GetMapping("/successOrder/{storeInfoKey}")
-    public String successOrder(@PathVariable("storeInfoKey") int storeInfoKey,
+    public String successOrder(@AuthenticationPrincipal User user, @PathVariable("storeInfoKey") int storeInfoKey,
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "pageSize", defaultValue = "3") int pageSize,
                                Model model) {
@@ -177,6 +192,8 @@ public class ClientOrderController {
 
         // 페이지네이션 정보 추가
         Map<String, Object> paginationMap = createPaginationMap(page, totalPages);
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
         model.addAttribute("map", paginationMap);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", pageSize);
@@ -190,7 +207,7 @@ public class ClientOrderController {
 
     // 주문 조회
     @GetMapping("/searchOrder/{storeInfoKey}")
-    public String searchOrder(@PathVariable("storeInfoKey") int storeInfoKey,
+    public String searchOrder(@AuthenticationPrincipal User user, @PathVariable("storeInfoKey") int storeInfoKey,
                               @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                               @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
                               @RequestParam(value = "page", defaultValue = "1") int page,
@@ -203,6 +220,9 @@ public class ClientOrderController {
         if (endDate == null) {
             endDate = LocalDate.now();
         }
+
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
 
         Map<String, Object> params = new HashMap<>();
         params.put("storeInfoKey", storeInfoKey);
