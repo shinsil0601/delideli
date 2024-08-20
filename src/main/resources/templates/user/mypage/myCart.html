@@ -20,52 +20,64 @@
 
         <!-- Start:Main -->
         <main id="mainpage__wrap">
-            <a href="/user/myAddress">주소관리</a><br>
-            <a href="/user/checkAccount">내 정보 수정</a><br>
-            <a href="/user/updatePw">비밀번호 변경</a><br>
-            <a href="/user/myOrder">주문내역</a><br>
-            <a href="/user/myReview">내 리뷰관리</a><br>
-            <a href="/user/myLike">찜목록</a><br>
-            <a href="/user/myCart">장바구니</a><br>
-            <a href="/user/myAsk">내 문의확인</a><br>
-            <a href="/user/withdrawal">회원탈퇴</a>
-            <br><br><br>
-
-            <div>
-                <h2>장바구니</h2>
-                <!-- 각 가게별로 그룹화된 장바구니 아이템을 출력 -->
-                <div th:each="entry : ${groupedCartItems}">
-                    <h3 th:text="${entry.key.storeName}">가게 이름</h3>
-                    <!-- 가게의 최소 주문 금액 표시 -->
-                    <p th:text="'최소 주문 금액: ' + ${entry.key.minOrderAmount} + '원'"></p>
-
-                    <div th:each="cartItem : ${entry.value}">
-                        <div>
-                            <img th:src="@{${cartItem.menu.menuImg}}" alt="메뉴 이미지">
-                            <p th:text="'메뉴: ' + ${cartItem.menu.menuName}">Menu Title</p>
-                            <p th:each="option : ${cartItem.cartOptions}" th:text="'옵션: ' + ${option.optionName}">Option Title</p>
-                            <p th:text="'수량: ' + ${cartItem.quantity}"></p>
-                            <p th:text="'가격: ' + ${cartItem.totalPrice} + '원'">Price</p>
-                            <button th:onclick="'openEditCartItemWindow(' + ${cartItem.cartKey} + '); return false;'" class="edit-button">
-                                수정하기
-                            </button>
-                            <button th:onclick="'deleteCartItem(' + ${cartItem.cartKey} + '); return false;'" class="delete-button">
-                                삭제하기
-                            </button>
-                        </div>
-                        <br><br>
-                    </div>
-
-                    <!-- 가게별 총 금액 표시 -->
-                    <p th:id="storeTotalPrice- + ${entry.key.storeInfoKey}" th:text="'총 금액: ' + ${storeTotalPrices[entry.key]} + '원'"></p>
-                    <button th:onclick="'processPayment(' + ${entry.key.storeInfoKey} + ',' + ${entry.key.minOrderAmount} + '); return false;'">결제하기</button>
-                    <a th:href="@{/user/storeDetail/{storeKey}(storeKey=${entry.key.storeInfoKey})}">메뉴 추가하러가기</a>
-                    <br><br>
-                    <h3>======================================</h3>
+            <div class="subPage__wrap">
+                <!-- Start:subNav -->
+                <th:block th:include="inc/user/subNav :: subNav"></th:block>
+                <!-- End:subNav -->
+                <h2 class="subPage__title">장바구니</h2>
+                <div class="myCart__con">
+                    <ul class="myCart__shop-items">
+                        <li th:each="entry : ${groupedCartItems}">
+                            <div class="myCart__top">
+                                <h3>[[${entry.key.storeName}]]</h3>
+                                <p>
+                                    최소주문금액 : [[${entry.key.minOrderAmount}]]
+                                </p>
+                            </div>
+                            <ul class="myCart__menu-items">
+                                <li th:each="cartItem : ${entry.value}">
+                                    <div class="myCart__img">
+                                        <img th:src="@{${cartItem.menu.menuImg}}" alt="메뉴 이미지">
+                                    </div>
+                                    <div class="myCart__menu">
+                                        <h3>메뉴 : [[${cartItem.menu.menuName}]]</h3>
+                                        <p th:each="option : ${cartItem.cartOptions}">
+                                            옵션 : [[${option.optionName}]]
+                                        </p>
+                                    </div>
+                                    <ul class="myCart__info">
+                                        <li>수량 : [[${cartItem.quantity}]]</li>
+                                        <li>가격 : [[${cartItem.totalPrice}]]</li>
+                                    </ul>
+                                    <div class="myCart__btn">
+                                        <button type="button" th:onclick="'openEditCartItemWindow(' + ${cartItem.cartKey} + '); return false;'" class="myCart__btn--1">
+                                            수정하기
+                                        </button>
+                                        <button type="button" th:onclick="'deleteCartItem(' + ${cartItem.cartKey} + '); return false;'" class="myCart__btn--2">
+                                            삭제하기
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="myCart__total">
+                                <h4 th:id="storeTotalPrice- + ${entry.key.storeInfoKey}">
+                                    총 금액 : [[${storeTotalPrices[entry.key]}]]원
+                                </h4>
+                                <div class="myCart__total-btn">
+                                    <button type="button" class="myCart__total-btn--1" th:onclick="'location.href=\'' + @{/user/storeDetail/{storeKey}(storeKey=${entry.key.storeInfoKey})} + '\''">
+                                        메뉴추가하기
+                                    </button>
+                                    <button type="button" class="myCart__total-btn--2" th:onclick="'processPayment(' + ${entry.key.storeInfoKey} + ',' + ${entry.key.minOrderAmount} + '); return false;'">
+                                        결제하기
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </div>
 
-            <script src="/user/js/module/myCart.js"></script>
+                <script src="/user/js/module/myCart.js"></script>
+            </div>
         </main>
         <!-- End:Main -->
 
