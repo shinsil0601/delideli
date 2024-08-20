@@ -58,6 +58,7 @@ public class ClientReviewController {
         return "client/review/review.view";
     }
 
+
     // 리뷰 신고 처리 (AJAX 요청)
     @PostMapping("/reviewReport/{reviewKey}")
     @ResponseBody
@@ -78,6 +79,7 @@ public class ClientReviewController {
             response.put("status", "error");
         }
         return response;
+
     }
 
 

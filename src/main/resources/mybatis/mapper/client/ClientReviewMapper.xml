@@ -52,4 +52,5 @@
         FROM review
         WHERE review_key = #{reviewKey}
     </select>
+
 </mapper>
