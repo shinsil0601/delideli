@@ -110,7 +110,7 @@
         <if test="businessStatus != null and businessStatus != ''">
             AND (CASE
             WHEN store_delete = true THEN '삭제 대기'
-            WHEN storePause = true THEN '일시정지'
+            WHEN store_pause = true THEN '일시정지'
             ELSE '영업중'
             END) = #{businessStatus}
         </if>
@@ -132,7 +132,7 @@
         <if test="businessStatus != null and businessStatus != ''">
             AND (CASE
             WHEN store_delete = true THEN '삭제 대기'
-            WHEN storePause = true THEN '일시정지'
+            WHEN store_pause = true THEN '일시정지'
             ELSE '영업중'
             END) = #{businessStatus}
         </if>
