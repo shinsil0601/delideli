@@ -1,0 +1,180 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.jhta.app.delideli.client.order.mapper.ClientOrderMapper">
+
+    <!-- Order에 대한 resultMap 정의 -->
+    <resultMap id="ClientOrderResultMap" type="kr.co.jhta.app.delideli.client.order.domain.ClientOrder">
+        <id property="orderKey" column="order_key"/>
+        <result property="userKey" column="user_key"/>
+        <result property="storeInfoKey" column="storeInfo_key"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="address" column="address"/>
+        <result property="orderMethod" column="order_method"/>
+        <result property="uorderPrice" column="uorder_price"/>
+        <result property="uorderPayment" column="uorder_payment"/>
+        <result property="orderEstimatedTime" column="order_estimated_time"/>
+        <result property="riderDesc" column="rider_desc"/>
+        <result property="shopDesc" column="shop_desc"/>
+        <result property="orderRegdate" column="order_regdate"/>
+        <result property="orderUpdate" column="order_update"/>
+
+        <!-- orderDetails를 리스트로 가져오기 위한 collection -->
+        <collection property="clientOrderDetails" ofType="kr.co.jhta.app.delideli.client.order.domain.ClientOrderDetail" select="getOrderDetailsByOrderKey" column="order_key"/>
+    </resultMap>
+
+    <!-- OrderDetail에 대한 resultMap 정의 -->
+    <resultMap id="ClientOrderDetailResultMap" type="kr.co.jhta.app.delideli.client.order.domain.ClientOrderDetail">
+        <id property="orderDetailKey" column="order_detail_key"/>
+        <result property="orderKey" column="order_key"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="optionName" column="option_name"/>
+        <result property="quantity" column="quantity"/>
+    </resultMap>
+
+    <!-- StoreInfo 에 대한 resultMap 정의 -->
+    <resultMap id="ClientStoreInfoResultMap" type="kr.co.jhta.app.delideli.client.store.domain.ClientStoreInfo">
+        <id property="storeInfoKey" column="storeInfo_key"/>
+        <result property="clientKey" column="client_key"/>
+        <result property="storeName" column="store_name"/>
+        <result property="storeAddress" column="store_address"/>
+        <result property="storeZipcode" column="store_zipcode"/>
+        <result property="storeAddrDetail" column="store_addrs_detail"/>
+        <result property="storePhone" column="store_phone"/>
+        <result property="minOrderAmount" column="min_order_amount"/>
+        <result property="orderAmount1" column="order_amount1"/>
+        <result property="deliveryAmount1" column="delivery_amount1"/>
+        <result property="orderAmount2" column="order_amount2"/>
+        <result property="deliveryAmount2" column="delivery_amount2"/>
+        <result property="orderAmount3" column="order_amount3"/>
+        <result property="deliveryAmount3" column="delivery_amount3"/>
+        <result property="openTime" column="open_time"/>
+        <result property="closeTime" column="close_time"/>
+        <result property="storeDetailInfo" column="store_detail_info"/>
+        <result property="storeOriginInfo" column="store_origin_info"/>
+        <result property="storeBusinessRegistrationFile" column="store_business_registration_file"/>
+        <result property="storeBusinessReportFile" column="store_business_report_file"/>
+        <result property="storeProfileImg" column="store_profile_img"/>
+        <result property="storeAccess" column="store_access"/>
+        <result property="storeDelete" column="store_delete"/>
+        <result property="storePause" column="store_pause"/>
+        <result property="storeRegdate" column="store_regdate"/>
+        <result property="storeUpdate" column="store_update"/>
+    </resultMap>
+
+    <!-- getOrderDetailsByOrderKey 쿼리 추가 -->
+    <select id="getOrderDetailsByOrderKey" parameterType="int" resultMap="ClientOrderDetailResultMap">
+        SELECT order_detail_key, order_key, menu_name, option_name, quantity
+        FROM order_detail
+        WHERE order_key = #{order_key}
+    </select>
+
+    <!-- 대기 주문 수를 계산하는 쿼리 -->
+    <select id="countWaitOrders" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM `order`
+        WHERE storeInfo_key = #{storeInfoKey}
+          AND order_method IN ('배달', '포장')
+          AND DATE(order_regdate) = CURDATE()
+          AND TIME(order_regdate) BETWEEN (SELECT open_time FROM storeInfo WHERE storeInfo_key = #{storeInfoKey})
+          AND (SELECT close_time FROM storeInfo WHERE storeInfo_key = #{storeInfoKey})
+    </select>
+
+    <!-- 대기 주문을 페이징으로 가져오는 쿼리 -->
+    <select id="getWaitOrdersByStoreInfoKeyWithPaging" parameterType="map" resultMap="ClientOrderResultMap">
+        SELECT o.*
+        FROM `order` o
+                 JOIN storeInfo s ON o.storeInfo_key = s.storeInfo_key
+        WHERE o.storeInfo_key = #{storeInfoKey}
+          AND o.order_method IN ('배달', '포장')
+          AND DATE(o.order_regdate) = CURDATE()
+          AND TIME(o.order_regdate) BETWEEN s.open_time AND s.close_time
+        ORDER BY o.order_regdate DESC
+            LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 주문 상세 정보 가져오기 -->
+    <select id="getWaitOrderDeatailByOrderKey" parameterType="int" resultMap="ClientOrderResultMap">
+        SELECT * FROM `order` WHERE order_key = #{orderKey}
+    </select>
+
+    <!-- 주문 접수하기 / 주문 거절하기 -->
+    <update id="updateOrder" parameterType="kr.co.jhta.app.delideli.client.order.domain.ClientOrder">
+        UPDATE `order`
+        SET order_method = #{orderMethod},
+            order_estimated_time = #{orderEstimatedTime},
+            order_update = NOW()
+        WHERE order_key = #{orderKey}
+    </update>
+
+    <!-- 처리중인 주문 수를 계산하는 쿼리 -->
+    <select id="countProcessingOrder" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM `order`
+        WHERE storeInfo_key = #{storeInfoKey}
+          AND order_method IN ('배달(조리중)', '포장(조리중)', '배달중', '포장(픽업대기)')
+          AND DATE(order_update) = CURDATE()
+          AND TIME(order_update) BETWEEN (SELECT open_time FROM storeInfo WHERE storeInfo_key = #{storeInfoKey})
+          AND (SELECT close_time FROM storeInfo WHERE storeInfo_key = #{storeInfoKey})
+    </select>
+
+    <!-- 처리중인 주문을 페이징으로 가져오는 쿼리 -->
+    <select id="getProcessingOrderByStoreInfoKeyWithPaging" parameterType="map" resultMap="ClientOrderResultMap">
+        SELECT o.*
+        FROM `order` o
+                 JOIN storeInfo s ON o.storeInfo_key = s.storeInfo_key
+        WHERE o.storeInfo_key = #{storeInfoKey}
+          AND o.order_method IN ('배달(조리중)', '포장(조리중)', '배달중', '포장(픽업대기)')
+          AND DATE(o.order_update) = CURDATE()
+          AND TIME(o.order_update) BETWEEN s.open_time AND s.close_time
+        ORDER BY o.order_update DESC
+            LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 처리완료된 주문 수를 계산하는 쿼리 -->
+    <select id="countSuccessOrder" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM `order`
+        WHERE storeInfo_key = #{storeInfoKey}
+          AND order_method IN ('배달 완료', '포장 완료')
+          AND DATE(order_update) = CURDATE()
+          AND TIME(order_update) BETWEEN (SELECT open_time FROM storeInfo WHERE storeInfo_key = #{storeInfoKey})
+          AND (SELECT close_time FROM storeInfo WHERE storeInfo_key = #{storeInfoKey})
+    </select>
+
+    <!-- 처리완료된 주문을 페이징으로 가져오는 쿼리 -->
+    <select id="getSuccessOrdersByStoreInfoKeyWithPaging" parameterType="map" resultMap="ClientOrderResultMap">
+        SELECT o.*
+        FROM `order` o
+                 JOIN storeInfo s ON o.storeInfo_key = s.storeInfo_key
+        WHERE o.storeInfo_key = #{storeInfoKey}
+          AND o.order_method IN ('배달 완료', '포장 완료')
+          AND DATE(o.order_update) = CURDATE()
+          AND TIME(o.order_update) BETWEEN s.open_time AND s.close_time
+        ORDER BY o.order_update DESC
+            LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 처리완료된 주문 수를 계산하는 쿼리 -->
+    <select id="countTotalOrder" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM `order`
+        WHERE storeInfo_key = #{storeInfoKey}
+          AND order_method IN ('배달 완료', '포장 완료')
+          AND DATE(order_update) BETWEEN #{startDate} AND #{endDate}
+    </select>
+
+    <!-- 처리완료된 주문을 페이징으로 가져오는 쿼리 -->
+    <select id="getTotalOrdersByStoreInfoKeyWithPaging" parameterType="map" resultMap="ClientOrderResultMap">
+        SELECT o.*
+        FROM `order` o
+                 JOIN storeInfo s ON o.storeInfo_key = s.storeInfo_key
+        WHERE o.storeInfo_key = #{storeInfoKey}
+          AND o.order_method IN ('배달 완료', '포장 완료')
+          AND DATE(o.order_update) BETWEEN #{startDate} AND #{endDate}
+        ORDER BY o.order_update DESC
+            LIMIT #{offset}, #{pageSize}
+    </select>
+
+</mapper>
