@@ -1,5 +1,5 @@
 <th:block th:fragment="OrderListPagination (type)">
-    <ul class="board__pagination">
+    <ul class="board__pagination" th:if="${totalPages > 0}">
         <li th:if="${map.prev}">
             <a th:href="@{${'/client/' + type}(page=${map.startPageNo})}">
                 <i class="fa-solid fa-angle-left"></i>
