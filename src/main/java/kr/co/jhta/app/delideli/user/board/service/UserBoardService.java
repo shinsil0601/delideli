@@ -44,7 +44,7 @@ public interface UserBoardService {
     void updateHitEvent(int num);
     //공지사항 상세보기 조회수업데이트
     void updateHitNotice(int num);
-
+  
     //공지사항 목록 리스트(최대 4개)
     ArrayList<Board> getBoardListIndex();
     //이벤트 배너이미지(최대 3개)
