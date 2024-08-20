@@ -196,7 +196,7 @@ public class UserBoardController {
             model.addAttribute("user", userAccount);
         }
         userCommentService.getCommentsByBoardKey(comment);
-        return "redirect:/user/eventDetail/" + comment.getBoardKey();
+        return "redirect:user/eventDetail/" + comment.getBoardKey();
     }
 
     // 댓글 조회 ajax 처리
@@ -273,7 +273,7 @@ public class UserBoardController {
         board.setUserKey(userAccount.getUserKey());
         userBoardService.myAskWrite(board);  // Board 객체를 매개변수로 전달
 
-        return "redirect:/user/myAsk";
+        return "redirect:user/myAsk";
     }
 
     //내문의 상세보기
@@ -290,7 +290,7 @@ public class UserBoardController {
     @GetMapping("/myAskDelete/{boardKey}")
     public String deleteMyAsk(@PathVariable int boardKey) {
         userBoardService.myAskDelete(boardKey);
-        return "redirect:/user/myAsk";
+        return "redirect:user/myAsk";
     }
 
 }
