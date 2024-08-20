@@ -2,6 +2,7 @@ package kr.co.jhta.app.delideli.user.store.domain;
 
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 public class StoreInfo {

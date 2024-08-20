@@ -1,11 +1,13 @@
 package kr.co.jhta.app.delideli.client.store.service;
 
+import kr.co.jhta.app.delideli.client.store.domain.ClientCategory;
 import kr.co.jhta.app.delideli.client.store.domain.ClientStoreInfo;
+import kr.co.jhta.app.delideli.client.store.mapper.ClientCategoryMapper;
 import kr.co.jhta.app.delideli.client.store.mapper.ClientStoreMapper;
 import kr.co.jhta.app.delideli.client.store.mapper.StoreCategoryMapper;
-import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +21,8 @@ public class ClientStoreServiceImpl implements ClientStoreService {
     private final ClientStoreMapper  clientStoreMapper;
     @Autowired
     private final StoreCategoryMapper storeCategoryMapper;
+    @Autowired
+    private ClientCategoryMapper clientCategoryMapper;
 
     public ClientStoreServiceImpl(ClientStoreMapper clientStoreMapper, StoreCategoryMapper storeCategoryMapper) {
         this.clientStoreMapper = clientStoreMapper;
@@ -37,15 +41,8 @@ public class ClientStoreServiceImpl implements ClientStoreService {
     }
 
     @Override
-    public ArrayList<StoreInfo> getAllStore(int clientKey) {
+    public ArrayList<ClientStoreInfo> getAllStore(int clientKey) {
         return clientStoreMapper.getAllStore(clientKey);
-    }
-
-    //사장님 가게 목록 리스트
-    @Override
-    public List<ClientStoreInfo> storeList(String clientId) {
-        List<ClientStoreInfo> list = clientStoreMapper.getStoreList(clientId);
-        return list;
     }
 
     //사장님 가게 영업일시정지 업데이트
@@ -63,65 +60,98 @@ public class ClientStoreServiceImpl implements ClientStoreService {
         return clientStoreMapper.getStorePauseState(storeInfoKey);
     }
 
-    // 가게 목록 페이징 처리
     @Override
-    public List<ClientStoreInfo> getPagedStoreList(Long clientKey, int startNo, int endNo) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("clientKey", clientKey);
-        map.put("startNo", startNo);
-        map.put("endNo", endNo);
-        return clientStoreMapper.getPagedStoreList(map);
+    public ClientStoreInfo getStoreDetail(int storeInfoKey) {
+        return clientStoreMapper.getStoreDetail(storeInfoKey);
     }
 
-    // 검색어에 따른 가게 목록 페이징 처리
     @Override
-    public List<ClientStoreInfo> getPagedKeywordStoreList(Long clientKey, int startNo, int endNo, String keyword) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("clientKey", clientKey);
-        map.put("startNo", startNo);
-        map.put("endNo", endNo);
-        map.put("keyword", keyword);
-        return clientStoreMapper.getPagedKeywordStoreList(map);
+    public int getTotalStores(int clientKey, String storeAccess, String businessStatus, String storeName) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("clientKey", clientKey);
+        params.put("storeAccess", storeAccess);
+        params.put("businessStatus", businessStatus);
+        params.put("storeName", storeName);
+        return clientStoreMapper.getTotalStores(params);
     }
 
-    //가게이름 검색어 총게시물수
     @Override
-    public int getTotalKeywordStore(Long clientKey, String keyword) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("clientKey", clientKey);
-        map.put("keyword", keyword);
-        return clientStoreMapper.getTotalKeywordStore(map);
+    public List<ClientStoreInfo> filterStoresWithPaging(int clientKey, String storeAccess, String businessStatus, String storeName, int page, int pageSize) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("clientKey", clientKey);
+        params.put("storeAccess", storeAccess);
+        params.put("businessStatus", businessStatus);
+        params.put("storeName", storeName);
+        params.put("startNo", (page - 1) * pageSize);
+        params.put("pageSize", pageSize);
+        return clientStoreMapper.filterStoresWithPaging(params);
     }
 
-    // 승인 여부에 따른 목록 페이징 처리
     @Override
-    public List<ClientStoreInfo> getPagedByAccessStatus(Long clientKey, int startNo, int countPerPage, boolean accessStatus) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("clientKey", clientKey);
-        map.put("startNo", startNo);
-        map.put("countPerPage", countPerPage);
-        map.put("accessStatus", accessStatus);
-        return clientStoreMapper.getPagedByAccessStatus(map);
+    public boolean getStoreDeleteState(int storeInfoKey) {
+        return clientStoreMapper.getStoreDeleteState(storeInfoKey);
     }
 
-    // 검색어 없을 때 총 게시물 수
     @Override
-    public int getTotalStore(Long clientKey) {
-        return clientStoreMapper.getTotalStore(clientKey);
+    public void updateStoreDelete(int storeInfoKey, boolean deleteState) {
+        clientStoreMapper.updateStoreDelete(storeInfoKey, deleteState);
+
     }
 
-    // 승인 여부에 따른 총 게시물 수
     @Override
-    public int getTotalByAccessStatus(Long clientKey, boolean accessStatus) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("clientKey", clientKey);
-        map.put("accessStatus", accessStatus);
-        return clientStoreMapper.getTotalByAccessStatus(map);
+    public List<ClientCategory> getStoreCategories(int storeInfoKey) {
+        return clientCategoryMapper.getStoreCategories(storeInfoKey);
     }
 
-    // 전체 가게 목록 가져오기(영업상태 컨트롤러에 값 조회)
     @Override
-    public List<ClientStoreInfo> getAllStores(Long clientKey) {
-        return clientStoreMapper.getAllStores(clientKey);
+    public void updateStore(int storeInfoKey, String storeName, String[] categories, String storeAddress, String storeZipcode,
+                            String storeAddrDetail, String storePhone, int minOrderAmount, int orderAmount1, int deliveryAmount1,
+                            Integer orderAmount2, Integer deliveryAmount2, Integer orderAmount3, Integer deliveryAmount3,
+                            String openTime, String closeTime, String storeDetailInfo, String storeOriginInfo,
+                            String storeBusinessRegistrationFile, String storeBusinessReportFile, String storeProfileImg) {
+
+        // 1. Store 정보 업데이트
+        ClientStoreInfo storeInfo = new ClientStoreInfo();
+        storeInfo.setStoreInfoKey(storeInfoKey);
+        storeInfo.setStoreName(storeName);
+        storeInfo.setStoreAddress(storeAddress);
+        storeInfo.setStoreZipcode(storeZipcode);
+        storeInfo.setStoreAddrDetail(storeAddrDetail);
+        storeInfo.setStorePhone(storePhone);
+        storeInfo.setMinOrderAmount(minOrderAmount);
+        storeInfo.setOrderAmount1(orderAmount1);
+        storeInfo.setDeliveryAmount1(deliveryAmount1);
+        storeInfo.setOrderAmount2(orderAmount2);
+        storeInfo.setDeliveryAmount2(deliveryAmount2);
+        storeInfo.setOrderAmount3(orderAmount3);
+        storeInfo.setDeliveryAmount3(deliveryAmount3);
+        storeInfo.setOpenTime(openTime);
+        storeInfo.setCloseTime(closeTime);
+        storeInfo.setStoreDetailInfo(storeDetailInfo);
+        storeInfo.setStoreOriginInfo(storeOriginInfo);
+        storeInfo.setStoreBusinessRegistrationFile(storeBusinessRegistrationFile);
+        storeInfo.setStoreBusinessReportFile(storeBusinessReportFile);
+        storeInfo.setStoreProfileImg(storeProfileImg);
+
+        clientStoreMapper.updateStoreInfo(storeInfo);
+
+        // 2. 기존 카테고리 삭제
+        storeCategoryMapper.deleteStoreCategories(storeInfoKey);
+
+        // 3. 새로운 카테고리 삽입
+        if (categories != null && categories.length > 0) {
+            for (String categoryKey : categories) {
+                storeCategoryMapper.insertStoreCategory(storeInfoKey, Integer.parseInt(categoryKey));
+            }
+        }
+    }
+
+    public List<ClientStoreInfo> filterStores(int clientKey, String storeAccess, String businessStatus, String storeName) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("clientKey", clientKey);
+        params.put("storeAccess", storeAccess);
+        params.put("businessStatus", businessStatus);
+        params.put("storeName", storeName);
+        return clientStoreMapper.filterStores(params);
     }
 }

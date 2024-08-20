@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사장님 - 가게 수정</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Client CSS -->
+        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Client JS -->
+        <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+        <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    </head>
+    <body>
+        <div class="client-wrap">
+            <!-- Start:Aside -->
+            <th:block th:include="inc/client/aside :: clientAside"></th:block>
+            <!-- End:Aside -->
+
+            <!-- Start:Main -->
+            <main id="mainpage__wrap">
+                <!-- Start:Header -->
+                <th:block th:include="inc/client/header :: clientHeader"></th:block>
+                <!-- End:Header -->
+
+                <!-- Start:Contents -->
+                <section class="contents">
+                    <form id="storeEditForm" th:action="@{/client/storeEdit/{storeInfoKey}(storeInfoKey=${store.storeInfoKey})}" method="post" enctype="multipart/form-data">
+
+                        <!-- 가게명 -->
+                        <div class="form-group">
+                            <label for="storeName">가게명</label>
+                            <input type="text" id="storeName" name="storeName" th:value="${store.storeName}">
+                        </div>
+                        <br>
+
+                        <!-- 가게 카테고리 -->
+                        <div class="form-group">
+                            <label for="category">가게 카테고리</label>
+                            <div id="category" class="checkbox-group">
+                                <th:block th:each="category : ${categories}">
+                                    <label>
+                                        <input type="checkbox" th:name="categories"
+                                               th:value="${category.categoryKey}"
+                                               th:checked="${#lists.contains(storeCategories, category)}">
+                                        <span th:text="${category.categoryName}"></span>
+                                    </label>
+                                </th:block>
+                            </div>
+                        </div>
+                        <br>
+
+                        <!-- 주소 수정 -->
+                        <div id="addressModal">
+                            <div>
+                                <h2 id="modalTitle">주소 수정</h2>
+                                <input type="hidden" id="storeAddress" name="storeAddress" th:value="${store.storeAddress}">
+                                <label for="newAddress">주소:</label>
+                                <input type="text" id="newAddress" name="newAddress" th:value="${store.storeAddress}" readonly required>
+                                <button type="button" onclick="execDaumPostcode()">주소 찾기</button>
+                                <br>
+                                <label for="storeZipcode">우편번호:</label>
+                                <input type="text" id="storeZipcode" name="storeZipcode" th:value="${store.storeZipcode}" readonly required>
+                                <br>
+                                <label for="storeAddrDetail">상세 주소:</label>
+                                <input type="text" id="storeAddrDetail" name="storeAddrDetail" th:value="${store.storeAddrDetail}" required>
+                                <br>
+                            </div>
+                        </div>
+                        <br>
+
+                        <!-- 가게 전화번호 -->
+                        <div class="form-group">
+                            <label for="storePhone">가게 전화번호</label>
+                            <input type="text" id="storePhone" name="storePhone" th:value="${store.storePhone}">
+                        </div>
+                        <br>
+
+                        <!-- 최소 주문 금액 -->
+                        <div class="form-group">
+                            <label for="minOrderAmount">최소 주문 금액</label>
+                            <input type="text" id="minOrderAmount" name="minOrderAmount" th:value="${store.minOrderAmount}">
+                        </div>
+                        <br>
+
+                        <!-- 주문 금액과 배달비 설정 -->
+                        <div class="form-group">
+                            <label for="orderAmount1">주문 금액</label>
+                            <input type="text" id="orderAmount1" name="orderAmount1" th:value="${store.orderAmount1}" placeholder="주문 금액 1"> 이하 주문시
+                            <label for="deliveryAmount1">배달비</label>
+                            <input type="text" id="deliveryAmount1" name="deliveryAmount1" th:value="${store.deliveryAmount1}" placeholder="배달비 1">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label for="orderAmount1Over">주문 금액</label>
+                            <input type="text" id="orderAmount1Over" name="orderAmount1Over" th:value="${store.orderAmount1}" placeholder="주문 금액 1" readonly> 초과
+                            <label for="orderAmount2">주문 금액</label>
+                            <input type="text" id="orderAmount2" name="orderAmount2" th:value="${store.orderAmount2}" placeholder="주문 금액 2"> 이하 주문시
+                            <label for="deliveryAmount2">배달비</label>
+                            <input type="text" id="deliveryAmount2" name="deliveryAmount2" th:value="${store.deliveryAmount2}" placeholder="배달비 2">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label for="orderAmount2Over">주문 금액</label>
+                            <input type="text" id="orderAmount2Over" name="orderAmount2Over" th:value="${store.orderAmount2}" placeholder="주문 금액 2" readonly> 초과
+                            <label for="deliveryAmount3">배달비</label>
+                            <input type="text" id="deliveryAmount3" name="deliveryAmount3" th:value="${store.deliveryAmount3}" placeholder="배달비 3">
+                        </div>
+                        <br>
+
+                        <!-- 오픈 시간 -->
+                        <div class="form-group">
+                            <label for="openTime">오픈 시간</label>
+                            <input type="time" id="openTime" name="openTime" th:value="${store.formattedOpenTime}">
+                        </div>
+                        <br>
+
+                        <!-- 마감 시간 -->
+                        <div class="form-group">
+                            <label for="closeTime">마감 시간</label>
+                            <input type="time" id="closeTime" name="closeTime" th:value="${store.formattedCloseTime}">
+                        </div>
+                        <br>
+
+                        <!-- 가게 상세 정보 -->
+                        <div class="form-group">
+                            <label for="storeDetailInfo">가게 상세정보</label>
+                            <textarea id="storeDetailInfo" name="storeDetailInfo" rows="4"
+                                      placeholder="가게를 짧게 소개해주세요 (손님들에게 보이지는 정보입니다.)"
+                                      th:text="${store.storeDetailInfo}"></textarea>
+                        </div>
+                        <br>
+
+                        <!-- 가게 원산지 정보 -->
+                        <div class="form-group">
+                            <label for="storeOriginInfo">가게 원산지 정보</label>
+                            <textarea id="storeOriginInfo" name="storeOriginInfo" rows="4"
+                                      placeholder="가게 원산지 정보를 입력해주세요."
+                                      th:text="${store.storeOriginInfo}"></textarea>
+                        </div>
+                        <br>
+
+                        <!-- 기존 파일 경로를 hidden input으로 전달 -->
+                        <input type="hidden" name="currentStoreBusinessRegistrationFile" th:value="${store.storeBusinessRegistrationFile}">
+                        <input type="hidden" name="currentStoreBusinessReportFile" th:value="${store.storeBusinessReportFile}">
+                        <input type="hidden" name="currentStoreProfileImg" th:value="${store.storeProfileImg}">
+
+                        <!-- 파일 업로드 -->
+                        <div class="form-group">
+                            <label for="storeBusinessRegistrationFile">사업자등록증</label>
+                            <input type="file" id="storeBusinessRegistrationFile" name="storeBusinessRegistrationFile" onchange="previewImage(this, 'regFilePreview')">
+                            <th:block th:if="${store.storeBusinessRegistrationFile}">
+                                <div>
+                                    <img id="regFilePreview" th:src="@{${store.storeBusinessRegistrationFile}}" alt="사업자등록증 이미지" style="max-width: 100px;">
+                                </div>
+                            </th:block>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="storeBusinessReportFile">영업신고증</label>
+                            <input type="file" id="storeBusinessReportFile" name="storeBusinessReportFile" onchange="previewImage(this, 'reportFilePreview')">
+                            <th:block th:if="${store.storeBusinessReportFile}">
+                                <div>
+                                    <img id="reportFilePreview" th:src="@{${store.storeBusinessReportFile}}" alt="영업신고증 이미지" style="max-width: 100px;">
+                                </div>
+                            </th:block>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="storeProfileImg">가게 프로필</label>
+                            <input type="file" id="storeProfileImg" name="storeProfileImg" onchange="previewImage(this, 'profileImgPreview')">
+                            <th:block th:if="${store.storeProfileImg}">
+                                <div>
+                                    <img id="profileImgPreview" th:src="@{${store.storeProfileImg}}" alt="가게 프로필 이미지" style="max-width: 100px;">
+                                </div>
+                            </th:block>
+                        </div>
+
+                        <input type="submit" value="수정 완료">
+                    </form>
+                    <script src="/client/js/module/store.edit.js"></script>
+
+                </section>
+                <!-- End:Contents -->
+            </main>
+            <!-- End:Main -->
+        </div>
+    </body>
+</html>

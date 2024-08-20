@@ -1,28 +1,18 @@
-<form th:action="@{/user/saveReview}" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="orderKey" th:value="${order.orderKey}">
-    <input type="hidden" name="storeInfoKey" th:value="${storeInfo.storeInfoKey}">
-    <input type="hidden" name="clientKey" th:value="${storeInfo.clientKey}">
-
-    <div>
-        <label>가게 이름:</label>
-        <span th:text="${storeInfo.storeName}"></span>
+<div class="store-list">
+    <div th:each="store : ${storeList}">
+        <div class="store-item">
+            <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}">
+                <img th:src="${store.storeProfileImg}" alt="가게 이미지">
+                <p th:text="${store.storeName}"></p>
+                <p th:text="'평점: ' + ${store.averageRating} + '⭐'"></p>
+                <p th:text="'최소주문금액: ' + ${store.minOrderAmount} + '원'"></p>
+                <p th:text="'배달비: ' + ${store.deliveryAmount1} + '원'"></p>
+            </a>
+        </div>
+        <br><br>
     </div>
+</div>
 
-    <div>
-        <label>별점:</label>
-        <input type="number" name="reviewRating" min="1" max="5" required>
-    </div>
-
-    <div>
-        <label>리뷰 내용:</label>
-        <textarea name="reviewDesc" required></textarea>
-    </div>
-
-    <div>
-        <label>사진 업로드:</label>
-        <input type="file" name="reviewPhoto1">
-        <input type="file" name="reviewPhoto2">
-    </div>
-
-    <button type="submit">리뷰 등록하기</button>
-</form>
+<!-- Start:Pagination -->
+<th:block th:include="inc/user/pagination :: boardPagination (${type})"></th:block>
+<!-- End:Pagination -->

@@ -8,6 +8,7 @@
     <!-- 메뉴 그룹 정보를 매핑할 resultMap -->
     <resultMap id="MenuGroupResultMap" type="kr.co.jhta.app.delideli.client.menu.domain.ClientMenuGroup">
         <id property="menuGroupKey" column="menu_group_key"/>
+        <result property="storeInfoKey" column="storeInfo_key"/>
         <result property="menuGroupName" column="menu_group_name"/>
         <result property="menuGroupRegdate" column="menu_group_regdate"/>
         <result property="menuGroupUpdate" column="menu_group_update"/>
@@ -17,6 +18,7 @@
     <resultMap id="MenuResultMap" type="kr.co.jhta.app.delideli.client.menu.domain.ClientMenu">
         <id property="menuKey" column="menu_key"/>
         <result property="storeInfoKey" column="storeInfo_key"/>
+        <result property="menuGroupKey" column="menu_group_key"/>
         <result property="menuName" column="menu_name"/>
         <result property="menuPrice" column="menu_price"/>
         <result property="menuImg" column="menu_img"/>
@@ -72,5 +74,35 @@
     <select id="getMenuById" parameterType="int" resultMap="MenuResultMap">
         SELECT * FROM menu WHERE menu_key = #{menuKey}
     </select>
+
+    <select id="getAllMenuGroup" parameterType="int" resultMap="MenuGroupResultMap">
+        SELECT * FROM menu_group WHERE storeInfo_key = #{storeInfoKey}
+    </select>
+
+    <insert id="addMenuGroup" parameterType="kr.co.jhta.app.delideli.client.menu.domain.ClientMenuGroup">
+        INSERT INTO menu_group (storeInfo_key, menu_group_name)
+        VALUES (#{storeInfoKey}, #{menuGroupName})
+    </insert>
+
+    <insert id="addMenu" parameterType="kr.co.jhta.app.delideli.client.menu.domain.ClientMenu" useGeneratedKeys="true" keyProperty="menuKey">
+        INSERT INTO menu (storeInfo_key, menu_group_key, menu_name, menu_price, menu_img)
+        VALUES (#{storeInfoKey}, #{menuGroupKey}, #{menuName}, #{menuPrice}, #{menuImg})
+    </insert>
+
+    <select id="getAllMenuByGroupKey" parameterType="int" resultMap="MenuResultMap">
+        SELECT * FROM menu WHERE menu_group_key = #{menuGroupKey}
+    </select>
+
+    <update id="updateMenu" parameterType="kr.co.jhta.app.delideli.client.menu.domain.ClientMenu">
+        UPDATE menu
+        SET
+            menu_group_key = #{menuGroupKey},
+            menu_name = #{menuName},
+            menu_price = #{menuPrice},
+            menu_img = #{menuImg},
+            menu_update = NOW()
+        WHERE menu_key = #{menuKey}
+    </update>
+
 
 </mapper>
