@@ -12,4 +12,6 @@ public interface ClientReviewMapper {
     ArrayList<ClientReview> getreviewList(Map<String, Object> map);
     // 리뷰 신고 처리
     int updateReportReview(int reviewKey);
+
+    ClientReview getReviewByKey(int reviewKey);
 }

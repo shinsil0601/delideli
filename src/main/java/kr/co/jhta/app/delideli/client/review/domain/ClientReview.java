@@ -27,4 +27,5 @@ public class ClientReview {
     private boolean reviewStatus;
     private Date mnmtRegdate;
     private String userId;
+
 }
