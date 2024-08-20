@@ -12,26 +12,30 @@
     <th:block th:include="inc/common/common-js :: commonJs"></th:block>
     <!-- Include:Client JS -->
     <th:block th:include="inc/client/client-js :: clientJs"></th:block>
-    <!-- JS: 토글 버튼 클릭 시 처리 -->
+
     <script>
         // 리뷰 신고를 처리하는 함수
         function reportReview(reviewKey, element) {
             if (confirm("정말 신고하시겠습니까?")) { // 확인 창 표시
-                fetch(`/client/reviewReport/${reviewKey}`, { method: 'POST' })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Response data:', data); // 데이터 출력
-                        if (data.status === "success") {
-                            element.textContent = "신고 완료"; // 텍스트 변경
-                            element.style.pointerEvents = 'none'; // 버튼 비활성화
+
+                $.ajax({
+                    type: "POST",
+                    url: "/client/reviewReport/" + reviewKey,
+                    success: function(response) {
+                        if (response.status === "success") {
+                            $(element).text("신고 완료"); // 텍스트 변경
+                            $(element).css("pointer-events", "none"); // 버튼 비활성화
+                        } else if (response.status === "already_reported") {
+                            alert("이미 신고된 리뷰입니다.");
                         } else {
                             alert("신고 처리에 실패했습니다. 다시 시도해주세요.");
                         }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
+                    },
+                    error: function(error) {
+                        console.error("Error:", error);
                         alert("오류가 발생했습니다. 다시 시도해주세요.");
-                    });
+                    }
+                });
             }
         }
     </script>

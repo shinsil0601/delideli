@@ -16,6 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/client")
@@ -56,22 +58,28 @@ public class ClientReviewController {
         return "client/review/review.view";
     }
 
-    // 리뷰 신고 처리 (비동기 요청)
+
+    // 리뷰 신고 처리 (AJAX 요청)
     @PostMapping("/reviewReport/{reviewKey}")
     @ResponseBody
-    public String reportReview(@PathVariable("reviewKey") int reviewKey) {
+    public Map<String, Object> reportReview(@PathVariable("reviewKey") int reviewKey) {
+        Map<String, Object> response = new HashMap<>();
         try {
-            log.info("reviewKey:!11>>>>>>>>>> {}", reviewKey);
-            boolean success = clientReviewService.reportReview(reviewKey); // 신고 처리 서비스 호출
+            boolean success = clientReviewService.reportReview(reviewKey);
             if (success) {
-                return "{\"status\": \"success\"}"; // JSON 형식의 성공 응답
+                response.put("status", "success");
             } else {
-                return "{\"status\": \"failure\"}"; // JSON 형식의 실패 응답
+                response.put("status", "failure");
             }
+        } catch (IllegalStateException e) {
+            response.put("status", "already_reported");
+            response.put("message", e.getMessage());
         } catch (Exception e) {
-            log.error("Review report failed>>>>>>>>>>", e);
-            return "{\"status\": \"error\"}"; // JSON 형식의 오류 응답
+            log.error("Review report failed", e);
+            response.put("status", "error");
         }
+        return response;
+
     }
 
 
