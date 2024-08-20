@@ -1,0 +1,220 @@
+.storePage__wrap {
+    position: relative;
+    margin: 0 auto;
+    max-width: 144rem;
+    padding: 6rem 0 12rem;
+}
+/* store - 검색박스 */
+.sp__search-con {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    padding-bottom: 4rem;
+}
+.sp__search-adr-input-box {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.search__add-value {
+    position: relative;
+    min-width: 32rem;
+    padding: 1rem 1.6rem 1rem 1.6rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+    line-height: 1;
+}
+.sp__search-adr-input-box button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10rem;
+    height: 4.2rem;
+    background: var(--gray-600);
+    color: var(--whiteColor);
+}
+.guest-addr__con {
+    padding-top: 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+.guest-addr__input-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.guest-addr__con input {
+    width: 20rem;
+    height: 4.2rem;
+    font-size: var(--font-size-14);
+}
+.guest-addr__con button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 6rem;
+    height: 4.2rem;
+    padding: 1.6rem 1rem;
+    font-size: var(--font-size-14);
+}
+.guest-addr__btn {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.addr-select__con {
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.addr-select__con select {
+    border: 1px solid var(--gray-200);
+    height: 4.2rem;
+    padding: 1rem;
+    border-radius: 0.8rem;
+}
+.addr-select__con button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 6rem;
+    height: 4.2rem;
+    padding: 1.6rem 1rem;
+    font-size: var(--font-size-14);
+}
+#addressSelect {
+
+}
+.sp__search-store-box {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.sp__search-store-input-box {
+    position: relative;
+}
+.sp__search-store-input-box span {
+    position: absolute;
+    left: 1.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.sp__search-store-input-box input {
+    width: 32rem;
+    padding: 1rem 1.6rem 1rem 4rem;
+}
+.sp__search-store-box button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10rem;
+    height: 4.2rem;
+    background: var(--gray-600);
+    color: var(--whiteColor);
+}
+/* store - 카테고리 */
+.sp__ctg {
+    padding-bottom: 4rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+.sp__ctg > li > a {
+    display: block;
+    text-align: center;
+    min-width: 8rem;
+    padding: 1rem 1.6rem;
+    background: var(--whiteColor);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+    font-size: var(--font-size-14);
+    font-weight: 700;
+    transition: .3s;
+}
+.sp__ctg > li.active > a {
+    background: var(--mainColor);
+    color: var(--whiteColor);
+    border: none;
+}
+.sp__ctg > li > a:hover {
+    background: var(--gray-100);
+}
+.sp__ctg > li.active > a:hover {
+    opacity: 1;
+    background: var(--mainColor);
+}
+/* store - 가게목록 */
+.sp__list {
+    display: grid;
+    gap: 4rem;
+    grid-template-columns: repeat(3, 1fr);
+}
+.sp__list > li {
+    transition: .3s;
+}
+.sp__list > li:hover {
+    transform: translateY(-1rem);
+}
+.sp__list > li > a {
+    display: block;
+    border-radius: 2rem;
+    box-shadow: var(--box-shadow-100);
+    transition: .3s;
+    padding: 2rem;
+}
+.sp__list > li:hover > a {
+    background: var(--gray-100);
+}
+.sp__img {
+    width: 100%;
+    height: 24rem;
+    border-radius: 2rem;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+}
+.sp__img img {
+    width: 100%;
+    height: 100%;
+}
+.sp__info {
+    padding: 2rem 0 1rem;
+}
+.sp__rating {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+.sp__rating > li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--font-size-14);
+    font-weight: 500;
+    color: var(--gray-400);
+}
+.sp__rating > li > i {
+    color: var(--mainColor);
+}
+.sp__name {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+    padding-bottom: 1rem;
+}
+.sp__menu p {
+    font-size: var(--font-size-18);
+    font-weight: 500;
+    color: var(--gray-900);
+}
+.sp__etc-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.sp__etc-info > li {
+    font-size: var(--font-size-14);
+    font-weight: 500;
+    color: var(--gray-400);
+}
