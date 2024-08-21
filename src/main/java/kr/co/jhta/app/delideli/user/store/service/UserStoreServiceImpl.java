@@ -36,8 +36,8 @@ public class UserStoreServiceImpl implements UserStoreService {
     }
 
     @Override
-    public ArrayList<StoreInfo> searchAllStoresByNameAndRegion(String query, String region) {
-        return userStoreMapper.searchAllStoresByNameAndRegion(query, region);
+    public ArrayList<StoreInfo> searchAllStoresByNameAndRegionAndCategory(int categoryId, String query, String region) {
+        return userStoreMapper.searchAllStoresByNameAndRegionAndCategory(categoryId, query, region);
     }
 
     @Override

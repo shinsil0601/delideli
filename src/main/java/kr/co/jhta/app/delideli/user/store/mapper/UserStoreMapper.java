@@ -15,11 +15,11 @@ public interface UserStoreMapper {
 
     ArrayList<StoreInfo> getAllStoresByCategoryAndRegion(int categoryId, String region);
 
-    ArrayList<StoreInfo> searchAllStoresByNameAndRegion(String query, String region);
-
     StoreInfo getStoreInfoById(int storeInfoKey);
 
     ArrayList<StoreInfo> getLikedStores(int userKey);
 
     ArrayList<StoreInfo> getStoresByCategory(Map<String, Object> params);
+
+    ArrayList<StoreInfo> searchAllStoresByNameAndRegionAndCategory(int categoryId, String query, String region);
 }

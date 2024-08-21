@@ -108,28 +108,32 @@
                     <th:block th:if="${user != null}">
                         <!-- 로그인 -->
                         <ul class="sp__ctg">
-                            <li class="active">
+                            <li th:classappend="${active == 0} ? active : ''">
                                 <a href="/user/category/0">ALL</a>
                             </li>
-                            <li th:each="category : ${categoryList}">
-                                <a th:href="@{'/user/category/' + ${category.categoryKey}}">
-                                    [[${category.categoryName}]]
-                                </a>
-                            </li>
+                            <th:block th:each="category : ${categoryList}">
+                                <li th:classappend="${active == category.categoryKey} ? active : ''">
+                                    <a th:href="@{'/user/category/' + ${category.categoryKey}}">
+                                        [[${category.categoryName}]]
+                                    </a>
+                                </li>
+                            </th:block>
                         </ul>
                     </th:block>
                     <th:block th:if="${user == null}">
                         <!-- 비로그인 -->
                         <ul class="sp__ctg">
-                            <li class="active">
-                                <a href="#" data-base-url="/user/category/0">ALL</a>
+                            <li th:classappend="${active == 0} ? active : ''">
+                                <a href="#" class="category-link" data-base-url="/user/category/0">ALL</a>
                             </li>
-                            <li th:each="category : ${categoryList}">
-                                <a href="#"
-                                   th:data-base-url="@{'/user/category/' + ${category.categoryKey}}">
-                                    [[${category.categoryName}]]
-                                </a>
-                            </li>
+                            <th:block th:each="category : ${categoryList}">
+                                <li th:classappend="${active == category.categoryKey} ? active : ''">
+                                    <a href="#" class="category-link"
+                                       th:data-base-url="@{'/user/category/' + ${category.categoryKey}}">
+                                        [[${category.categoryName}]]
+                                    </a>
+                                </li>
+                            </th:block>
                         </ul>
                     </th:block>
                 </div>

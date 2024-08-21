@@ -138,11 +138,11 @@ public class UserOrderController {
         }
     }
 
-
     @GetMapping("/myOrder")
     public String myOrder(@AuthenticationPrincipal User user, Model model) {
         UserAccount userAccount = userService.findUserById(user.getUsername());
         model.addAttribute("user", userAccount);
+        model.addAttribute("active", "myOrder");
 
         // 사용자의 모든 주문을 가져옴
         ArrayList<Order> userOrders = userOrderService.getOrdersByUserKey(userAccount.getUserKey());
@@ -163,6 +163,7 @@ public class UserOrderController {
             String formattedDate = order.getOrderRegdate().format(formatter);
             order.setFormattedOrderDate(formattedDate);
 
+
             // 주문 상태 메시지 설정
             String statusMessage = "";
 
@@ -171,10 +172,7 @@ public class UserOrderController {
                 case "포장":
                     statusMessage = "가게 접수중";
                     break;
-                case "배달접수":
-                    statusMessage = "조리중";
-                    break;
-                case "포장접수":
+                case "배달(조리중)", "포장(조리중)":
                     statusMessage = "조리중";
                     break;
                 case "배달중":
@@ -196,8 +194,10 @@ public class UserOrderController {
 
             order.setStatusMessage(statusMessage);
 
+            log.info("order  >>>>>>>>>>>>>>>>>> {}", order);
+            
             // 주문 상태에 따라 리스트에 추가
-            if (order.getOrderMethod().equals("배달") || order.getOrderMethod().equals("포장") || order.getOrderMethod().equals("배달접수") || order.getOrderMethod().equals("포장접수") || order.getOrderMethod().equals("배달중") || order.getOrderMethod().equals("포장(픽업대기)")) {
+            if (order.getOrderMethod().equals("배달") || order.getOrderMethod().equals("포장") || order.getOrderMethod().equals("배달(조리중)") || order.getOrderMethod().equals("포장(조리중)") || order.getOrderMethod().equals("배달중") || order.getOrderMethod().equals("포장(픽업대기)")) {
                 inProgressOrders.add(order);
             } else {
                 completedOrders.add(order);
@@ -250,10 +250,7 @@ public class UserOrderController {
             case "포장":
                 statusMessage = "가게 접수중";
                 break;
-            case "배달접수":
-                statusMessage = "조리중";
-                break;
-            case "포장접수":
+            case "배달(조리중)", "포장(조리중)":
                 statusMessage = "조리중";
                 break;
             case "배달중":
@@ -277,6 +274,7 @@ public class UserOrderController {
 
         //log.info("order" + order);
         //log.info("storeInfo" + storeInfo);
+        model.addAttribute("active", "myOrder");
         model.addAttribute("order", order);
         model.addAttribute("store", storeInfo);
         return "user/order/orderDetail";
