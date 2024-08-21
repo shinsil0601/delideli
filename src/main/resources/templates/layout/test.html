@@ -1,72 +1,135 @@
-<a href="/client/storeRegister">가게 등록</a>
-<hr>
-<form th:action="@{/client/storeList}" method="get">
-    <div>
-        <input type="text" name="keyword" th:value="${keyword}" placeholder="가게명 검색">
-        <select name="storeAccess">
-            <option value="">전체 (승인 여부)</option>
-            <option value="true" th:selected="${storeAccess == 'true'}">승인</option>
-            <option value="false" th:selected="${storeAccess == 'false'}">승인 대기</option>
-        </select>
-        <select name="businessStatus">
-            <option value="">전체 (상태)</option>
-            <option value="영업중" th:selected="${businessStatus == '영업중'}">영업중</option>
-            <option value="일시정지" th:selected="${businessStatus == '일시정지'}">일시정지</option>
-            <option value="삭제 대기" th:selected="${businessStatus == '삭제 대기'}">삭제 대기</option>
-            <option value="마감" th:selected="${businessStatus == '마감'}">마감</option>
-        </select>
-        <button type="submit">검색</button>
-    </div>
-</form>
-<hr>
-<table>
-    <thead>
-    <tr>
-        <th>가게명</th>
-        <th>오픈시간</th>
-        <th>마감시간</th>
-        <th>상태</th>
-        <th>가게 일시정지</th>
-        <th>승인여부</th>
-        <th>주문관리</th>
-        <th>관리</th>
-    </tr>
-    </thead>
-    <tbody>
-    <th:block th:each="store : ${store}">
-        <tr>
-            <td th:text="${store.storeName}">가게명</td>
-            <td th:text="${store.formattedOpenTime}">오후 12시</td>
-            <td th:text="${store.formattedCloseTime}">오전 12시</td>
-            <td th:text="${store.storeDelete ? '삭제 대기' : store.businessStatus}">영업중</td>
-            <td>
-                <button th:data-store-id="${store.storeInfoKey}"
-                        th:classappend="${store.storePause ? 'toggle-on' : 'toggle-off'}"
-                        onclick="toggleStorePause(this)">
-                    <span th:text="${store.storePause ? 'ON' : 'OFF'}"></span>
-                </button>
-            </td>
-            <td>
-                <span th:if="${store.storeAccess}" th:text="'승인'">승인</span>
-                <span th:if="${!store.storeAccess}" th:text="'승인 대기'" style="color: red;">승인 대기</span>
-            </td>
-            <td>
-                <a href="/client/storeOrders" th:href="@{/client/waitOrder/{storeInfoKey}(storeInfoKey=${store.storeInfoKey})}">이동</a>
-            </td>
-            <td>
-                <a href="/client/storeEdit" th:href="@{/client/storeEdit/{storeInfoKey}(storeInfoKey=${store.storeInfoKey})}">수정</a>
-                <button th:data-store-id="${store.storeInfoKey}"
-                        onClick="toggleStoreDelete(this)"
-                        th:text="${store.storeDelete ? '삭제 취소' : '삭제'}">
-                </button>
-            </td>
-        </tr>
-    </th:block>
-    </tbody>
-</table>
-<!-- Start:Pagination -->
-<th:block th:include="inc/client/pagination-storeList :: StoreListPagination (${type})"></th:block>
-<!-- End:Pagination -->
+<form id="storeRegisterForm" enctype="multipart/form-data">
+    <p>‘입점신청 하기’ 버튼을 눌러 신청서를 작성해 주세요. 담당자 확인 후 전화 혹은 대면으로 도와드립니다.</p>
+    <br>
 
-<script src="/client/js/module/store.list.js"></script>
-</section>
+    <!-- 가게명 -->
+    <div class="form-group">
+        <label for="store-name">가게명</label>
+        <input type="text" id="store-name" name="store-name">
+    </div>
+    <br>
+
+    <!-- 가게 카테고리 -->
+    <div class="form-group">
+        <label for="category">가게 카테고리</label>
+        <div id="category" class="checkbox-group">
+            <th:block th:each="category : ${category}">
+                <label>
+                    <input type="checkbox" th:name="categories" th:value="${category.categoryKey}">
+                    <span th:text="${category.categoryName}"></span>
+                </label>
+            </th:block>
+        </div>
+    </div>
+    <br>
+
+    <!-- 주소 추가 -->
+    <div id="addressModal">
+        <div>
+            <h2 id="modalTitle">주소 추가</h2>
+            <input type="hidden" id="addressKey" name="addressKey">
+            <label for="newAddress">주소:</label>
+            <input type="text" id="newAddress" name="newAddress" readonly required>
+            <button type="button" onclick="execDaumPostcode()">주소 찾기</button>
+            <br>
+            <label for="newZipcode">우편번호:</label>
+            <input type="text" id="newZipcode" name="newZipcode" readonly required>
+            <br>
+            <label for="newAddrDetail">상세 주소:</label>
+            <input type="text" id="newAddrDetail" name="newAddrDetail" required>
+            <br>
+        </div>
+    </div>
+    <br>
+
+    <!-- 가게 전화번호 -->
+    <div class="form-group">
+        <label for="store-phone">가게 전화번호</label>
+        <input type="text" id="store-phone" name="store-phone">
+    </div>
+    <br>
+
+    <!-- 최소 주문 금액 -->
+    <div class="form-group">
+        <label for="min-amount">최소 주문 금액</label>
+        <input type="text" id="min-amount" name="min-amount">
+    </div>
+    <br>
+
+    <!-- 주문 금액과 배달비 설정 -->
+    <div class="form-group">
+        <label for="order-amount-1">주문 금액</label>
+        <input type="text" id="order-amount-1" name="orderAmount1" placeholder="주문 금액 1"> 이하 주문시
+        <label for="delivery-fee-1">배달비</label>
+        <input type="text" id="delivery-fee-1" name="deliveryFee1" placeholder="배달비 1">
+    </div>
+    <br>
+
+    <div class="form-group">
+        <label for="order-amount-1-over">주문 금액</label>
+        <input type="text" id="order-amount-1-over" name="orderAmount1Over" placeholder="주문 금액 1"
+               readonly> 초과
+        <label for="order-amount-2">주문 금액</label>
+        <input type="text" id="order-amount-2" name="orderAmount2" placeholder="주문 금액 2"> 이하 주문시
+        <label for="delivery-fee-2">배달비</label>
+        <input type="text" id="delivery-fee-2" name="deliveryFee2" placeholder="배달비 2">
+    </div>
+    <br>
+
+    <div class="form-group">
+        <label for="order-amount-2-over">주문 금액</label>
+        <input type="text" id="order-amount-2-over" name="orderAmount2Over" placeholder="주문 금액 2"
+               readonly> 초과
+        <label for="delivery-fee-3">배달비</label>
+        <input type="text" id="delivery-fee-3" name="deliveryFee3" placeholder="배달비 3">
+    </div>
+    <br>
+
+    <!-- 오픈 시간 -->
+    <div class="form-group">
+        <label for="open-time">오픈 시간</label>
+        <input type="time" id="open-time" name="openTime">
+    </div>
+    <br>
+
+    <!-- 마감 시간 -->
+    <div class="form-group">
+        <label for="close-time">마감 시간</label>
+        <input type="time" id="close-time" name="closeTime">
+    </div>
+    <br>
+
+    <!-- 가게 상세 정보 -->
+    <div class="form-group">
+        <label for="store-info">가게 상세정보</label>
+        <textarea id="store-info" name="storeInfo" rows="4"
+                  placeholder="가게를 짧게 소개해주세요 (손님들에게 보이지는 정보입니다.)"></textarea>
+    </div>
+    <br>
+
+    <!-- 가게 원산지 정보 -->
+    <div class="form-group">
+        <label for="origin-info">가게 원산지 정보</label>
+        <textarea id="origin-info" name="originInfo" rows="4"
+                  placeholder="가게 원산지 정보를 입력해주세요."></textarea>
+    </div>
+    <br>
+
+    <!-- 파일 업로드 -->
+    <div class="form-group">
+        <label for="business-license">사업자등록증</label>
+        <input type="file" id="business-license" name="businessLicense">
+    </div>
+    <div class="form-group">
+        <label for="operating-permit">영업신고증</label>
+        <input type="file" id="operating-permit" name="operatingPermit">
+    </div>
+    <div class="form-group">
+        <label for="store-profile">가게 프로필</label>
+        <input type="file" id="store-profile" name="storeProfile">
+    </div>
+    <br>
+
+    <input type="submit" value="등록 신청">
+</form>
+<script src="/client/js/module/store.register.js"></script>
