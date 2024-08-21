@@ -154,4 +154,19 @@ public class ClientStoreServiceImpl implements ClientStoreService {
         params.put("storeName", storeName);
         return clientStoreMapper.filterStores(params);
     }
+
+    @Override
+    public ArrayList<ClientStoreInfo> getAllStoreWithPaging(int clientKey, int page, int pageSize) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("clientKey", clientKey);
+        params.put("startNo", (page - 1) * pageSize);
+        params.put("pageSize", pageSize);
+
+        return clientStoreMapper.getAllStoreWithPaging(params);
+    }
+
+    @Override
+    public int getTotalStoreCountByClientKey(int clientKey) {  // 이름 변경
+        return clientStoreMapper.getTotalStoreCountByClientKey(clientKey);
+    }
 }

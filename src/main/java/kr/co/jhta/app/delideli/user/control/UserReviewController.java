@@ -52,18 +52,15 @@ public class UserReviewController {
         // 현재 사용자 정보를 가져옴
         UserAccount userAccount = userService.findUserById(user.getUsername());
 
-        // 오늘 날짜를 기준으로 7일 전 날짜를 계산
         LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
 
-        // 리뷰 작성이 가능한 주문 목록을 가져옴 (조건: order_method가 '완료'이고, 주문일이 7일 이내인 경우)
-        ArrayList<Order> reviewableOrders = userOrderService.getReviewableOrders(userAccount.getUserKey(), sevenDaysAgo);
+        ArrayList<Order> availableForReviewOrders = userOrderService.getOrdersWithoutReview(userAccount.getUserKey(), sevenDaysAgo);
 
-        // 작성 가능한 리뷰 목록과 작성된 리뷰 목록을 구분하기 위한 리스트 생성
-        ArrayList<Order> availableForReviewOrders = new ArrayList<>();
-        ArrayList<Order> writtenReviewOrders = new ArrayList<>();
+        // 작성된 리뷰 목록을 가져옴
+        ArrayList<Order> writtenReviewOrders = userOrderService.getOrdersWithReview(userAccount.getUserKey());
 
         // 각 주문에 대한 상세 정보를 가져옴
-        for (Order order : reviewableOrders) {
+        for (Order order : availableForReviewOrders) {
             ArrayList<OrderDetail> orderDetails = userOrderService.getOrderDetailsByOrderKey(order.getOrderKey());
             order.setOrderDetails(orderDetails);
 
@@ -77,15 +74,21 @@ public class UserReviewController {
             // 남은 리뷰 작성 기간 계산
             int remainingDays = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), order.getOrderRegdate().plusDays(7));
             order.setRemainingDays(remainingDays);
+        }
 
-            // 리뷰 작성 여부 확인 후 리스트에 추가
-            if (userReviewService.isReviewWritten(order.getOrderKey())) {
-                Review review = userReviewService.getReviewByOrderKey(order.getOrderKey());
-                order.setReview(review); // 리뷰 정보 설정
-                writtenReviewOrders.add(order);
-            } else {
-                availableForReviewOrders.add(order);
-            }
+        for (Order order : writtenReviewOrders) {
+            ArrayList<OrderDetail> orderDetails = userOrderService.getOrderDetailsByOrderKey(order.getOrderKey());
+            order.setOrderDetails(orderDetails);
+
+            StoreInfo storeInfo = userStoreService.getStoreInfoById(order.getStoreInfoKey());
+            order.setStoreInfo(storeInfo);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+            String formattedDate = order.getOrderRegdate().format(formatter);
+            order.setFormattedOrderDate(formattedDate);
+
+            Review review = userReviewService.getReviewByOrderKey(order.getOrderKey());
+            order.setReview(review); // 리뷰 정보 설정
         }
 
         // 사용자 정보와 리뷰 가능한 주문 목록을 모델에 추가
@@ -96,6 +99,7 @@ public class UserReviewController {
 
         return "user/mypage/myReview";
     }
+
 
     // 리뷰 작성 페이지로 이동
     @GetMapping("/writeReview")

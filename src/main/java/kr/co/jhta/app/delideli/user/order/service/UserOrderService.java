@@ -22,4 +22,7 @@ public interface UserOrderService {
 
     ArrayList<Order> getReviewableOrders(int userKey, LocalDateTime sevenDaysAgo);
 
+    ArrayList<Order> getOrdersWithoutReview(int userKey, LocalDateTime sevenDaysAgo);
+
+    ArrayList<Order> getOrdersWithReview(int userKey);
 }
