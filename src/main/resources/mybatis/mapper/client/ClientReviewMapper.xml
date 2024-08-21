@@ -47,13 +47,9 @@
         WHERE review_key = #{reviewKey} AND report_review = 0
     </update>
 
-<<<<<<< HEAD
     <select id="getReviewByKey" resultMap="ReviewResultMap" parameterType="int">
         SELECT *
         FROM review
         WHERE review_key = #{reviewKey}
     </select>
-=======
-
->>>>>>> 8e5472ec7d22a93cfda4506551fd2e5e0420a3f1
 </mapper>

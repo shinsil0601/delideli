@@ -33,7 +33,7 @@
                             <a href="/client/changePwLogin" th:classappend="${active == 'changePw'} ? active : ''">비밀번호 변경</a>
                         </li>
                         <li>
-                            <a href="#none" th:classappend="${active == 'quit'} ? active : ''">탈퇴 신청</a>
+                            <a href="/client/quit" th:classappend="${active == 'quit'} ? active : ''">탈퇴 신청</a>
                         </li>
                     </ul>
                 </li>
@@ -74,6 +74,9 @@
                             <a href="#none">정산</a>
                         </li>
                     </ul>
+                </li>
+                <li>
+                    <a href="/client/logout">로그아웃</a>
                 </li>
             </ul>
         </div>
