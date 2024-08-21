@@ -127,6 +127,7 @@ public class UserStoreController {
             if (store.getCloseTime() != null) {
                 store.setCloseTime(LocalTime.parse(store.getCloseTime()).format(timeFormatter));
             }
+            store.setBusinessStatus(store.getBusinessStatus());
         }
 
         int totalStores = allStores.size();
@@ -195,6 +196,7 @@ public class UserStoreController {
             if (store.getCloseTime() != null) {
                 store.setCloseTime(LocalTime.parse(store.getCloseTime()).format(timeFormatter));
             }
+            store.setBusinessStatus(store.getBusinessStatus());
         }
 
         int totalStores = allStores.size();
@@ -304,6 +306,7 @@ public class UserStoreController {
             if (store.getCloseTime() != null) {
                 store.setCloseTime(LocalTime.parse(store.getCloseTime()).format(timeFormatter));
             }
+            store.setBusinessStatus(store.getBusinessStatus());
         }
 
         int totalStores = allStores.size();  // 검색 결과의 총 가게 수
@@ -400,6 +403,7 @@ public class UserStoreController {
         if (store.getCloseTime() != null) {
             store.setCloseTime(LocalTime.parse(store.getCloseTime()).format(timeFormatter));
         }
+        store.setBusinessStatus(store.getBusinessStatus());
 
         // 모델에 데이터 추가
         model.addAttribute("store", store);
@@ -430,7 +434,7 @@ public class UserStoreController {
         // 메뉴 정보 및 옵션 그룹을 가져옴
         Menu menu = userStoreService.getMenuById(menuKey);
         ArrayList<OptionGroup> optionGroups = userStoreService.getOptionGroupsByMenuId(menuKey);
-
+        StoreInfo store = userStoreService.getStoreInfoById(menu.getStoreInfoKey());
         // 사용자 정보가 null이 아니라면 로그인된 상태
         boolean isLoggedIn = (user != null);
 
@@ -454,6 +458,7 @@ public class UserStoreController {
         }
 
         // 모델에 필요한 데이터 추가
+        model.addAttribute("store", store);
         model.addAttribute("menu", menu);
         model.addAttribute("optionGroups", optionGroups);
         model.addAttribute("isLoggedIn", isLoggedIn);  // 로그인 상태를 모델에 추가
