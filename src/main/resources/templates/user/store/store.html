@@ -157,6 +157,9 @@
                                        </li>
                                     </ul>
                                     <h3 class="sp__name">[[${store.storeName}]]</h3>
+                                    <p th:if="${store.businessStatus == '영업중'}">영업중</p>
+                                    <p th:if="${store.businessStatus == '일시정지'}">일시정지</p>
+                                    <p th:if="${store.businessStatus == '마감'}">마감</p>
                                     <div class="sp__menu">
                                         <p th:if="${store.firstMenu != null}">
                                             대표 메뉴 : [[${store.firstMenu.menuName}]]
