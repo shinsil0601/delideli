@@ -31,15 +31,15 @@
                     <h3>옵션 선택</h3>
                     <ul class="editCart__option-items">
                         <li th:each="group : ${optionGroups}">
-                            <p class="editCart__option-name">
+                            <p class="editCart__option-name option-group-header">
                                 [[${group.optionGroupName}]]
                             </p>
                             <div class="editCart__option-menu" th:each="option : ${group.options}">
-                                <input type="checkbox" id="optionCartName" name="optionCartName"
+                                <input type="checkbox" id="" name=""
                                        th:data-price="${option.optionPrice}"
                                        th:value="${option.optionKey}"
                                        th:checked="${#lists.contains(selectedOptionKeys, option.optionKey)}">
-                                <label for="optionCartName">
+                                <label for="">
                                     [[${option.optionName}]] + [[${option.optionPrice}]]원
                                 </label>
                             </div>
