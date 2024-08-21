@@ -67,7 +67,7 @@ public class ClientReviewController {
         Map<String, Object> response = new HashMap<>();
         try {
             boolean success = clientReviewService.reportReview(reviewKey);
-            log.info("success>>>>>>>>>!!!!! : {}", success);
+            //og.info("success>>>>>>>>>!!!!! : {}", success);
             if (success) {
                 response.put("status", "success");
             } else {
@@ -77,7 +77,7 @@ public class ClientReviewController {
             response.put("status", "already_reported");
             response.put("message", e.getMessage());
         } catch (Exception e) {
-            log.error("Review report failed!!!!!!!>>  ", e);
+            //log.error("Review report failed!!!!!!!>>  ", e);
             response.put("status", "error");
         }
         return response;
