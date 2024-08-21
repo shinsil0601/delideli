@@ -73,5 +73,22 @@ public class ClientReviewServiceImpl implements ClientReviewService {
         return clientReviewMapper.getOrderList(map);
     }
 
+    @Override
+    public void updateComment(int reviewKey, String updatedComment) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("reviewKey", reviewKey);
+        params.put("updatedComment", updatedComment);
+
+        clientReviewMapper.updateComment(params);
+    }
+
+    @Override
+    public void addNewComment(int reviewKey, String newComment) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("reviewKey", reviewKey);
+        params.put("newComment", newComment);
+        clientReviewMapper.addNewComment(params);
+    }
+
 
 }
