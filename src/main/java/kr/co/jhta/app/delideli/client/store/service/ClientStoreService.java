@@ -33,4 +33,8 @@ public interface ClientStoreService {
     List<ClientCategory> getStoreCategories(int storeInfoKey);
 
     void updateStore(int storeInfoKey, String storeName, String[] categories, String storeAddress, String storeZipcode, String storeAddrDetail, String storePhone, int minOrderAmount, int orderAmount1, int deliveryAmount1, Integer orderAmount2, Integer deliveryAmount2, Integer orderAmount3, Integer deliveryAmount3, String openTime, String closeTime, String storeDetailInfo, String storeOriginInfo, String regFilePath, String reportFilePath, String profileImgPath);
+
+    ArrayList<ClientStoreInfo> getAllStoreWithPaging(int clientKey, int page, int pageSize);
+
+    int getTotalStoreCountByClientKey(int clientKey);
 }

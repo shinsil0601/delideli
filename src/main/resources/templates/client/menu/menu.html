@@ -48,11 +48,11 @@
                         <h2>메뉴 목록</h2><br>
                         <!-- 메뉴 그룹화된 데이터 렌더링 -->
                         <div th:each="entry : ${groupedMenu}">
-                            <h3 th:text="${entry.key}">메뉴 그룹 이름</h3>
+                            <h3 class="menu-group-toggle" th:text="${entry.key}" th:data-groupkey="${entry.key}">메뉴 그룹 이름</h3>
                             <!-- 메뉴 그룹 삭제 버튼 -->
                             <button class="delete-group-btn" th:data-groupkey="${entry.value[0].clientMenuGroup.menuGroupKey}">메뉴 그룹 삭제</button>
                             <br><br>
-                            <ul>
+                            <ul class="menu-group-list" th:data-groupkey="${entry.key}">
                                 <li th:each="menu : ${entry.value}">
                                     <img th:src="${menu.menuImg}" alt="메뉴 이미지">
                                     <br>

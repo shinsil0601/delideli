@@ -45,11 +45,28 @@ public class ClientMenuController {
     private final ClientOptionService clientOptionService;
 
     @GetMapping("/menu")
-    public String menu(@AuthenticationPrincipal User user,Model model) {
+    public String menu(@AuthenticationPrincipal User user,
+                       @RequestParam(value = "page", defaultValue = "1") int page,
+                       @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
+                       Model model) {
         ClientAccount clientAccount = clientService.findClientById(user.getUsername());
-        ArrayList<ClientStoreInfo> storeList = clientStoreService.getAllStore(clientAccount.getClientKey());
         model.addAttribute("client", clientAccount);
+
+        // 가게 목록 페이징 처리
+        ArrayList<ClientStoreInfo> storeList = clientStoreService.getAllStoreWithPaging(clientAccount.getClientKey(), page, pageSize);
         model.addAttribute("store", storeList);
+
+        int totalStores = clientStoreService.getTotalStoreCountByClientKey(clientAccount.getClientKey());
+        int totalPages = (int) Math.ceil((double) totalStores / pageSize);
+
+        // 페이지네이션 정보 추가
+        Map<String, Object> paginationMap = createPaginationMap(page, totalPages);
+
+        model.addAttribute("map", paginationMap);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", pageSize); // 페이지 사이즈 설정
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("type", "menu");
         model.addAttribute("on", "menu");
 
         return "client/menu/menu.list";
@@ -379,4 +396,13 @@ public class ClientMenuController {
         return "/client/images/uploads/" + uniqueFilename;
     }
 
+    // 페이지네이션 정보를 맵핑하는 메서드
+    private Map<String, Object> createPaginationMap(int currentPage, int totalPages) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("prev", currentPage > 1);
+        map.put("next", currentPage < totalPages);
+        map.put("startPageNo", 1); // 필요에 따라 조정 가능
+        map.put("endPageNo", totalPages); // 필요에 따라 조정 가능
+        return map;
+    }
 }

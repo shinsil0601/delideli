@@ -30,6 +30,7 @@ public class ClientReview {
     private boolean reviewStatus;
     private LocalDateTime mnmtRegdate;
     private String userId;
+    private String userNickname;
 
     // 새로운 필드: 해당 리뷰에 연관된 주문 리스트
     private List<ClientOrder> orderList;

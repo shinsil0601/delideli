@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>사장님 - 가게목록</title>
-        <!-- Include:공통 CSS -->
-        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
-        <!-- Include:Client CSS -->
-        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
-        <!-- Include:공통 JS -->
-        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
-        <!-- Include:Client JS -->
-        <th:block th:include="inc/client/client-js :: clientJs"></th:block>
-        <!-- JS: 토글 버튼 클릭 시 처리 -->
-
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사장님 - 가게목록</title>
+    <!-- Include:공통 CSS -->
+    <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+    <!-- Include:Client CSS -->
+    <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+    <!-- Include:공통 JS -->
+    <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+    <!-- Include:Client JS -->
+    <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+</head>
     <body>
         <div class="client-wrap">
             <!-- Start:Aside -->
@@ -26,80 +24,141 @@
                 <!-- Start:Header -->
                 <th:block th:include="inc/client/header :: clientHeader"></th:block>
                 <!-- End:Header -->
-                
+
                 <!-- Start:Contents -->
                 <section class="contents">
-                    <a href="/client/storeRegister">가게 등록</a>
-                    <hr>
+                    <!-- OB 상단 -->
+                    <div class="ob__top-con">
+                        <div class="ob__info">
+                            <h2 class="ob__info--title">가게관리</h2>
+                            <p class="ob__info--desc">
+                                가게관리 - 가게목록
+                            </p>
+                        </div>
+                        <a href="/client/storeRegister" class="ob__link-btn">
+                            가게 등록
+                        </a>
+                    </div>
+                    <!-- OB 검색바 -->
                     <form th:action="@{/client/storeList}" method="get">
-                        <div>
-                            <input type="text" name="keyword" th:value="${keyword}" placeholder="가게명 검색">
-                            <select name="storeAccess">
-                                <option value="">전체 (승인 여부)</option>
-                                <option value="true" th:selected="${storeAccess == 'true'}">승인</option>
-                                <option value="false" th:selected="${storeAccess == 'false'}">승인 대기</option>
-                            </select>
-                            <select name="businessStatus">
-                                <option value="">전체 (상태)</option>
-                                <option value="영업중" th:selected="${businessStatus == '영업중'}">영업중</option>
-                                <option value="일시정지" th:selected="${businessStatus == '일시정지'}">일시정지</option>
-                                <option value="삭제 대기" th:selected="${businessStatus == '삭제 대기'}">삭제 대기</option>
-                                <option value="마감" th:selected="${businessStatus == '마감'}">마감</option>
-                            </select>
-                            <button type="submit">검색</button>
+                        <div class="ob__search-con">
+                            <h2 class="ob__sc-title">가게검색</h2>
+                            <div class="ob__sc-form-con">
+                                <select name="storeAccess">
+                                    <option value="">승인여부</option>
+                                    <option value="true" th:selected="${storeAccess == 'true'}">승인</option>
+                                    <option value="false" th:selected="${storeAccess == 'false'}">승인대기</option>
+                                </select>
+                                <select name="businessStatus">
+                                    <option value="">영업상태</option>
+                                    <option value="영업중" th:selected="${businessStatus == '영업중'}">영업중</option>
+                                    <option value="일시정지" th:selected="${businessStatus == '일시정지'}">일시정지</option>
+                                    <option value="삭제 대기" th:selected="${businessStatus == '삭제 대기'}">삭제대기</option>
+                                    <option value="마감" th:selected="${businessStatus == '마감'}">마감</option>
+                                </select>
+                                <input type="text" name="keyword" th:value="${keyword}" placeholder="가게명 검색">
+                                <button type="submit">검색</button>
+                            </div>
                         </div>
                     </form>
-                    <hr>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>가게명</th>
-                            <th>오픈시간</th>
-                            <th>마감시간</th>
-                            <th>상태</th>
-                            <th>가게 일시정지</th>
-                            <th>승인여부</th>
-                            <th>주문관리</th>
-                            <th>관리</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <th:block th:each="store : ${store}">
-                            <tr>
-                                <td th:text="${store.storeName}">가게명</td>
-                                <td th:text="${store.formattedOpenTime}">오후 12시</td>
-                                <td th:text="${store.formattedCloseTime}">오전 12시</td>
-                                <td th:text="${store.storeDelete ? '삭제 대기' : store.businessStatus}">영업중</td>
-                                <td>
-                                    <button th:data-store-id="${store.storeInfoKey}"
-                                            th:classappend="${store.storePause ? 'toggle-on' : 'toggle-off'}"
-                                            onclick="toggleStorePause(this)">
-                                        <span th:text="${store.storePause ? 'ON' : 'OFF'}"></span>
-                                    </button>
-                                </td>
-                                <td>
-                                    <span th:if="${store.storeAccess}" th:text="'승인'">승인</span>
-                                    <span th:if="${!store.storeAccess}" th:text="'승인 대기'" style="color: red;">승인 대기</span>
-                                </td>
-                                <td>
-                                    <a href="/client/storeOrders" th:href="@{/client/waitOrder/{storeInfoKey}(storeInfoKey=${store.storeInfoKey})}">이동</a>
-                                </td>
-                                <td>
-                                    <a href="/client/storeEdit" th:href="@{/client/storeEdit/{storeInfoKey}(storeInfoKey=${store.storeInfoKey})}">수정</a>
-                                    <button th:data-store-id="${store.storeInfoKey}"
-                                            onClick="toggleStoreDelete(this)"
-                                            th:text="${store.storeDelete ? '삭제 취소' : '삭제'}">
-                                    </button>
-                                </td>
-                            </tr>
-                        </th:block>
-                        </tbody>
-                    </table>
-                    <!-- Start:Pagination -->
-                    <th:block th:include="inc/client/pagination-storeList :: StoreListPagination (${type})"></th:block>
-                    <!-- End:Pagination -->
-
-                    <script src="/client/js/module/store.list.js"></script>
+                    <!-- OB 컨텐츠 -->
+                    <div class="ob__main">
+                        <div class="storeList__con">
+                            <div class="sl__table-box">
+                                <table class="sl__table">
+                                    <colgroup>
+                                        <col width="30%">
+                                        <col width="10%">
+                                        <col width="10%">
+                                        <col width="5%">
+                                        <col width="10%">
+                                        <col width="10%">
+                                        <col width="10%">
+                                        <col width="15%">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>가게명</th>
+                                        <th>오픈시간</th>
+                                        <th>마감시간</th>
+                                        <th>상태</th>
+                                        <th>일시정지</th>
+                                        <th>승인여부</th>
+                                        <th>주문</th>
+                                        <th>관리</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="store : ${store}">
+                                        <td>
+                                            [[${store.storeName}]]
+                                        </td>
+                                        <td>
+                                            [[${store.formattedOpenTime}]]
+                                        </td>
+                                        <td>
+                                            [[${store.formattedCloseTime}]]
+                                        </td>
+                                        <td>
+                                            <th:block th:if="${store.storeDelete}">
+                                                <span class="sl-bs sl-bs--delete">
+                                                    삭제 대기
+                                                </span>
+                                            </th:block>
+                                            <th:block th:if="${!store.storeDelete}">
+                                                <th:block th:if="${store.businessStatus} == '일시정지'">
+                                                    <span class="sl-bs sl-bs--stop">[[${store.businessStatus}]]</span>
+                                                </th:block>
+                                                <th:block th:if="${store.businessStatus} == '영업중'">
+                                                    <span class="sl-bs sl-bs--start">[[${store.businessStatus}]]</span>
+                                                </th:block>
+                                                <th:block th:if="${store.businessStatus} == '마감'">
+                                                    <span class="sl-bs sl-bs--off">[[${store.businessStatus}]]</span>
+                                                </th:block>
+                                            </th:block>
+                                        </td>
+                                        <td>
+                                            <button th:data-store-id="${store.storeInfoKey}"
+                                                    th:classappend="${store.storePause ? 'sl-status--on' : 'sl-status--off'}"
+                                                    onclick="toggleStorePause(this)" class="sl-status">
+                                                <span th:text="${store.storePause ? 'ON' : 'OFF'}"></span>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <span th:if="${store.storeAccess}" class="sl-app sl-app--on">
+                                                승인
+                                            </span>
+                                            <span th:if="${!store.storeAccess}" class="sl-app sl-app--off">
+                                                승인대기
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a th:href="@{/client/waitOrder/{storeInfoKey}(storeInfoKey=${store.storeInfoKey})}" target="_blank" class="sl__order--link">
+                                                이동
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <div class="sl__btn-con">
+                                                <button type="button" class="sl__btn--edit" th:onclick="|location.href='@{/client/storeEdit/{storeInfoKey}(storeInfoKey=${store.storeInfoKey})}'|">
+                                                    수정
+                                                </button>
+                                                <button type="button" class="sl__btn--delete"
+                                                        th:data-store-id="${store.storeInfoKey}"
+                                                        onClick="toggleStoreDelete(this)"
+                                                        th:text="${store.storeDelete ? '삭제취소' : '삭제'}">
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Start:Pagination -->
+                            <th:block th:include="inc/client/pagination-storeList :: StoreListPagination (${type})"></th:block>
+                            <!-- End:Pagination -->
+                        </div>
+                        <script src="/client/js/module/store.list.js"></script>
+                    </div>
                 </section>
                 <!-- End:Contents -->
             </main>

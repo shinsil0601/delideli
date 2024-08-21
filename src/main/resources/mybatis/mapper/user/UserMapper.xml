@@ -149,4 +149,7 @@
         WHERE user_key = #{userKey}
     </update>
 
+    <select id="getUserAccountByUserKey" parameterType="int" resultMap="UserAccountResultMap">
+        SELECT * FROM user_account WHERE user_key = #{userKey}
+    </select>
 </mapper>

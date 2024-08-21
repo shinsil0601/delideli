@@ -108,4 +108,37 @@
         WHERE order_key = #{orderKey}
     </select>
 
+    <update id="updateComment" parameterType="map">
+        UPDATE review
+        SET review_comment = #{updatedComment}, comment_update = NOW()
+        WHERE review_key = #{reviewKey}
+    </update>
+
+    <update id="addNewComment" parameterType="map">
+        UPDATE review
+        SET review_comment = #{newComment}, comment_regdate = NOW()
+        WHERE review_key = #{reviewKey}
+    </update>
+
+    <!-- 리뷰 목록 페이징 처리 -->
+    <select id="getAllReviewWithPaging" resultMap="ReviewResultMap" parameterType="map">
+        SELECT
+            r.review_key, r.user_key, r.client_key, r.storeInfo_key, r.order_key, r.review_rating, r.review_desc, r.review_photo1,
+            r.review_photo2, r.review_regdate, r.review_comment, r.report_review, r.comment_regdate, r.comment_update,
+            r.review_status, r.mnmt_regdate
+        FROM review r
+        WHERE r.storeInfo_key = #{storeKey}
+          AND r.client_key = #{clientKey}
+        ORDER BY r.review_key DESC
+            LIMIT #{startNo}, #{pageSize}
+    </select>
+
+    <!-- 가게에 따른 전체 리뷰 수 -->
+    <select id="getTotalReviewsByStoreKey" resultType="int" parameterType="map">
+        SELECT COUNT(*)
+        FROM review
+        WHERE storeInfo_key = #{storeKey}
+          AND client_key = #{clientKey}
+    </select>
+
 </mapper>
