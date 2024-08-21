@@ -89,6 +89,7 @@ public class UserReviewController {
         }
 
         // 사용자 정보와 리뷰 가능한 주문 목록을 모델에 추가
+        model.addAttribute("active", "myReview");
         model.addAttribute("user", userAccount);
         model.addAttribute("availableForReviewOrders", availableForReviewOrders);
         model.addAttribute("writtenReviewOrders", writtenReviewOrders);

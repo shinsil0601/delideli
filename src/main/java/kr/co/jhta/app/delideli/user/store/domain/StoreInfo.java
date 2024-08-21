@@ -29,8 +29,10 @@ public class StoreInfo {
     private String storeProfileImg;
     private boolean storeAccess;
     private boolean storeDelete;
+    private boolean storePause;
     private LocalDateTime storeRegdate;
     private LocalDateTime storeUpdate;
+    private String businessStatus;
 
     private Integer deliveryTime; // 배달 시간 (분 단위)
     private String averageRating; // 평균 리뷰 점수
@@ -41,4 +43,20 @@ public class StoreInfo {
     private String clientName;       // 대표자명
     private String clientPhone;           // 사업장 전화번호
     private String clientEID;  // 사업자 등록번호
+
+    public String getBusinessStatus() {
+        if (storePause) {
+            return "일시정지";
+        }
+
+        LocalTime now = LocalTime.now();
+        LocalTime open = LocalTime.parse(this.openTime);
+        LocalTime close = LocalTime.parse(this.closeTime);
+
+        if (now.isAfter(open) && now.isBefore(close)) {
+            return "영업중";
+        } else {
+            return "마감";
+        }
+    }
 }

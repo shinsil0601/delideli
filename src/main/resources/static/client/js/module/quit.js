@@ -4,10 +4,6 @@ $(document).ready(function() {
 
         // 확인 메시지 표시
         if (confirm('탈퇴하시겠습니까?')) {
-            // '예'를 누른 경우 탈퇴 처리 진행
-
-            // 입력된 비밀번호 가져오기
-            var inputClientPw = $('#inputClientPw').val();
 
             // AJAX로 POST 요청 전송
             $.ajax({

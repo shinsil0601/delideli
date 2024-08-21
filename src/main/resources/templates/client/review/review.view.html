@@ -34,6 +34,7 @@
                         alert("오류가 발생했습니다. 다시 시도해주세요.");
                     }
                 });
+
             }
         }
     </script>
@@ -65,6 +66,7 @@
                         </a>
 
                         <b th:text="${review.userId}"></b>
+<<<<<<< HEAD
                         [[${#temporals.format(review.reviewRegdate.toLocalDate(), 'yyyy/MM/dd')}]]
                         <span th:if="${review.reviewComment == null || review.reviewComment.isEmpty()}" th:text="미작성"></span>
                         <span th:if="${review.reviewComment != null && !review.reviewComment.isEmpty()}" th:text="작성"></span>
@@ -104,6 +106,12 @@
                         </div>
 
                         <br>
+=======
+                        [[${review.reviewRegdate}]]
+                        <span th:if="${review.reviewComment == null || review.reviewComment.isEmpty()}" th:text="미작성"></span>
+                        <span th:if="${review.reviewComment != null}" th:text="작성"></span>
+                        [[${review.reviewRating}]]
+>>>>>>> 89c7b11e4e5577c2cb58c0029bb3e0502ceab11a
                     </li>
                 </th:block>
             </ul>

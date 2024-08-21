@@ -1,5 +1,5 @@
 <th:block th:fragment="StoreListPagination (type)">
-    <ul>
+    <ul th:if="${totalPages > 0}">
         <li th:if="${map.prev}">
             <a th:href="@{/client/storeList(page=${currentPage - 1}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}">이전</a>
         </li>

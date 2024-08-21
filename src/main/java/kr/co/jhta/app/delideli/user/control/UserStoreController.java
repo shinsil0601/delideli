@@ -21,6 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +44,8 @@ public class UserStoreController {
     @Autowired
     private final UserLikeService userLikeService;
 
+    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
     // 가게 목록
     @GetMapping("/category/{categoryId}")
     public String categoryPage(@PathVariable("categoryId") int categoryId,
@@ -50,8 +54,10 @@ public class UserStoreController {
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "pageSize", defaultValue = "8") int pageSize,
                                Model model, HttpServletResponse response) {
+
         // 모든 카테고리 목록을 가져와서 모델에 추가
         ArrayList<Category> categoryList = userCategoryService.getAllCategory();
+        model.addAttribute("active", categoryId);
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("currentPage", page);  // 현재 페이지 번호를 모델에 추가
         model.addAttribute("categoryId", categoryId);  // 현재 카테고리 ID를 모델에 추가
@@ -114,6 +120,14 @@ public class UserStoreController {
             store.setFirstMenu(firstMenu);  // 첫 번째 메뉴 설정
             store.setAverageRating(averageRating != null ? String.format("%.1f", averageRating) : "0.0");  // 평균 리뷰 점수 설정
             store.setReviewCount(userStoreService.getReviewCountForStore(store.getStoreInfoKey()));  // 리뷰 개수 설정
+
+            if (store.getOpenTime() != null) {
+                store.setOpenTime(LocalTime.parse(store.getOpenTime()).format(timeFormatter));
+            }
+            if (store.getCloseTime() != null) {
+                store.setCloseTime(LocalTime.parse(store.getCloseTime()).format(timeFormatter));
+            }
+            store.setBusinessStatus(store.getBusinessStatus());
         }
 
         int totalStores = allStores.size();
@@ -131,14 +145,13 @@ public class UserStoreController {
         model.addAttribute("map", paginationMap);
         model.addAttribute("type", "category/" + categoryId); // 카테고리 유형 전달
 
-        // user/store/store.html 페이지를 반환
         return "user/store/store";
     }
 
 
     // 지역별 가게목록 추출
     @GetMapping("/filterStoresByAddress")
-    public String filterStoresByAddress(@RequestParam("address") String address, @AuthenticationPrincipal User user, Model model, HttpServletResponse response) {
+    public String filterStoresByAddress(@RequestParam("address") String address, @RequestParam(value = "categoryId", defaultValue = "0") int categoryId, @AuthenticationPrincipal User user, Model model, HttpServletResponse response) {
         if (user != null) {
             boolean hasUserRole = user.getAuthorities().stream()
                     .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
@@ -159,8 +172,14 @@ public class UserStoreController {
         // 주소에서 지역 정보를 추출
         String region = extractRegion(address);
 
+
         // 해당 지역의 가게 목록을 가져옴
-        ArrayList<StoreInfo> allStores = userStoreService.getAllStoresInRegion(region);
+        ArrayList<StoreInfo> allStores;
+        if (categoryId == 0) {
+            allStores = userStoreService.getAllStoresInRegion(region);
+        } else {
+            allStores = userStoreService.getAllStoresByCategoryAndRegion(categoryId, region);
+        }
 
         // 각 가게에 메뉴와 리뷰 정보를 추가
         for (StoreInfo store : allStores) {
@@ -170,6 +189,14 @@ public class UserStoreController {
             store.setFirstMenu(firstMenu);  // 첫 번째 메뉴 설정
             store.setAverageRating(averageRating != null ? String.format("%.1f", averageRating) : "0.0");  // 평균 리뷰 점수 설정
             store.setReviewCount(userStoreService.getReviewCountForStore(store.getStoreInfoKey()));  // 리뷰 개수 설정
+
+            if (store.getOpenTime() != null) {
+                store.setOpenTime(LocalTime.parse(store.getOpenTime()).format(timeFormatter));
+            }
+            if (store.getCloseTime() != null) {
+                store.setCloseTime(LocalTime.parse(store.getCloseTime()).format(timeFormatter));
+            }
+            store.setBusinessStatus(store.getBusinessStatus());
         }
 
         int totalStores = allStores.size();
@@ -189,13 +216,13 @@ public class UserStoreController {
         model.addAttribute("map", paginationMap);
         model.addAttribute("type", "filterStoresByAddress"); // 필터 유형 전달
 
-        // user/store/store.html 페이지로 반환
         return "user/store/store";
     }
 
     // 가게명으로 주소 검색
-    @GetMapping("/search")
-    public String searchStores(@RequestParam(value = "query", required = false) String query,
+    @GetMapping("/search/{categoryId}")
+    public String searchStores(@PathVariable("categoryId") int categoryId,
+                               @RequestParam(value = "query", required = false) String query,
                                @RequestParam(value = "address", required = false) String address,
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "pageSize", defaultValue = "8") int pageSize,
@@ -245,10 +272,23 @@ public class UserStoreController {
 
         // 검색어가 없을 경우 모든 가게를 검색
         if (query == null || query.trim().isEmpty()) {
-            allStores = userStoreService.getAllStoresInRegion(region);
+            allStores = (categoryId == 0)
+                    ? userStoreService.getAllStoresInRegion(region)
+                    : userStoreService.getAllStoresByCategoryAndRegion(categoryId, region);
         } else {
             // 검색어와 지역 정보를 기반으로 가게 목록을 가져옴
-            allStores = userStoreService.searchAllStoresByNameAndRegion(query, region);
+            allStores = userStoreService.searchAllStoresByNameAndRegionAndCategory(categoryId, query, region);
+        }
+
+        // 검색 결과가 없는 경우의 처리
+        if (allStores.isEmpty()) {
+            model.addAttribute("active", categoryId);
+            model.addAttribute("storeList", new ArrayList<StoreInfo>());
+            model.addAttribute("totalPages", 0);
+            model.addAttribute("currentPage", 1);
+            model.addAttribute("selectedAddress", address);
+            model.addAttribute("message", "검색 결과가 없습니다.");
+            return "user/store/store";
         }
 
         // 각 가게에 메뉴와 리뷰 정보를 추가
@@ -259,6 +299,14 @@ public class UserStoreController {
             store.setFirstMenu(firstMenu);  // 첫 번째 메뉴 설정
             store.setAverageRating(averageRating != null ? String.format("%.1f", averageRating) : "0.0");// 평균 리뷰 점수 설정
             store.setReviewCount(userStoreService.getReviewCountForStore(store.getStoreInfoKey()));  // 리뷰 개수 설정
+
+            if (store.getOpenTime() != null) {
+                store.setOpenTime(LocalTime.parse(store.getOpenTime()).format(timeFormatter));
+            }
+            if (store.getCloseTime() != null) {
+                store.setCloseTime(LocalTime.parse(store.getCloseTime()).format(timeFormatter));
+            }
+            store.setBusinessStatus(store.getBusinessStatus());
         }
 
         int totalStores = allStores.size();  // 검색 결과의 총 가게 수
@@ -276,14 +324,15 @@ public class UserStoreController {
         Map<String, Object> paginationMap = createPaginationMap(page, totalPages);
 
         // 가게 목록 및 페이지네이션 정보를 모델에 추가
+        model.addAttribute("active", categoryId);
         model.addAttribute("storeList", storeList);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("map", paginationMap);
         model.addAttribute("type", "search");
         model.addAttribute("query", query);
+        model.addAttribute("selectedAddress", address);
 
-        // user/store/store.html 페이지를 반환
         return "user/store/store";
     }
 
@@ -348,6 +397,14 @@ public class UserStoreController {
         store.setAverageRating(averageRating != null ? String.format("%.1f", averageRating) : "0.0");  // 평균 리뷰 점수 설정
         store.setReviewCount(userStoreService.getReviewCountForStore(store.getStoreInfoKey()));  // 리뷰 개수 설정
 
+        if (store.getOpenTime() != null) {
+            store.setOpenTime(LocalTime.parse(store.getOpenTime()).format(timeFormatter));
+        }
+        if (store.getCloseTime() != null) {
+            store.setCloseTime(LocalTime.parse(store.getCloseTime()).format(timeFormatter));
+        }
+        store.setBusinessStatus(store.getBusinessStatus());
+
         // 모델에 데이터 추가
         model.addAttribute("store", store);
         model.addAttribute("groupedMenus", groupedMenus);
@@ -377,7 +434,7 @@ public class UserStoreController {
         // 메뉴 정보 및 옵션 그룹을 가져옴
         Menu menu = userStoreService.getMenuById(menuKey);
         ArrayList<OptionGroup> optionGroups = userStoreService.getOptionGroupsByMenuId(menuKey);
-
+        StoreInfo store = userStoreService.getStoreInfoById(menu.getStoreInfoKey());
         // 사용자 정보가 null이 아니라면 로그인된 상태
         boolean isLoggedIn = (user != null);
 
@@ -401,6 +458,7 @@ public class UserStoreController {
         }
 
         // 모델에 필요한 데이터 추가
+        model.addAttribute("store", store);
         model.addAttribute("menu", menu);
         model.addAttribute("optionGroups", optionGroups);
         model.addAttribute("isLoggedIn", isLoggedIn);  // 로그인 상태를 모델에 추가
@@ -411,10 +469,11 @@ public class UserStoreController {
 
     // 페이지네이션 처리 메서드
     private ArrayList<StoreInfo> paginateStores(ArrayList<StoreInfo> allStores, int page, int pageSize) {
+        int totalStores = allStores.size();
         int fromIndex = (page - 1) * pageSize;
         int toIndex = Math.min(fromIndex + pageSize, allStores.size());
 
-        if (fromIndex > toIndex) {
+        if (fromIndex < 0 || fromIndex >= totalStores) {
             return new ArrayList<>();
         }
 

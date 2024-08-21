@@ -322,9 +322,7 @@ public class ClientController {
 
     @PostMapping("/quit")
     @ResponseBody
-    public String quit(@AuthenticationPrincipal User user,
-                       @RequestParam("inputClientPw") String inputClientPw,
-                       HttpServletResponse response) {
+    public String quit(@AuthenticationPrincipal User user, @RequestParam("inputClientPw") String inputClientPw, HttpServletResponse response) {
         ClientAccount clientAccount = clientService.findClientById(user.getUsername());
 
         if (!passwordEncoder.matches(inputClientPw, clientAccount.getClientPw())) {
