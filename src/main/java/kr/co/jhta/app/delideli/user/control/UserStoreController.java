@@ -49,6 +49,8 @@ public class UserStoreController {
 
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
+    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
     // 가게 목록
     @GetMapping("/category/{categoryId}")
     public String categoryPage(@PathVariable("categoryId") int categoryId,
