@@ -34,7 +34,6 @@ public class ClientReviewServiceImpl implements ClientReviewService {
     // 리뷰 신고 처리
     @Override
     public boolean reportReview(int reviewKey) {
-
         int updatedRows = clientReviewMapper.updateReportReview(reviewKey);
         if (updatedRows > 0) {
             return true; // 신고 성공
