@@ -61,4 +61,6 @@ public interface UserService {
 
     // 계정 탈퇴
     void deleteUserByUserName(int userKey);
+
+    UserAccount getUserAccountByUserKey(int userKey);
 }

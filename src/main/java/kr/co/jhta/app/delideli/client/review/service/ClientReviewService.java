@@ -12,4 +12,9 @@ public interface ClientReviewService {
     boolean reportReview(int reviewKey);
     //사용자키값에 따른 주문목록
     ArrayList<ClientOrder> getAllOrderList(int clientKey, String storeKey);
+
+    void updateComment(int reviewKey, String updatedComment);
+
+    void addNewComment(int reviewKey, String newComment);
+
 }
