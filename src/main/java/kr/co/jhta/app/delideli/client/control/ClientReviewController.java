@@ -49,7 +49,9 @@ public class ClientReviewController {
         ClientAccount clientAccount = clientService.findClientById(user.getUsername());
         ArrayList<ClientStoreInfo> storeList = clientStoreService.getAllStore(clientAccount.getClientKey());
         ArrayList<ClientReview> reviewList = clientReviewService.getAllReview(clientAccount.getClientKey(), storeKey);
-        //log.info("review>>>>>>>>>>>!!!!: {}", reviewList.toString());
+
+        // 로그로 reportReview 값 확인
+        reviewList.forEach(review -> log.info("Review Key!!!!!!!1: {}, ReportReview!!!!!!!111: {}", review.getReviewKey(), review.isReportReview()));
 
         model.addAttribute("client", clientAccount);
         model.addAttribute("store", storeList);
@@ -65,6 +67,7 @@ public class ClientReviewController {
         Map<String, Object> response = new HashMap<>();
         try {
             boolean success = clientReviewService.reportReview(reviewKey);
+            log.info("success>>>>>>>>>!!!!! : {}", success);
             if (success) {
                 response.put("status", "success");
             } else {
@@ -74,7 +77,7 @@ public class ClientReviewController {
             response.put("status", "already_reported");
             response.put("message", e.getMessage());
         } catch (Exception e) {
-            //log.error("Review report failed", e);
+            log.error("Review report failed!!!!!!!>>  ", e);
             response.put("status", "error");
         }
         return response;

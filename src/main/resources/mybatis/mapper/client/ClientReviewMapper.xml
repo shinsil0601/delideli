@@ -16,7 +16,7 @@
         <result property="reviewPhoto2" column="review_photo2"/>
         <result property="reviewRegdate" column="review_regdate"/>
         <result property="reviewComment" column="review_comment"/>
-        <result property="reportReview" column="report_review"/>
+        <result property="reportReview" column="report_review" javaType="boolean"/>
         <result property="commentRegdate" column="comment_regdate"/>
         <result property="commentUpdate" column="comment_update"/>
         <result property="reviewStatus" column="review_status"/>
