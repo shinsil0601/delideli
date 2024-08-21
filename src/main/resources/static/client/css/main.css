@@ -82,3 +82,103 @@ button:disabled:hover {
     font-weight: 700;
     color: var(--teal-500);
 }
+/* Operator Board */
+.ob__top-con {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 6rem;
+}
+.ob__info--title {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.ob__info--desc {
+    font-weight: 500;
+    color: var(--gray-400);
+}
+.ob__link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.6rem;
+    min-width: 14rem;
+    border-radius: 0.8rem;
+    background: var(--blue-700);
+    font-weight: 700;
+    color: var(--whiteColor);
+    transition: .3s;
+}
+.ob__link-btn:hover {
+    opacity: 0.8;
+}
+.ob__search-con {
+    padding: 2rem;
+    border-radius: 2rem;
+    box-shadow: var(--box-shadow-100);
+    margin-bottom: 6rem;
+}
+.ob__sc-title {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.ob__sc-form-con {
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.ob__sc-form-con select {
+    padding: 1.6rem 0.8rem;
+    min-width: 12rem;
+    border-radius: 0.8rem;
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    color: var(--gray-500);
+}
+.ob__sc-form-con select:focus {
+    outline-color: var(--blue-500);
+}
+.ob__sc-form-con input {
+    width: 100%;
+}
+.ob__sc-form-con button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.6rem;
+    min-width: 14rem;
+    border-radius: 0.8rem;
+    background: var(--blue-700);
+    font-weight: 700;
+    color: var(--whiteColor);
+    transition: .3s;
+}
+.ob__sc-form-con button:hover {
+    opacity: 0.8;
+}
+/* Pagination */
+.pagination {
+    padding-top: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+.pagination > li > a {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 0.8rem;
+    background: var(--whiteColor);
+    border: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-14);
+    font-weight: 700;
+}
+.pagination > li > a:hover {
+    background: var(--gray-100);
+}
