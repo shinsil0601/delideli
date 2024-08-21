@@ -17,13 +17,12 @@
         // 리뷰 신고를 처리하는 함수
         function reportReview(reviewKey, element) {
             if (confirm("정말 신고하시겠습니까?")) { // 확인 창 표시
-
                 $.ajax({
                     type: "POST",
                     url: "/client/reviewReport/" + reviewKey,
                     success: function(response) {
                         if (response.status === "success") {
-                            $(element).text("신고 완료"); // 텍스트 변경
+                            $(element).text("신고 완료");
                             $(element).css("pointer-events", "none"); // 버튼 비활성화
                         } else if (response.status === "already_reported") {
                             alert("이미 신고된 리뷰입니다.");
@@ -32,7 +31,6 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        //console.error("Error:", xhr, status, error);
                         alert("오류가 발생했습니다. 다시 시도해주세요.");
                     }
                 });
@@ -68,10 +66,45 @@
                         </a>
 
                         <b th:text="${review.userId}"></b>
-                        [[${review.reviewRegdate}]]
+                        [[${#temporals.format(review.reviewRegdate.toLocalDate(), 'yyyy/MM/dd')}]]
                         <span th:if="${review.reviewComment == null || review.reviewComment.isEmpty()}" th:text="미작성"></span>
-                        <span th:if="${review.reviewComment != null}" th:text="작성"></span>
-                        [[${review.reviewRating}]]
+                        <span th:if="${review.reviewComment != null && !review.reviewComment.isEmpty()}" th:text="작성"></span>
+                        <p>별점 : [[${review.reviewRating}]]</p>
+                        <p>[[${review.reviewDesc}]]</p>
+                        <p th:if="${review.reviewPhoto1 != null || review.reviewPhoto2 != null}">
+                            [[${review.reviewPhoto1}]] [[${review.reviewPhoto2}]]
+                        </p>
+
+                        <!-- 주문 목록 반복 -->
+                        <p>주문메뉴</p>
+                        <ul>
+                            <th:block th:each="order : ${review.orderList}">
+                                <th:block th:each="detail : ${order.clientOrderDetails}">
+                                    <li th:if="${review.orderKey == detail.orderKey}">
+                                        <span th:text="${detail.menuName}"></span>
+                                        <span th:text="${detail.optionName}"></span>
+                                        <span th:text="${detail.quantity}"></span>
+                                    </li>
+                                </th:block>
+                            </th:block>
+                        </ul>
+
+                        <!-- 사장님 답변 여부창 -->
+                        <div>
+                            <form th:action="@{/client/{action}(action=${review.reviewComment == null || review.reviewComment.isEmpty() ? 'saveComment' : 'updateComment'})}"
+                                  method="post">
+                                <p th:text="${review.reviewComment == null || review.reviewComment.isEmpty() ? '사장님 답글달기' : '작성일자: ' + (review.commentRegdate != null ? #temporals.format(review.commentRegdate.toLocalDate(), 'yyyy/MM/dd') : '')}"></p>
+                                <textarea name="comment"
+                                          th:attr="readonly=${review.reviewComment != null && !review.reviewComment.isEmpty()}"
+                                          th:placeholder="${review.reviewComment == null || review.reviewComment.isEmpty() ? '내용을 입력해주세요' : ''}"
+                                          th:text="${review.reviewComment != null ? review.reviewComment : ''}"></textarea>
+                                <input type="hidden" name="reviewKey" th:value="${review.reviewKey}"/>
+                                <button type="submit"
+                                        th:text="${review.reviewComment == null || review.reviewComment.isEmpty() ? '작성' : '수정'}"></button>
+                            </form>
+                        </div>
+
+                        <br>
                     </li>
                 </th:block>
             </ul>
