@@ -65,17 +65,22 @@
     </select>
 
     <!-- 검색어와 지역에 따른 모든 가게 목록을 가져옴 -->
-    <select id="searchAllStoresByNameAndRegion" resultMap="StoreInfoResultMap" parameterType="map">
+    <select id="searchAllStoresByNameAndRegionAndCategory" resultMap="StoreInfoResultMap" parameterType="map">
         SELECT si.*,
-               ca.client_name AS business_owner_name,
-               ca.client_phone AS business_phone,
-               ca.client_EID AS business_registration_no
+        ca.client_name AS business_owner_name,
+        ca.client_phone AS business_phone,
+        ca.client_EID AS business_registration_no
         FROM storeInfo si
-                 JOIN client_account ca ON si.client_key = ca.client_key
+        JOIN client_account ca ON si.client_key = ca.client_key
+        LEFT JOIN store_category sc ON si.storeInfo_key = sc.storeInfo_key
         WHERE si.store_name LIKE CONCAT('%', #{query}, '%')
-          AND si.store_address LIKE CONCAT('%', #{region}, '%')
-          AND si.store_delete = 0
+        AND si.store_address LIKE CONCAT('%', #{region}, '%')
+        AND si.store_delete = 0
+        <if test="categoryId != 0">
+            AND sc.category_key = #{categoryId}
+        </if>
     </select>
+
 
     <!-- 특정 가게 정보를 가져옴 -->
     <select id="getStoreInfoById" parameterType="int" resultMap="StoreInfoResultMap">

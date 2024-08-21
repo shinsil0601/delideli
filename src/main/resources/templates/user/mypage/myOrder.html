@@ -112,11 +112,13 @@
                                         </div>
                                         <div class="myOrder__info-box">
                                             <span>메뉴</span>
-                                            <th:block th:if="${order.orderDetails.size() == 1}">
-                                                [[${order.orderDetails[0].menuName}]]
-                                            </th:block>
-                                            <th:block th:if="${order.orderDetails.size() != 1}">
-                                                [[${order.orderDetails[0].menuName}]] 외 [[${order.orderDetails.size() - 1}]]개
+                                            <th:block th:if="${order.orderDetails.size() > 0}">
+                                                <th:block th:if="${order.orderDetails.size() == 1}">
+                                                    [[${order.orderDetails[0].menuName}]]
+                                                </th:block>
+                                                <th:block th:if="${order.orderDetails.size() != 1}">
+                                                    [[${order.orderDetails[0].menuName}]] 외 [[${order.orderDetails.size() - 1}]]개
+                                                </th:block>
                                             </th:block>
                                         </div>
                                         <div class="myOrder__info-box">

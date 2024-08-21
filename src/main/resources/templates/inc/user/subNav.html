@@ -1,6 +1,6 @@
 <th:block th:fragment="subNav">
     <ul class="subNav__items">
-        <li>
+        <li th:classappend="${active == 'myAddress'} ? active : ''">
             <a href="/user/myAddress">내 주소관리</a>
         </li>
         <li>
@@ -9,19 +9,19 @@
         <li>
             <a href="/user/updatePw">비밀번호 변경</a>
         </li>
-        <li>
+        <li th:classappend="${active == 'myOrder'} ? active : ''">
             <a href="/user/myOrder">주문내역</a>
         </li>
-        <li>
+        <li th:classappend="${active == 'myReview'} ? active : ''">
             <a href="/user/myReview">내 리뷰관리</a>
         </li>
-        <li>
+        <li th:classappend="${active == 'myLike'} ? active : ''">
             <a href="/user/myLike">찜목록</a>
         </li>
-        <li>
+        <li th:classappend="${active == 'myCart'} ? active : ''">
             <a href="/user/myCart">장바구니</a>
         </li>
-        <li>
+        <li th:classappend="${active == 'myAsk'} ? active : ''">
             <a href="/user/myAsk">내 문의확인</a>
         </li>
     </ul>

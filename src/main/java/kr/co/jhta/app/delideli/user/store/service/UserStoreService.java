@@ -14,8 +14,8 @@ public interface UserStoreService {
     // 카테고리와 지역에 따른 모든 가게 목록을 반환하는 메서드
     ArrayList<StoreInfo> getAllStoresByCategoryAndRegion(int categoryId, String region);
 
-    // 검색어와 지역에 따른 모든 가게 목록을 반환하는 메서드
-    ArrayList<StoreInfo> searchAllStoresByNameAndRegion(String query, String region);
+    // 검색어와 지역, 카테고리에 따른 모든 가게 목록을 반환하는 메서드
+    ArrayList<StoreInfo> searchAllStoresByNameAndRegionAndCategory(int categoryId, String query, String region);
 
     // 특정 가게의 평균 리뷰 점수를 반환하는 메서드
     Double getAverageRatingForStore(int storeInfoKey);
@@ -45,4 +45,5 @@ public interface UserStoreService {
     int getMenuByStoreInfoKeyAndMenuName(int storeInfoKey, String menuName);
 
     ArrayList<StoreInfo> getStoresByCategory(int firstCategoryId, int i);
+
 }
