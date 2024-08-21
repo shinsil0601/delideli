@@ -1,12 +1,14 @@
 window.onload = function () {
     // 메뉴 그룹 클릭 이벤트 처리
-    const menuGroups = document.querySelectorAll(".menu-group h3");
+    const menuGroups = document.querySelectorAll(".sdTabCnt__menu-gItem > h3");
 
     menuGroups.forEach(function (group) {
         group.addEventListener("click", function () {
             const menuItems = group.nextElementSibling;
-            if (menuItems.style.display === "none" || menuItems.style.display === "") {
-                menuItems.style.display = "block";
+            const currentDisplay = window.getComputedStyle(menuItems).display;
+
+            if (currentDisplay === "none") {
+                menuItems.style.display = "grid";
             } else {
                 menuItems.style.display = "none";
             }
@@ -14,7 +16,7 @@ window.onload = function () {
     });
 
     // 메뉴 항목 클릭 이벤트 처리
-    const menuItems = document.querySelectorAll(".menu-item");
+    const menuItems = document.querySelectorAll(".sdTabCnt__menu-item");
 
     menuItems.forEach(function (item) {
         item.addEventListener("click", function () {
@@ -36,7 +38,7 @@ window.onload = function () {
 // 모달창 생성 및 사이즈 설정
 function openMenuDetail(menuKey) {
     const url = '/user/menuDetail/' + menuKey;
-    window.open(url, 'menuDetailWindow', 'width=400,height=600');
+    window.open(url, 'menuDetailWindow', 'width=720,height=720');
 }
 
 // 찜하기 및 취소 기능
