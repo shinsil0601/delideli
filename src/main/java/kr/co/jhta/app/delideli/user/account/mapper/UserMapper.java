@@ -57,4 +57,6 @@ public interface UserMapper {
 
     // 사용자 탈퇴
     void deleteUserByUserName(int userKey);
+
+    UserAccount getUserAccountByUserKey(int userKey);
 }

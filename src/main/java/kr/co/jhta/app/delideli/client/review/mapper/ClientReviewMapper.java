@@ -21,4 +21,8 @@ public interface ClientReviewMapper {
     ArrayList<ClientOrder> getOrderList(Map<String, Object> map);
     // 각 주문에 연결된 주문 상세 리스트 가져오기
     List<ClientOrderDetail> getOrderDetailListByOrderKey(int orderKey);
+
+    void updateComment(Map<String, Object> params);
+
+    void addNewComment(Map<String, Object> params);
 }

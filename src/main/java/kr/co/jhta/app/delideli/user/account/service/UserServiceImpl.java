@@ -210,6 +210,11 @@ public class UserServiceImpl implements UserService {
         userMapper.deleteUserByUserName(userKey);
     }
 
+    @Override
+    public UserAccount getUserAccountByUserKey(int userKey) {
+        return userMapper.getUserAccountByUserKey(userKey);
+    }
+
     // 프로필 이미지 저장
     private String saveProfileImage(MultipartFile file) {
         String uploadDir = "src/main/resources/static/user/images/uploads/";
