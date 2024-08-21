@@ -1,10 +1,13 @@
 package kr.co.jhta.app.delideli.client.review.domain;
 
+import kr.co.jhta.app.delideli.client.order.domain.ClientOrder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -19,12 +22,15 @@ public class ClientReview {
     private String reviewDesc;
     private String reviewPhoto1;
     private String reviewPhoto2;
-    private Date reviewRegdate;
+    private LocalDateTime reviewRegdate;
     private String reviewComment;
     private boolean reportReview;
-    private Date commentRegdate;
-    private Date commentUpdate;
+    private LocalDateTime commentRegdate;
+    private LocalDateTime commentUpdate;
     private boolean reviewStatus;
-    private Date mnmtRegdate;
+    private LocalDateTime mnmtRegdate;
     private String userId;
+
+    // 새로운 필드: 해당 리뷰에 연관된 주문 리스트
+    private List<ClientOrder> orderList;
 }
