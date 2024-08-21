@@ -19,7 +19,7 @@ $(document).ready(function () {
                 },
                 error: function (xhr, status, error) {
                     alert('카테고리 추가 실패');
-                    console.error('Error:', error);
+                    //console.error('Error:', error);
                 }
             });
         } else {

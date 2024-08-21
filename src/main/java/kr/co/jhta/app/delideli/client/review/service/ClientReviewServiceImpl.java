@@ -1,5 +1,7 @@
 package kr.co.jhta.app.delideli.client.review.service;
 
+import kr.co.jhta.app.delideli.client.order.domain.ClientOrder;
+import kr.co.jhta.app.delideli.client.order.domain.ClientOrderDetail;
 import kr.co.jhta.app.delideli.client.review.domain.ClientReview;
 import kr.co.jhta.app.delideli.client.review.mapper.ClientReviewMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -21,20 +24,33 @@ public class ClientReviewServiceImpl implements ClientReviewService {
     }
 
 
-    //사장님 가게에 따른 리뷰
+    // 사장님 가게에 따른 리뷰와 관련 주문, 주문 상세 정보를 포함한 리스트를 가져옴
     @Override
     public ArrayList<ClientReview> getAllReview(int clientKey, String storeKey) {
         Map<String, Object> map = new HashMap<>();
         map.put("clientKey", clientKey);
         map.put("storeKey", storeKey);
-        //log.info("map>>>>>!!!!!!{}", map.toString());
-        return clientReviewMapper.getreviewList(map);
+
+        // 리뷰 리스트 가져오기
+        ArrayList<ClientReview> reviewList = clientReviewMapper.getreviewList(map);
+
+        // 각 리뷰에 대해 관련된 주문 및 주문 상세 정보를 추가
+        for (ClientReview review : reviewList) {
+            ArrayList<ClientOrder> orderList = clientReviewMapper.getOrderList(map);
+            review.setOrderList(orderList);
+
+            for (ClientOrder order : orderList) {
+                List<ClientOrderDetail> orderDetailList = clientReviewMapper.getOrderDetailListByOrderKey(order.getOrderKey());
+                order.setClientOrderDetails((ArrayList<ClientOrderDetail>) orderDetailList);
+            }
+        }
+
+        return reviewList;
     }
 
     // 리뷰 신고 처리
     @Override
     public boolean reportReview(int reviewKey) {
-
         int updatedRows = clientReviewMapper.updateReportReview(reviewKey);
         if (updatedRows > 0) {
             return true; // 신고 성공
@@ -47,6 +63,32 @@ public class ClientReviewServiceImpl implements ClientReviewService {
         }
     }
 
+    //사용자키값에 따른 주문목록
+    @Override
+    public ArrayList<ClientOrder> getAllOrderList(int clientKey, String storeKey) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("clientKey", clientKey);
+        map.put("storeKey", storeKey);
+
+        return clientReviewMapper.getOrderList(map);
+    }
+
+    @Override
+    public void updateComment(int reviewKey, String updatedComment) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("reviewKey", reviewKey);
+        params.put("updatedComment", updatedComment);
+
+        clientReviewMapper.updateComment(params);
+    }
+
+    @Override
+    public void addNewComment(int reviewKey, String newComment) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("reviewKey", reviewKey);
+        params.put("newComment", newComment);
+        clientReviewMapper.addNewComment(params);
+    }
 
 
 }

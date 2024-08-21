@@ -6,13 +6,11 @@ import kr.co.jhta.app.delideli.client.account.domain.ClientAccount;
 import kr.co.jhta.app.delideli.client.dto.ClientDTO;
 import kr.co.jhta.app.delideli.client.account.exception.DuplicateClientIdException;
 import kr.co.jhta.app.delideli.client.account.service.ClientService;
-import kr.co.jhta.app.delideli.client.store.domain.ClientStoreInfo;
 import kr.co.jhta.app.delideli.client.store.service.ClientStoreService;
 import kr.co.jhta.app.delideli.common.security.CustomAuthenticationDetails;
 import kr.co.jhta.app.delideli.common.security.JwtTokenProvider;
 import kr.co.jhta.app.delideli.common.service.EmailService;
 import kr.co.jhta.app.delideli.common.service.EmailVerificationService;
-import kr.co.jhta.app.delideli.user.store.domain.StoreInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +29,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -72,7 +69,7 @@ public class ClientController {
         //log.debug("loginProc 호출됨");
         //log.debug("입력된 사용자 이름: {}", clientId);
         try {
-            if (clientService.checkAccessAccount(clientId, password)) {
+            if (clientService.checkAccessAccount(clientId, password) && !clientService.checkQuitAccount(clientId, password)) {
                 //log.debug("승인된 계정");
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(clientId, password);
@@ -312,6 +309,38 @@ public class ClientController {
         clientService.changePwLogin(clientId, newPw1);
         redirectAttributes.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
         return "redirect:/client/infoUpdate";
+    }
+
+    @GetMapping("/quit")
+    public String quit(@AuthenticationPrincipal User user, Model model) {
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
+        model.addAttribute("on", "myPage");
+        model.addAttribute("active", "quit");
+        return "client/mypage/quit";
+    }
+
+    @PostMapping("/quit")
+    @ResponseBody
+    public String quit(@AuthenticationPrincipal User user, @RequestParam("inputClientPw") String inputClientPw, HttpServletResponse response) {
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+
+        if (!passwordEncoder.matches(inputClientPw, clientAccount.getClientPw())) {
+            return "failure";
+        }
+
+        clientService.quitClientAccount(clientAccount.getClientId());
+
+        SecurityContextHolder.clearContext();
+
+        Cookie cookie = new Cookie("JWT", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return "success";
     }
 
 }

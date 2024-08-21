@@ -46,6 +46,7 @@ public class UserCartController {
     public String myCartPage(@AuthenticationPrincipal User user, Model model) {
         if (user != null) {
             UserAccount userAccount = userService.findUserById(user.getUsername());
+            model.addAttribute("active", "myCart");
             model.addAttribute("user", userAccount);
 
             ArrayList<Cart> cartItems = new ArrayList<>(userCartService.getCartItemsByUser(userAccount.getUserKey()));

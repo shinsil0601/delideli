@@ -145,8 +145,11 @@
     <!-- 사용자 삭제 -->
     <update id="deleteUserByUserName" parameterType="int">
         UPDATE user_account
-        SET user_role = 'null'
+        SET user_role = ''
         WHERE user_key = #{userKey}
     </update>
 
+    <select id="getUserAccountByUserKey" parameterType="int" resultMap="UserAccountResultMap">
+        SELECT * FROM user_account WHERE user_key = #{userKey}
+    </select>
 </mapper>

@@ -29,6 +29,7 @@
         <result property="storeProfileImg" column="store_profile_img"/>
         <result property="storeAccess" column="store_access"/>
         <result property="storeDelete" column="store_delete"/>
+        <result property="storePause" column="store_pause"/>
         <result property="storeRegdate" column="store_regdate"/>
         <result property="storeUpdate" column="store_update"/>
 
@@ -41,40 +42,67 @@
     <!-- 지역에 따른 모든 가게 목록을 가져옴 -->
     <select id="getAllStoresInRegion" resultMap="StoreInfoResultMap" parameterType="string">
         SELECT si.*,
-               ca.client_name AS business_owner_name,
-               ca.client_phone AS business_phone,
-               ca.client_EID AS business_registration_no
+        ca.client_name AS business_owner_name,
+        ca.client_phone AS business_phone,
+        ca.client_EID AS business_registration_no,
+        CASE
+        WHEN si.store_pause = 1 THEN 2  <!-- 일시정지 -->
+        WHEN NOW() BETWEEN si.open_time AND si.close_time THEN 1  <!-- 영업중 -->
+        ELSE 3  <!-- 마감 -->
+        END AS businessStatus
         FROM storeInfo si
-                 JOIN client_account ca ON si.client_key = ca.client_key
+        JOIN client_account ca ON si.client_key = ca.client_key
         WHERE si.store_address LIKE CONCAT('%', #{region}, '%')
-          AND si.store_delete = 0
+        AND si.store_delete = 0
+        AND si.store_access = 1
+        ORDER BY businessStatus, si.store_name
     </select>
+
 
     <!-- 카테고리와 지역에 따른 모든 가게 목록을 가져옴 -->
     <select id="getAllStoresByCategoryAndRegion" resultMap="StoreInfoResultMap" parameterType="map">
         SELECT si.*,
-               ca.client_name AS business_owner_name,
-               ca.client_phone AS business_phone,
-               ca.client_EID AS business_registration_no
+        ca.client_name AS business_owner_name,
+        ca.client_phone AS business_phone,
+        ca.client_EID AS business_registration_no,
+        CASE
+        WHEN si.store_pause = 1 THEN 2  <!-- 일시정지 -->
+        WHEN NOW() BETWEEN si.open_time AND si.close_time THEN 1  <!-- 영업중 -->
+        ELSE 3  <!-- 마감 -->
+        END AS businessStatus
         FROM storeInfo si
-                 JOIN store_category sc ON si.storeInfo_key = sc.storeInfo_key
-                 JOIN client_account ca ON si.client_key = ca.client_key
+        JOIN store_category sc ON si.storeInfo_key = sc.storeInfo_key
+        JOIN client_account ca ON si.client_key = ca.client_key
         WHERE sc.category_key = #{categoryId}
-          AND si.store_address LIKE CONCAT('%', #{region}, '%')
-          AND si.store_delete = 0
+        AND si.store_address LIKE CONCAT('%', #{region}, '%')
+        AND si.store_delete = 0
+        AND si.store_access = 1
+        ORDER BY businessStatus, si.store_name
     </select>
 
+
     <!-- 검색어와 지역에 따른 모든 가게 목록을 가져옴 -->
-    <select id="searchAllStoresByNameAndRegion" resultMap="StoreInfoResultMap" parameterType="map">
+    <select id="searchAllStoresByNameAndRegionAndCategory" resultMap="StoreInfoResultMap" parameterType="map">
         SELECT si.*,
-               ca.client_name AS business_owner_name,
-               ca.client_phone AS business_phone,
-               ca.client_EID AS business_registration_no
+        ca.client_name AS business_owner_name,
+        ca.client_phone AS business_phone,
+        ca.client_EID AS business_registration_no,
+        CASE
+        WHEN si.store_pause = 1 THEN 2  <!-- 일시정지 -->
+        WHEN NOW() BETWEEN si.open_time AND si.close_time THEN 1  <!-- 영업중 -->
+        ELSE 3  <!-- 마감 -->
+        END AS businessStatus
         FROM storeInfo si
-                 JOIN client_account ca ON si.client_key = ca.client_key
+        JOIN client_account ca ON si.client_key = ca.client_key
+        LEFT JOIN store_category sc ON si.storeInfo_key = sc.storeInfo_key
         WHERE si.store_name LIKE CONCAT('%', #{query}, '%')
-          AND si.store_address LIKE CONCAT('%', #{region}, '%')
-          AND si.store_delete = 0
+        AND si.store_address LIKE CONCAT('%', #{region}, '%')
+        AND si.store_delete = 0
+        AND si.store_access = 1
+        <if test="categoryId != 0">
+            AND sc.category_key = #{categoryId}
+        </if>
+        ORDER BY businessStatus, si.store_name
     </select>
 
     <!-- 특정 가게 정보를 가져옴 -->
@@ -105,16 +133,24 @@
     <!-- 카테고리별 특정 개수의 가게 목록을 가져옴 -->
     <select id="getStoresByCategory" parameterType="map" resultMap="StoreInfoResultMap">
         SELECT si.*,
-               ca.client_name AS business_owner_name,
-               ca.client_phone AS business_phone,
-               ca.client_EID AS business_registration_no
+        ca.client_name AS business_owner_name,
+        ca.client_phone AS business_phone,
+        ca.client_EID AS business_registration_no,
+        CASE
+        WHEN si.store_pause = 1 THEN 2  <!-- 일시정지 -->
+        WHEN NOW() BETWEEN si.open_time AND si.close_time THEN 1  <!-- 영업중 -->
+        ELSE 3  <!-- 마감 -->
+        END AS businessStatus
         FROM storeInfo si
-                 JOIN store_category sc ON si.storeInfo_key = sc.storeInfo_key
-                 JOIN client_account ca ON si.client_key = ca.client_key
+        JOIN store_category sc ON si.storeInfo_key = sc.storeInfo_key
+        JOIN client_account ca ON si.client_key = ca.client_key
         WHERE sc.category_key = #{categoryId}
-          AND si.store_delete = 0
-            LIMIT #{limit}
+        AND si.store_delete = 0
+        AND si.store_access = 1
+        ORDER BY businessStatus, si.store_name
+        LIMIT #{limit}
     </select>
+
 
 
 </mapper>

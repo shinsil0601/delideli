@@ -36,7 +36,7 @@ function updateOrderStatus(button) {
             }
         },
         error: function(xhr, status, error) {
-            console.error('Error:', error);
+            //console.error('Error:', error);
             alert('서버 요청 중 오류가 발생했습니다.');
         }
     });

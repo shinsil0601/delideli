@@ -123,7 +123,7 @@ public class UserController {
         ArrayList<Board> eventList = userBoardService.getEventListIndex();
         model.addAttribute("eventImage", eventList);
 
-        log.info("storeList {}", storeList);
+        //log.info("storeList {}", storeList);
 
         return "index";
     }
@@ -396,6 +396,7 @@ public class UserController {
         ArrayList<UserAddress> addressList = userService.userAddressList(userAccount.getUserKey());
         model.addAttribute("user", userAccount);
         model.addAttribute("addressList", addressList);
+        model.addAttribute("active", "myAddress");
         return "user/mypage/myAddress";
     }
 
@@ -463,6 +464,7 @@ public class UserController {
         Map<String, Object> paginationMap = createPaginationMap(page, totalPages);
 
         // 모델에 데이터 추가
+        model.addAttribute("active", "myLike");
         model.addAttribute("user", userAccount);
         model.addAttribute("storeList", storeList);
         model.addAttribute("totalPages", totalPages);
@@ -483,9 +485,16 @@ public class UserController {
 
     // 회원 탈퇴
     @PostMapping("/withdrawal")
-    public String withdrawUser(@AuthenticationPrincipal User user, HttpServletResponse response) {
+    @ResponseBody
+    public String withdrawUser(@AuthenticationPrincipal User user,@RequestParam("userPw") String userPw, HttpServletResponse response) {
         UserAccount userAccount = userService.findUserById(user.getUsername());
+
+        if (!passwordEncoder.matches(userPw, userAccount.getUserPw())) {
+            return "failure";
+        }
+
         userService.deleteUserByUserName(userAccount.getUserKey());
+
         SecurityContextHolder.clearContext();
 
         Cookie cookie = new Cookie("JWT", null);
@@ -495,7 +504,7 @@ public class UserController {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
 
-        return "redirect:/";
+        return "success";
     }
 
     // 내 쿠폰보기

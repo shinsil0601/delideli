@@ -36,7 +36,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 alert('옵션 그룹 수정 중 오류가 발생했습니다.');
-                console.error(error);
+                //console.error(error);
             }
         });
     });

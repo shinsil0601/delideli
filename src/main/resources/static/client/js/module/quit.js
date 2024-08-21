@@ -7,13 +7,13 @@ $(document).ready(function() {
 
             // AJAX로 POST 요청 전송
             $.ajax({
-                url: '/user/withdrawal',
+                url: '/client/quit',
                 type: 'POST',
                 data: $(this).serialize(), // 폼 데이터 전송
                 success: function(response) {
                     // 성공적으로 탈퇴 처리된 후의 동작
                     if (response === "success") {
-                        window.location.href = '/user/login'; // 로그인 페이지로 리다이렉트
+                        window.location.href = '/client/login'; // 로그인 페이지로 리다이렉트
                     } else {
                         alert('비밀번호가 일치하지 않습니다. 다시 시도해주세요.');
                     }

@@ -31,7 +31,7 @@ $(document).ready(function() {
                     window.location.reload();
                 },
                 error: function(error) {
-                    console.error('옵션 그룹 삭제 중 오류 발생:', error);
+                    //console.error('옵션 그룹 삭제 중 오류 발생:', error);
                     alert('옵션 그룹 삭제 중 오류가 발생했습니다.');
                 }
             });
@@ -91,7 +91,7 @@ $(document).ready(function() {
                     }
                 },
                 error: function(error) {
-                    console.error('옵션 추가 중 오류 발생:', error);
+                    //console.error('옵션 추가 중 오류 발생:', error);
                     alert('옵션 추가 중 오류가 발생했습니다.');
                 }
             });
