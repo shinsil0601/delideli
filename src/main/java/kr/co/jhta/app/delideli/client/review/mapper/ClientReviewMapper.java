@@ -1,9 +1,12 @@
 package kr.co.jhta.app.delideli.client.review.mapper;
 
+import kr.co.jhta.app.delideli.client.order.domain.ClientOrder;
+import kr.co.jhta.app.delideli.client.order.domain.ClientOrderDetail;
 import kr.co.jhta.app.delideli.client.review.domain.ClientReview;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Mapper
@@ -12,7 +15,7 @@ public interface ClientReviewMapper {
     int updateReportReview(int reviewKey);
 
     ClientReview getReviewByKey(int reviewKey);
-
+  
     void updateComment(Map<String, Object> params);
 
     void addNewComment(Map<String, Object> params);
