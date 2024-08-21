@@ -28,6 +28,9 @@
                                 <img th:src="${store.storeProfileImg}" alt="가게 이미지">
                             </div>
                             <div class="storeDetail__info-box">
+                                <p th:if="${store.businessStatus == '영업중'}">영업중</p>
+                                <p th:if="${store.businessStatus == '일시정지'}">일시정지</p>
+                                <p th:if="${store.businessStatus == '마감'}">마감</p>
                                 <h3 class="storeDetail__title">
                                     [[${store.storeName}]]
                                     <span class="storeDetail__rating">

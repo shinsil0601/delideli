@@ -2,6 +2,7 @@ package kr.co.jhta.app.delideli.client.control;
 
 import kr.co.jhta.app.delideli.client.account.domain.ClientAccount;
 import kr.co.jhta.app.delideli.client.account.service.ClientService;
+import kr.co.jhta.app.delideli.client.order.domain.ClientOrder;
 import kr.co.jhta.app.delideli.client.review.domain.ClientReview;
 import kr.co.jhta.app.delideli.client.review.service.ClientReviewService;
 import kr.co.jhta.app.delideli.client.store.domain.ClientStoreInfo;
@@ -47,11 +48,20 @@ public class ClientReviewController {
     public String clientReview(@AuthenticationPrincipal User user,
                                @PathVariable("storeKey") String storeKey, Model model) {
         ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        //가게목록
         ArrayList<ClientStoreInfo> storeList = clientStoreService.getAllStore(clientAccount.getClientKey());
+        //가게리뷰
         ArrayList<ClientReview> reviewList = clientReviewService.getAllReview(clientAccount.getClientKey(), storeKey);
 
-        // 로그로 reportReview 값 확인
-        reviewList.forEach(review -> log.info("Review Key!!!!!!!1: {}, ReportReview!!!!!!!111: {}", review.getReviewKey(), review.isReportReview()));
+        // 각 리뷰와 관련된 주문 및 주문 상세 정보 출력 (로그)
+        reviewList.forEach(review -> {
+            log.info("Review Key: {}", review.getReviewKey());
+            review.getOrderList().forEach(order -> {
+                log.info("Order Key: {}", order.getOrderKey());
+                order.getClientOrderDetails().forEach(detail ->
+                        log.info("Menu Name: {}", detail.getMenuName()));
+            });
+        });
 
         model.addAttribute("client", clientAccount);
         model.addAttribute("store", storeList);

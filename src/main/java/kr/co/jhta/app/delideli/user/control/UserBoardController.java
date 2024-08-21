@@ -254,6 +254,7 @@ public class UserBoardController {
         //log.info("userKey>>>>>>>>>!!! " + userAccount.getUserKey());
         List<Board> list = userBoardService.getMyAskList(userAccount.getUserKey());
         model.addAttribute("list", list);
+        model.addAttribute("active", "myAsk");
 
         return "user/mypage/myAsk";
     }

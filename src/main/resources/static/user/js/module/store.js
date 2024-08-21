@@ -126,6 +126,7 @@ function applyGuestAddress() {
     const guestAddress = $('#guestAddress').val();
     const guestAddrDetail = $('#guestAddrDetail').val();
     const fullGuestAddress = `${guestAddress} ${guestAddrDetail}`;
+    const currentCategory = getCurrentCategory();
 
     if (!guestAddress) {
         alert("주소를 입력하세요.");
@@ -139,7 +140,7 @@ function applyGuestAddress() {
     $.ajax({
         url: "/user/filterStoresByAddress",
         type: "GET",
-        data: { address: guestAddress }
+        data: { address: guestAddress, categoryId: currentCategory }
     }).done((data) => {
         $('#storeList').html($(data).find('#storeList').html());
         history.pushState({}, null, '/user/category/0');
@@ -150,6 +151,7 @@ function applyGuestAddress() {
 // 가게명 검색 기능
 function searchStores() {
     const query = $('#storeSearchInput').val().trim();
+    const categoryId = getCurrentCategory();
     const guestAddress = $("div[th\\:if='${user != null}']").length
         ? $("div[th\\:if='${user != null}'] p").text().trim()
         : $("#displayedGuestAddress").text().trim() || "";
@@ -167,13 +169,21 @@ function searchStores() {
         return;
     }
 
+    const url = `/user/search/${categoryId}?query=${encodeURIComponent(query)}&address=${encodeURIComponent(guestAddress)}`;
+
     $.ajax({
-        url: "/user/search",
+        url: url,
         type: "GET",
-        data: { query, address: guestAddress, page: 1, pageSize: 8 }
     }).done((data) => {
         $('#storeList').html($(data).find('#storeList').html());
-        history.pushState({}, null, `/user/search?query=${encodeURIComponent(query)}&address=${encodeURIComponent(guestAddress)}`);
+        history.pushState({}, null, url);
         location.reload();
     }).fail(() => alert("검색 결과를 불러오는데 실패했습니다."));
+}
+
+function getCurrentCategory() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pathSegments = window.location.pathname.split('/');
+    const categorySegment = pathSegments.find(segment => segment.match(/^\d+$/));
+    return categorySegment || 0; // 카테고리가 없으면 기본값 0 (ALL) 사용
 }

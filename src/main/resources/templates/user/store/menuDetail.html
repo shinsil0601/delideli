@@ -54,7 +54,8 @@
                         </p>
                     </div>
                     <div class="editCart__total-btn">
-                        <button type="button" id="addToCartButton">추가하기</button>
+                        <button type="button" id="addToCartButton" th:if="${store.businessStatus == '영업중'}">추가하기</button>
+                        <p th:if="${store.businessStatus != '영업중'}">현재 가게가 영업 중이 아닙니다. 주문할 수 없습니다.</p>
                     </div>
                 </div>
             </div>
