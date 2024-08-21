@@ -1,84 +1,93 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사장님 - 리뷰 상세보기</title>
-    <!-- Include:공통 CSS -->
-    <th:block th:include="inc/common/common-css :: commonCss"></th:block>
-    <!-- Include:Client CSS -->
-    <th:block th:include="inc/client/client-css :: clientCss"></th:block>
-    <!-- Include:공통 JS -->
-    <th:block th:include="inc/common/common-js :: commonJs"></th:block>
-    <!-- Include:Client JS -->
-    <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사장님 - 리뷰 상세보기</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Client CSS -->
+        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Client JS -->
+        <th:block th:include="inc/client/client-js :: clientJs"></th:block>
 
-    <script>
-        // 리뷰 신고를 처리하는 함수
-        function reportReview(reviewKey, element) {
-            if (confirm("정말 신고하시겠습니까?")) { // 확인 창 표시
+    </head>
+    <body>
+        <div class="client-wrap">
+            <!-- Start:Aside -->
+            <th:block th:include="inc/client/aside :: clientAside"></th:block>
+            <!-- End:Aside -->
 
-                $.ajax({
-                    type: "POST",
-                    url: "/client/reviewReport/" + reviewKey,
-                    success: function(response) {
-                        if (response.status === "success") {
-                            $(element).text("신고 완료"); // 텍스트 변경
-                            $(element).css("pointer-events", "none"); // 버튼 비활성화
-                        } else if (response.status === "already_reported") {
-                            alert("이미 신고된 리뷰입니다.");
-                        } else {
-                            alert("신고 처리에 실패했습니다. 다시 시도해주세요.");
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        //console.error("Error:", xhr, status, error);
-                        alert("오류가 발생했습니다. 다시 시도해주세요.");
-                    }
-                });
+            <!-- Start:Main -->
+            <main id="mainpage__wrap">
+                <!-- Start:Header -->
+                <th:block th:include="inc/client/header :: clientHeader"></th:block>
+                <!-- End:Header -->
 
-            }
-        }
-    </script>
-</head>
-<body>
-<div class="client-wrap">
-    <!-- Start:Aside -->
-    <th:block th:include="inc/client/aside :: clientAside"></th:block>
-    <!-- End:Aside -->
+                <!-- Start:Contents -->
+                <section class="contents">
+                    <h3 th:text="${store.storeName} + '의 리뷰 목록'"></h3><br>
 
-    <!-- Start:Main -->
-    <main id="mainpage__wrap">
-        <!-- Start:Header -->
-        <th:block th:include="inc/client/header :: clientHeader"></th:block>
-        <!-- End:Header -->
+                    <ul>
+                        <th:block th:each="review : ${reviewList}">
+                            <li>
+                                <!-- 신고 버튼 -->
+                                <a href="javascript:void(0);"
+                                   th:onclick="'reportReview(' + ${review.reviewKey} + ', this)'"
+                                   th:text="${review.reportReview ? '신고 완료' : '신고🚨'}"
+                                   th:style="${review.reportReview ? 'pointer-events: none;' : ''}">
+                                </a>
+                                <span th:if="${review.reviewComment == null || review.reviewComment.isEmpty()}" th:text="'미작성'"></span>
+                                <span th:if="${review.reviewComment != null && !review.reviewComment.isEmpty()}" th:text="'작성 완료'"></span>
 
-        <!-- Start:Contents -->
-        <section class="contents">
-            <h3>가게별 리뷰 보기</h3><br>
+                                <p th:text="${review.userNickname}"></p>
+                                [[${#temporals.format(review.reviewRegdate.toLocalDate(), 'yyyy/MM/dd')}]]
+                                <p>별점 : [[${review.reviewRating}]]</p>
+                                <p>[[${review.reviewDesc}]]</p>
+                                <img th:src="${review.reviewPhoto1}" alt="1번 리뷰 이미지" th:if="${review.reviewPhoto1} != null">
+                                <img th:src="${review.reviewPhoto2}" alt="2번 리뷰 이미지" th:if="${review.reviewPhoto2} != null">
 
-            <ul>
-                <th:block th:each="review : ${reviewList}">
-                    <li>
-                        <!-- 신고 버튼 -->
-                        <a href="javascript:void(0);"
-                           th:onclick="'reportReview(' + ${review.reviewKey} + ', this)'"
-                           th:text="${review.reportReview ? '신고 완료' : '신고🚨'}"
-                           th:style="${review.reportReview ? 'pointer-events: none;' : ''}">
-                        </a>
+                                <!-- 주문 목록 반복 -->
+                                <p>주문메뉴</p>
+                                <ul>
+                                    <th:block th:each="order : ${review.orderList}">
+                                        <th:block th:each="detail : ${order.clientOrderDetails}">
+                                            <li th:if="${review.orderKey == detail.orderKey}">
+                                                <span th:text="${detail.menuName} + ${detail.quantity} + '개'"></span>
+                                                <span th:text="'(' + ${detail.optionName} + ')'"></span>
+                                            </li>
+                                        </th:block>
+                                    </th:block>
+                                </ul>
 
-                        <b th:text="${review.userId}"></b>
-                        [[${review.reviewRegdate}]]
-                        <span th:if="${review.reviewComment == null || review.reviewComment.isEmpty()}" th:text="미작성"></span>
-                        <span th:if="${review.reviewComment != null}" th:text="작성"></span>
-                        [[${review.reviewRating}]]
-                    </li>
-                </th:block>
-            </ul>
-        </section>
-        <!-- End:Contents -->
-    </main>
-    <!-- End:Main -->
-</div>
-</body>
+                                <!-- 사장님 답변 여부창 -->
+                                <!-- 작성했을 때 -->
+                                <div th:if="${review.reviewComment != null && !review.reviewComment.isEmpty()}">
+                                    <p class="commentText" th:text="'사장님 답변 : ' + ${review.reviewComment}"></p>
+                                    <button class="editButton" data-review-key="${review.reviewKey}">수정하기</button>
+                                    <textarea name="editComment" class="editComment" cols="30" rows="10" th:text="${review.reviewComment}" placeholder="내용을 입력해주세요" style="display: none"></textarea>
+                                    <button class="saveButton" th:data-review-key="${review.reviewKey}" style="display: none">수정</button>
+                                </div>
+                                <!-- 작성 안했을 때 -->
+                                <div th:if="${review.reviewComment == null || review.reviewComment.isEmpty()}">
+                                    <textarea name="writeComment" class="writeComment" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea>
+                                    <button class="saveNewButton" th:data-review-key="${review.reviewKey}">저장</button>
+                                </div>
+                                <br>
+                            </li>
+                        </th:block>
+                    </ul>
+                    <!-- Start:Pagination -->
+                    <th:block th:include="inc/client/pagination-order :: OrderListPagination (${type})"></th:block>
+                    <!-- End:Pagination -->
+
+                    <script src="/client/js/module/review.view.js"></script>
+                </section>
+                <!-- End:Contents -->
+            </main>
+            <!-- End:Main -->
+        </div>
+    </body>
 </html>

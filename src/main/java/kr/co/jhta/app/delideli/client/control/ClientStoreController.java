@@ -221,6 +221,7 @@ public class ClientStoreController {
         model.addAttribute("store", store);
         model.addAttribute("categories", category);
         model.addAttribute("storeCategories", storeCategories);
+        model.addAttribute("on", "list");
 
         return "client/store/store.edit";
     }
