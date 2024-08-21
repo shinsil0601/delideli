@@ -7,16 +7,13 @@ import kr.co.jhta.app.delideli.client.account.service.ClientService;
 import kr.co.jhta.app.delideli.client.store.domain.ClientCategory;
 import kr.co.jhta.app.delideli.client.store.service.ClientCategoryService;
 import kr.co.jhta.app.delideli.client.store.service.ClientStoreService;
-import kr.co.jhta.app.delideli.common.util.PageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -212,7 +209,9 @@ public class ClientStoreController {
 
     // 가게 수정창으로 이동
     @GetMapping("/storeEdit/{storeInfoKey}")
-    public String editStore(@PathVariable("storeInfoKey") int storeInfoKey, Model model) {
+    public String editStore(@AuthenticationPrincipal User user, @PathVariable("storeInfoKey") int storeInfoKey, Model model) {
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
         ClientStoreInfo store = clientStoreService.getStoreDetail(storeInfoKey);
         store.formatTimes();
 

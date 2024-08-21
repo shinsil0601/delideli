@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>사장님 - 메인페이지</title>
+        <!-- Include:공통 CSS -->
+        <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+        <!-- Include:Client CSS -->
+        <th:block th:include="inc/client/client-css :: clientCss"></th:block>
+        <!-- Include:공통 JS -->
+        <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+        <!-- Include:Client JS -->
+        <th:block th:include="inc/client/client-js :: clientJs"></th:block>
+
+    </head>
+    <body>
+        <div class="client-wrap">
+            <!-- Start:Aside -->
+            <th:block th:include="inc/client/aside :: clientAside"></th:block>
+            <!-- End:Aside -->
+
+            <!-- Start:Main -->
+            <main id="mainpage__wrap">
+                <!-- Start:Header -->
+                <th:block th:include="inc/client/header :: clientHeader"></th:block>
+                <!-- End:Header -->
+
+                <!-- Start:Contents -->
+                <section class="contents">
+
+                    <form id="checkPwForm" action="/client/quit" method="post">
+                        <!-- 아이디 -->
+                        <div class="account__input-box">
+                            <label for="clientId">아이디</label>
+                            <input type="text" name="clientId" id="clientId" th:value="${client.clientId}" readonly>
+                            <input type="hidden" name="clientPw" th:value="${client.clientPw}">
+                        </div>
+                        <!-- 비밀번호 -->
+                        <div class="account__input-box">
+                            <label for="inputClientPw">비밀번호</label>
+                            <input type="password" name="inputClientPw" id="inputClientPw">
+                        </div>
+                        <button type="submit">탈퇴</button>
+                    </form>
+                    <script src="/client/js/module/quit.js"></script>
+                </section>
+                <!-- End:Contents -->
+            </main>
+            <!-- End:Main -->
+        </div>
+    </body>
+</html>

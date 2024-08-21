@@ -123,7 +123,7 @@ public class UserController {
         ArrayList<Board> eventList = userBoardService.getEventListIndex();
         model.addAttribute("eventImage", eventList);
 
-        log.info("storeList {}", storeList);
+        //log.info("storeList {}", storeList);
 
         return "index";
     }

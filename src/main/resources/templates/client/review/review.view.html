@@ -31,11 +31,12 @@
                             alert("신고 처리에 실패했습니다. 다시 시도해주세요.");
                         }
                     },
-                    error: function(error) {
-                        console.error("Error:", error);
+                    error: function(xhr, status, error) {
+                        console.error("Error:", xhr, status, error);
                         alert("오류가 발생했습니다. 다시 시도해주세요.");
                     }
                 });
+
             }
         }
     </script>
@@ -62,11 +63,13 @@
                         <!-- 신고 버튼 -->
                         <a href="javascript:void(0);"
                            th:onclick="'reportReview(' + ${review.reviewKey} + ', this)'"
-                           th:text="${review.reportReview == 1 ? '신고 완료' : '신고🚨'}"
-                           th:style="${review.reportReview == 1 ? 'pointer-events: none;' : ''}"></a>
+                           th:text="${review.reportReview ? '신고 완료' : '신고🚨'}"
+                           th:style="${review.reportReview ? 'pointer-events: none;' : ''}">
+                        </a>
+
                         <b th:text="${review.userId}"></b>
                         [[${review.reviewRegdate}]]
-                        <span th:if="${review.reviewComment == null}" th:text="미작성"></span>
+                        <span th:if="${review.reviewComment == null || review.reviewComment.isEmpty()}" th:text="미작성"></span>
                         <span th:if="${review.reviewComment != null}" th:text="작성"></span>
                         [[${review.reviewRating}]]
                     </li>

@@ -23,8 +23,12 @@ public interface ClientMapper {
     void updatePwClient(ClientAccount client);
     //아이디 승인 여부 검토
     boolean checkAccessAccount(ClientAccount clientAccount);
+    // 아이디 탈퇴 여부 검토
+    boolean checkQuitAccount(ClientAccount clientAccount);
     //내정보 수정
     void modifyClient(ClientDTO clientDTO);
     //비밀번호 변경(로그인)
     void changePwLogin(ClientAccount client);
+    // 회원 탈퇴
+    void quitClientAccount(String clientId);
 }
