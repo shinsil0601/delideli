@@ -66,4 +66,10 @@ $(document).ready(function() {
             });
         }
     });
+
+    // 메뉴 그룹을 접고 펼치는 기능
+    $(document).on('click', '.menu-group-toggle', function() {
+        var groupKey = $(this).data("groupkey");
+        $(".menu-group-list[data-groupkey='" + groupKey + "']").slideToggle();
+    });
 });

@@ -76,8 +76,38 @@
         SELECT *
         FROM `order`
         WHERE user_key = #{userKey}
-        AND order_method = '완료'
+        AND order_method = '포장 완료' OR order_method = '배달 완료'
         AND order_update &gt; #{sevenDaysAgo}
+    </select>
+
+    <!-- 리뷰가 작성되지 않은 주문 목록을 가져오는 쿼리 -->
+    <select id="getOrdersWithoutReview" resultMap="OrderResultMap" parameterType="map">
+        SELECT o.*
+        FROM `order` o
+        WHERE o.user_key = #{userKey}
+        AND o.order_regdate >= #{fromDate}
+        AND NOT EXISTS (
+        SELECT 1
+        FROM review r
+        WHERE r.order_key = o.order_key
+        )
+        AND (o.order_method = '배달 완료' OR o.order_method = '포장 완료')
+        ORDER BY o.order_regdate DESC
+    </select>
+
+
+    <!-- 리뷰가 작성된 주문 목록을 가져오는 쿼리 -->
+    <select id="getOrdersWithReview" resultMap="OrderResultMap" parameterType="int">
+        SELECT o.*
+        FROM `order` o
+        WHERE o.user_key = #{userKey}
+        AND EXISTS (
+        SELECT 1
+        FROM review r
+        WHERE r.order_key = o.order_key
+        )
+        AND (o.order_method = '배달 완료' OR o.order_method = '포장 완료')
+        ORDER BY o.order_regdate DESC
     </select>
 
 </mapper>

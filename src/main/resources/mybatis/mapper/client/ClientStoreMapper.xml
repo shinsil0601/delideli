@@ -179,4 +179,20 @@
         WHERE storeInfo_key = #{storeInfoKey}
     </update>
 
+    <!-- 가게 목록 페이징 처리 -->
+    <select id="getAllStoreWithPaging" resultMap="StoreInfoResultMap" parameterType="map">
+        SELECT *
+        FROM storeInfo
+        WHERE client_key = #{clientKey}
+        ORDER BY store_access DESC, store_delete ASC, store_regdate ASC
+            LIMIT #{startNo}, #{pageSize}
+    </select>
+
+    <!-- 클라이언트 키에 따른 전체 가게 수 -->
+    <select id="getTotalStoreCountByClientKey" resultType="int" parameterType="int"> <!-- 이름 변경 -->
+        SELECT COUNT(*)
+        FROM storeInfo
+        WHERE client_key = #{clientKey}
+    </select>
+
 </mapper>

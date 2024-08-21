@@ -7,6 +7,7 @@ import kr.co.jhta.app.delideli.user.account.domain.UserAddress;
 import kr.co.jhta.app.delideli.user.account.service.UserService;
 import kr.co.jhta.app.delideli.user.like.domain.Like;
 import kr.co.jhta.app.delideli.user.review.domain.Review;
+import kr.co.jhta.app.delideli.user.review.service.UserReviewService;
 import kr.co.jhta.app.delideli.user.store.domain.*;
 import kr.co.jhta.app.delideli.user.store.service.UserCategoryService;
 import kr.co.jhta.app.delideli.user.like.service.UserLikeService;
@@ -43,6 +44,10 @@ public class UserStoreController {
     private final UserStoreService userStoreService;
     @Autowired
     private final UserLikeService userLikeService;
+    @Autowired
+    private final UserReviewService userReviewService;
+
+    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -392,6 +397,10 @@ public class UserStoreController {
 
         Map<MenuGroup, ArrayList<Menu>> groupedMenus = userStoreService.getMenuGroupedByMenuGroup(storeInfoKey);
         ArrayList<Review> reviewList = userStoreService.getReviewListByStore(storeInfoKey);
+        for (Review review : reviewList) {
+            UserAccount userAccount = userService.getUserAccountByUserKey(review.getUserKey());
+            review.setUserNickname(userAccount.getUserNickname());
+        }
 
         Double averageRating = userStoreService.getAverageRatingForStore(store.getStoreInfoKey());
         store.setAverageRating(averageRating != null ? String.format("%.1f", averageRating) : "0.0");  // 평균 리뷰 점수 설정

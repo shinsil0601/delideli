@@ -35,4 +35,8 @@ public interface ClientStoreMapper {
     void updateStoreDelete(int storeInfoKey, boolean deleteState);
 
     void updateStoreInfo(ClientStoreInfo storeInfo);
+
+    ArrayList<ClientStoreInfo> getAllStoreWithPaging(Map<String, Object> params);
+
+    int getTotalStoreCountByClientKey(int clientKey);
 }
