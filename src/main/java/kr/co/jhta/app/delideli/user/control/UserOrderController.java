@@ -194,7 +194,7 @@ public class UserOrderController {
 
             order.setStatusMessage(statusMessage);
 
-            log.info("order  >>>>>>>>>>>>>>>>>> {}", order);
+            //log.info("order  >>>>>>>>>>>>>>>>>> {}", order);
             
             // 주문 상태에 따라 리스트에 추가
             if (order.getOrderMethod().equals("배달") || order.getOrderMethod().equals("포장") || order.getOrderMethod().equals("배달(조리중)") || order.getOrderMethod().equals("포장(조리중)") || order.getOrderMethod().equals("배달중") || order.getOrderMethod().equals("포장(픽업대기)")) {
