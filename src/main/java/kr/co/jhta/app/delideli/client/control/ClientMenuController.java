@@ -254,9 +254,11 @@ public class ClientMenuController {
 
     // 메뉴 옵션 추가창 이동
     @GetMapping("/registerMenuOption/{menuKey}")
-    public String registerMenuOption(@PathVariable("menuKey") int menuKey, Model model) {
+    public String registerMenuOption(@AuthenticationPrincipal User user, @PathVariable("menuKey") int menuKey, Model model) {
         ArrayList<ClientOptionGroup> optionGroups = clientOptionService.getMenuOptionByMenuKey(menuKey);
         ClientMenu menu = clientMenuService.getMenuById(menuKey);
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
         model.addAttribute("storeKey", menu.getStoreInfoKey());
         model.addAttribute("menuKey", menuKey);
         model.addAttribute("optionList", optionGroups);
@@ -266,7 +268,9 @@ public class ClientMenuController {
 
     // 메뉴 옵션그룹 추가창 (모달창)
     @GetMapping("/addOptionGroup/{menuKey}")
-    public String addOptionGroup(@PathVariable("menuKey") int menuKey, Model model) {
+    public String addOptionGroup(@AuthenticationPrincipal User user, @PathVariable("menuKey") int menuKey, Model model) {
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
         model.addAttribute("menuKey", menuKey);
         model.addAttribute("on", "menu");
         return "client/menu/addOptionGroup";
@@ -281,8 +285,10 @@ public class ClientMenuController {
 
     // 메뉴 옵션그룹 수정창 (모달창)
     @GetMapping("/updateOptionGroup/{optionGroupKey}")
-    public String updateOptionGroup(@PathVariable("optionGroupKey") int optionGroupKey, Model model) {
+    public String updateOptionGroup(@AuthenticationPrincipal User user, @PathVariable("optionGroupKey") int optionGroupKey, Model model) {
         ClientOptionGroup clientOptionGroup = clientOptionService.getOptionGroupByKey(optionGroupKey);
+        ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        model.addAttribute("client", clientAccount);
         model.addAttribute("optionGroup", clientOptionGroup);
         model.addAttribute("on", "menu");
         return "client/menu/updateOptionGroup";
@@ -308,7 +314,7 @@ public class ClientMenuController {
     @ResponseBody
     public Map<String, Object> addOption(@RequestBody ClientOption clientOption) {
         Map<String, Object> response = new HashMap<>();
-        log.info("clientOption {}", clientOption);
+        ///log.info("clientOption {}", clientOption);
         try {
             clientOptionService.addOption(clientOption);
             response.put("success", true);

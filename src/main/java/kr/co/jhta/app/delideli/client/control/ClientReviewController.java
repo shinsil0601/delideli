@@ -75,7 +75,7 @@ public class ClientReviewController {
             response.put("status", "already_reported");
             response.put("message", e.getMessage());
         } catch (Exception e) {
-            log.error("Review report failed", e);
+            //log.error("Review report failed", e);
             response.put("status", "error");
         }
         return response;

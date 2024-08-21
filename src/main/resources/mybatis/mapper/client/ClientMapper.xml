@@ -54,6 +54,11 @@
         SELECT client_access as clientAccess FROM client_account WHERE client_id = #{clientId} AND client_pw = #{clientPw}
     </select>
 
+    <!-- 아이디 탈퇴 여부 검토 -->
+    <select id="checkQuitAccount" parameterType="ClientAccount" resultType="boolean">
+        SELECT client_delete as clientDelete FROM client_account WHERE client_id = #{clientId} AND client_pw = #{clientPw}
+    </select>
+
     <!-- 비밀번호 변경 -->
     <update id="updatePwClient" parameterType="ClientAccount">
         UPDATE client_account
@@ -74,6 +79,13 @@
     <update id="changePwLogin" parameterType="ClientAccount">
         UPDATE client_account
         SET client_pw = #{clientPw}, client_update = NOW()
+        WHERE client_id = #{clientId}
+    </update>
+
+    <!-- 회원탈퇴 -->
+    <update id="quitClientAccount" parameterType="String">
+        UPDATE client_account
+        SET client_role = '', client_delete = TRUE
         WHERE client_id = #{clientId}
     </update>
 
