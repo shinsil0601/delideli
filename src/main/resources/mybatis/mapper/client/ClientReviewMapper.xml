@@ -73,7 +73,7 @@
                            ON r.storeInfo_key = si.storeInfo_key
         WHERE r.storeInfo_key = #{storeKey}
           AND r.client_key = #{clientKey}
-        AND r.review_status = 0
+          AND r.review_status = 0
         ORDER BY r.review_key DESC
     </select>
 
@@ -107,6 +107,5 @@
         FROM order_detail
         WHERE order_key = #{orderKey}
     </select>
-
 
 </mapper>
