@@ -2,6 +2,7 @@ package kr.co.jhta.app.delideli.client.control;
 
 import kr.co.jhta.app.delideli.client.account.domain.ClientAccount;
 import kr.co.jhta.app.delideli.client.account.service.ClientService;
+import kr.co.jhta.app.delideli.client.order.domain.ClientOrder;
 import kr.co.jhta.app.delideli.client.review.domain.ClientReview;
 import kr.co.jhta.app.delideli.client.review.service.ClientReviewService;
 import kr.co.jhta.app.delideli.client.store.domain.ClientStoreInfo;
@@ -47,9 +48,20 @@ public class ClientReviewController {
     public String clientReview(@AuthenticationPrincipal User user,
                                @PathVariable("storeKey") String storeKey, Model model) {
         ClientAccount clientAccount = clientService.findClientById(user.getUsername());
+        //가게목록
         ArrayList<ClientStoreInfo> storeList = clientStoreService.getAllStore(clientAccount.getClientKey());
+        //가게리뷰
         ArrayList<ClientReview> reviewList = clientReviewService.getAllReview(clientAccount.getClientKey(), storeKey);
-        //log.info("review>>>>>>>>>>>!!!!: {}", reviewList.toString());
+
+        // 각 리뷰와 관련된 주문 및 주문 상세 정보 출력 (로그)
+        reviewList.forEach(review -> {
+            log.info("Review Key: {}", review.getReviewKey());
+            review.getOrderList().forEach(order -> {
+                log.info("Order Key: {}", order.getOrderKey());
+                order.getClientOrderDetails().forEach(detail ->
+                        log.info("Menu Name: {}", detail.getMenuName()));
+            });
+        });
 
         model.addAttribute("client", clientAccount);
         model.addAttribute("store", storeList);
@@ -58,7 +70,6 @@ public class ClientReviewController {
         return "client/review/review.view";
     }
 
-
     // 리뷰 신고 처리 (AJAX 요청)
     @PostMapping("/reviewReport/{reviewKey}")
     @ResponseBody
@@ -66,6 +77,7 @@ public class ClientReviewController {
         Map<String, Object> response = new HashMap<>();
         try {
             boolean success = clientReviewService.reportReview(reviewKey);
+            log.info("success>>>>>>>>>!!!!! : {}", success);
             if (success) {
                 response.put("status", "success");
             } else {
@@ -75,7 +87,7 @@ public class ClientReviewController {
             response.put("status", "already_reported");
             response.put("message", e.getMessage());
         } catch (Exception e) {
-            //log.error("Review report failed", e);
+            log.error("Review report failed!!!!!!!>>  ", e);
             response.put("status", "error");
         }
         return response;

@@ -16,13 +16,50 @@
         <result property="reviewPhoto2" column="review_photo2"/>
         <result property="reviewRegdate" column="review_regdate"/>
         <result property="reviewComment" column="review_comment"/>
-        <result property="reportReview" column="report_review"/>
+        <result property="reportReview" column="report_review" javaType="boolean"/>
         <result property="commentRegdate" column="comment_regdate"/>
         <result property="commentUpdate" column="comment_update"/>
         <result property="reviewStatus" column="review_status"/>
         <result property="mnmtRegdate" column="mnmt_regdate"/>
     </resultMap>
 
+    <!-- Order에 대한 resultMap 정의 -->
+    <resultMap id="ClientOrderResultMap" type="kr.co.jhta.app.delideli.client.order.domain.ClientOrder">
+        <id property="orderKey" column="order_key"/>
+        <result property="userKey" column="user_key"/>
+        <result property="storeInfoKey" column="storeInfo_key"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="address" column="address"/>
+        <result property="orderMethod" column="order_method"/>
+        <result property="uorderPrice" column="uorder_price"/>
+        <result property="uorderPayment" column="uorder_payment"/>
+        <result property="orderEstimatedTime" column="order_estimated_time"/>
+        <result property="riderDesc" column="rider_desc"/>
+        <result property="shopDesc" column="shop_desc"/>
+        <result property="orderRegdate" column="order_regdate"/>
+        <result property="orderUpdate" column="order_update"/>
+
+        <!-- orderDetails를 리스트로 가져오기 위한 collection -->
+        <collection property="clientOrderDetails" ofType="kr.co.jhta.app.delideli.client.order.domain.ClientOrderDetail" select="getOrderDetailsByOrderKey" column="order_key"/>
+    </resultMap>
+
+    <!-- orderDetails에 대한 resultMap 정의 -->
+    <resultMap id="ClientOrderDetailResultMap" type="kr.co.jhta.app.delideli.client.order.domain.ClientOrderDetail">
+        <id property="orderKey" column="order_key"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="optionName" column="option_name"/>
+        <result property="quantity" column="quantity"/>
+    </resultMap>
+
+
+    <!-- getOrderDetailsByOrderKey 쿼리 추가 -->
+    <select id="getOrderDetailsByOrderKey" parameterType="int" resultMap="ClientOrderDetailResultMap">
+        SELECT order_detail_key, order_key, menu_name, option_name, quantity
+        FROM order_detail
+        WHERE order_key = #{order_key}
+    </select>
+
+    <!-- 가게에 따른 리뷰리스트 -->
     <select id="getreviewList" resultMap="ReviewResultMap" parameterType="map">
         SELECT
             r.review_key, r.user_key, r.client_key, r.storeInfo_key, r.order_key, r.review_rating, r.review_desc, r.review_photo1,
@@ -37,7 +74,7 @@
         WHERE r.storeInfo_key = #{storeKey}
           AND r.client_key = #{clientKey}
         AND r.review_status = 0
-        ORDER BY r.review_regdate DESC
+        ORDER BY r.review_key DESC
     </select>
 
     <!-- 리뷰 신고 처리 쿼리 -->
@@ -51,6 +88,24 @@
         SELECT *
         FROM review
         WHERE review_key = #{reviewKey}
+    </select>
+
+    <!-- getOrderList 쿼리 -->
+    <select id="getOrderList" resultMap="ClientOrderResultMap" parameterType="map">
+        SELECT o.*
+        FROM `order` o
+                 JOIN `user_account` ua ON o.user_key = ua.user_key
+                 JOIN `storeInfo` si ON o.storeInfo_key = si.storeInfo_key
+                 JOIN `client_account` ca ON si.client_key = ca.client_key
+        WHERE ca.client_key = #{clientKey}
+          AND si.storeInfo_key = #{storeKey};
+    </select>
+
+    <!-- 주문 상세 리스트 가져오기 -->
+    <select id="getOrderDetailListByOrderKey" resultMap="ClientOrderDetailResultMap">
+        SELECT order_key, menu_name, option_name, quantity
+        FROM order_detail
+        WHERE order_key = #{orderKey}
     </select>
 
 </mapper>

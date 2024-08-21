@@ -1,0 +1,93 @@
+/* StoreList */
+.sl__table-box {
+    border: 1px solid var(--gray-200);
+    border-radius: 2rem;
+    overflow: hidden;
+}
+.sl__table {
+    width: 100%;
+}
+.sl__table th {
+    padding: 2rem 0;
+    text-align: center;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.sl__table td {
+    padding: 2rem 0;
+    text-align: center;
+}
+.sl__table thead > tr {
+    border-bottom: 1px solid var(--gray-200);
+}
+.sl__table tbody > tr {
+    border-bottom: 1px solid var(--gray-200);
+}
+.sl__table tbody > tr:last-child {
+    border-bottom: none;
+}
+.sl__table tbody > tr:hover {
+    background: var(--gray-100);
+}
+.sl-bs {
+    font-weight: 700;
+}
+.sl-bs--stop {
+    color: var(--failedColor);
+}
+.sl-bs--start {
+    color: var(--teal-500);
+}
+.sl-bs--off {
+    color: var(--gray-400);
+}
+.sl-status {
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 0.6rem;
+    background: var(--whiteColor);
+    border: 1px solid var(--gray-200);
+}
+.sl-status--on {
+    color: var(--teal-500);
+}
+.sl-status--off {
+    color: var(--gray-400);
+}
+.sl-app {
+    font-weight: 700;
+}
+.sl-app--on {
+    color: var(--teal-500);
+}
+.sl-app--off {
+    color: var(--gray-400);
+}
+.sl__order--link {
+    padding: 0.6rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+    background: var(--whiteColor);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--blue-500);
+}
+.sl__btn-con {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+.sl__btn-con button {
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 0.6rem;
+}
+.sl__btn--edit {
+    background: var(--gray-900);
+    color: var(--whiteColor);
+}
+.sl__btn--delete {
+    background: var(--gray-400);
+    color: var(--gray-900);
+}
