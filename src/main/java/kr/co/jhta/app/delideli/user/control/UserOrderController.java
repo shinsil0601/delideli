@@ -25,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -173,7 +174,14 @@ public class UserOrderController {
                     statusMessage = "가게 접수중";
                     break;
                 case "배달(조리중)", "포장(조리중)":
-                    statusMessage = "조리중";
+                    // 예상 도착 시간을 계산합니다.
+                    LocalDateTime estimatedArrivalTime = order.getOrderUpdate().plusMinutes(Long.parseLong(order.getOrderEstimatedTime()));
+
+                    // 시와 분만 추출하여 형식화합니다.
+                    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+                    String formattedTime = estimatedArrivalTime.format(timeFormatter);
+
+                    statusMessage = "조리중 - " + formattedTime + " 도착 예정";
                     break;
                 case "배달중":
                     statusMessage = "배달중";
@@ -181,7 +189,7 @@ public class UserOrderController {
                 case "포장(픽업대기)":
                     statusMessage = "포장(픽업대기)";
                     break;
-                case "완료":
+                case "포장 완료", "배달 완료":
                     statusMessage = "주문 완료";
                     break;
                 case "취소됨":

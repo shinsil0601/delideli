@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserReviewServiceImpl implements UserReviewService {
 
-
     @Autowired
     private UserReviewMapper userReviewMapper;
 
@@ -26,4 +25,5 @@ public class UserReviewServiceImpl implements UserReviewService {
     public void saveReview(Review review) {
         userReviewMapper.insertReview(review);
     }
+
 }

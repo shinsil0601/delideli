@@ -106,7 +106,7 @@
                                         [[${order.review.reviewDesc}]]
                                     </p>
                                 </div>
-                                <div class="myReview__y--client" th:if="${order.review.reviewComment}">
+                                <div class="myReview__y--client" th:if="${order.review.reviewComment != null && order.review.reviewComment != ''}">
                                     <h3>사장님 답변</h3>
                                     <p>[[${order.review.reviewComment}]]</p>
                                 </div>

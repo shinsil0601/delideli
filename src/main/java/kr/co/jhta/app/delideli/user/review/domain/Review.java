@@ -22,4 +22,5 @@ public class Review {
     private Date commentRegdate;
     private Date commentUpdate;
     private boolean reviewStatus;
+    private String userNickname;
 }
