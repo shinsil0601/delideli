@@ -1,15 +1,21 @@
 <th:block th:fragment="StoreListPagination (type)">
-    <ul th:if="${totalPages > 0}">
+    <ul class="pagination" th:if="${totalPages > 0}">
         <li th:if="${map.prev}">
-            <a th:href="@{/client/storeList(page=${currentPage - 1}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}">이전</a>
+            <a th:href="@{/client/storeList(page=${currentPage - 1}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}">
+                <i class="fa-solid fa-caret-left"></i>
+            </a>
         </li>
         <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
             <li th:classappend="${i == currentPage ? 'active' : ''}">
-                <a th:href="@{/client/storeList(page=${i}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}" th:text="${i}">1</a>
+                <a th:href="@{/client/storeList(page=${i}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}">
+                    [[${i}]]
+                </a>
             </li>
         </th:block>
         <li th:if="${map.next}">
-            <a th:href="@{/client/storeList(page=${currentPage + 1}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}">다음</a>
+            <a th:href="@{/client/storeList(page=${currentPage + 1}, keyword=${keyword}, storeAccess=${storeAccess}, businessStatus=${businessStatus})}">
+                <i class="fa-solid fa-caret-right"></i>
+            </a>
         </li>
     </ul>
 </th:block>
