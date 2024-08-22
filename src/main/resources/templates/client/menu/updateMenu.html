@@ -36,7 +36,7 @@
                             <label for="menuImage">메뉴 이미지</label>
                             <input type="file" id="menuImage" name="menuImg">
                             <div>
-                                <img th:src="@{/images/{menuImg}(menuImg=${menu.menuImg})}" alt="Menu Image" style="max-width: 200px; max-height: 200px;">
+                                <img th:src="@{${menu.menuImg}}" alt="Menu Image" style="max-width: 200px; max-height: 200px;">
                             </div>
                         </div>
                         <div>

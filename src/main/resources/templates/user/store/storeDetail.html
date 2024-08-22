@@ -25,12 +25,12 @@
                     <div class="storeDetail__box">
                         <div class="storeDetail__box--left">
                             <div class="storeDetail__img">
-                                <img th:src="${store.storeProfileImg}" alt="가게 이미지">
+                                <img th:src="'/' + ${store.storeProfileImg}" alt="가게 이미지">
                             </div>
                             <div class="storeDetail__info-box">
-                                <p th:if="${store.businessStatus == '영업중'}">영업중</p>
-                                <p th:if="${store.businessStatus == '일시정지'}">일시정지</p>
-                                <p th:if="${store.businessStatus == '마감'}">마감</p>
+                                <p th:if="${store.businessStatus == '영업중'}" class="sd__status sd__status--on">영업중</p>
+                                <p th:if="${store.businessStatus == '일시정지'}" class="sd__status sd__status--stop">일시정지</p>
+                                <p th:if="${store.businessStatus == '마감'}" class="sd__status sd__status--off">마감</p>
                                 <h3 class="storeDetail__title">
                                     [[${store.storeName}]]
                                     <span class="storeDetail__rating">
@@ -94,14 +94,15 @@
                         <div class="sdTabCnt sdTabCnt__review-tab" th:if="${tab == 'review'}">
                             <div class="sbTabCnt__review-item" th:each="review : ${reviewList}">
                                 <div class="sbTabCnt__review-img">
-                                    <img th:src="${review.reviewPhoto1}" alt="리뷰 이미지" th:if="${review.reviewPhoto1 != null}">
-                                    <img th:src="${review.reviewPhoto2}" alt="리뷰 이미지" th:if="${review.reviewPhoto2 != null}">
+                                    <img th:if="${review.reviewPhoto1 != null}" th:src="'/' + ${review.reviewPhoto1}" alt="리뷰 이미지">
+                                    <img th:if="${review.reviewPhoto2 != null}" th:src="'/' + ${review.reviewPhoto2}" alt="리뷰 이미지">
                                 </div>
                                 <div class="sbTabCnt__review-info">
                                     <h3>
                                         <i class="fa-solid fa-star"></i>
                                         [[${review.reviewRating}]]
                                     </h3>
+                                    <h4>[[${review.userNickname}]]</h4>
                                     <p>[[${review.reviewDesc}]]</p>
                                 </div>
                             </div>
@@ -152,7 +153,7 @@
                                 <div class="sdTabCnt__info-cnt">
                                     <h3>가게 소개</h3>
                                     <div class="sdTabCnt__info-img">
-                                        <img th:src="${store.storeProfileImg}" alt="가게 이미지">
+                                        <img th:src="'/' + ${store.storeProfileImg}" alt="가게 이미지">
                                     </div>
                                     <p class="sdTabCnt__info-desc">
                                         [[${store.storeDetailInfo}]]

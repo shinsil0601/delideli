@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class UserOrderServiceImpl implements UserOrderService {
@@ -57,4 +59,16 @@ public class UserOrderServiceImpl implements UserOrderService {
         return userOrderMapper.findReviewableOrders(userKey, sevenDaysAgo);
     }
 
+    @Override
+    public ArrayList<Order> getOrdersWithoutReview(int userKey, LocalDateTime fromDate) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userKey", userKey);
+        params.put("fromDate", fromDate);
+        return userOrderMapper.getOrdersWithoutReview(params);
+    }
+
+    @Override
+    public ArrayList<Order> getOrdersWithReview(int userKey) {
+        return userOrderMapper.getOrdersWithReview(userKey);
+    }
 }

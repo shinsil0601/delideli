@@ -23,31 +23,6 @@ public class ClientReviewServiceImpl implements ClientReviewService {
         this.clientReviewMapper = clientReviewMapper;
     }
 
-
-    // 사장님 가게에 따른 리뷰와 관련 주문, 주문 상세 정보를 포함한 리스트를 가져옴
-    @Override
-    public ArrayList<ClientReview> getAllReview(int clientKey, String storeKey) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("clientKey", clientKey);
-        map.put("storeKey", storeKey);
-
-        // 리뷰 리스트 가져오기
-        ArrayList<ClientReview> reviewList = clientReviewMapper.getreviewList(map);
-
-        // 각 리뷰에 대해 관련된 주문 및 주문 상세 정보를 추가
-        for (ClientReview review : reviewList) {
-            ArrayList<ClientOrder> orderList = clientReviewMapper.getOrderList(map);
-            review.setOrderList(orderList);
-
-            for (ClientOrder order : orderList) {
-                List<ClientOrderDetail> orderDetailList = clientReviewMapper.getOrderDetailListByOrderKey(order.getOrderKey());
-                order.setClientOrderDetails((ArrayList<ClientOrderDetail>) orderDetailList);
-            }
-        }
-
-        return reviewList;
-    }
-
     // 리뷰 신고 처리
     @Override
     public boolean reportReview(int reviewKey) {
@@ -61,16 +36,6 @@ public class ClientReviewServiceImpl implements ClientReviewService {
             }
             return false; // 신고 실패
         }
-    }
-
-    //사용자키값에 따른 주문목록
-    @Override
-    public ArrayList<ClientOrder> getAllOrderList(int clientKey, String storeKey) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("clientKey", clientKey);
-        map.put("storeKey", storeKey);
-
-        return clientReviewMapper.getOrderList(map);
     }
 
     @Override
@@ -90,5 +55,23 @@ public class ClientReviewServiceImpl implements ClientReviewService {
         clientReviewMapper.addNewComment(params);
     }
 
+    @Override
+    public ArrayList<ClientReview> getAllReviewWithPaging(int clientKey, String storeKey, int page, int pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("clientKey", clientKey);
+        map.put("storeKey", storeKey);
+        map.put("startNo", (page - 1) * pageSize);
+        map.put("pageSize", pageSize);
+
+        return clientReviewMapper.getAllReviewWithPaging(map);
+    }
+
+    @Override
+    public int getTotalReviewsByStoreKey(int clientKey, String storeKey) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("clientKey", clientKey);
+        map.put("storeKey", storeKey);
+        return clientReviewMapper.getTotalReviewsByStoreKey(map);
+    }
 
 }
