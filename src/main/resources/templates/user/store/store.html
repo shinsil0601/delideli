@@ -143,7 +143,7 @@
                         <li th:each="store : ${storeList}">
                             <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}">
                                 <div class="sp__img" th:if="${store != null}">
-                                    <img th:if="${store.firstMenu != null}" th:src="@{${store.firstMenu.menuImg}}" alt="Menu Image">
+                                    <img th:src="@{${store.storeProfileImg != null ? '/' + store.storeProfileImg : '/path/to/default/image.jpg'}}" alt="Menu Image">
                                 </div>
                                 <div class="sp__info">
                                     <ul class="sp__rating">
