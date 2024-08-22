@@ -78,7 +78,7 @@
                                 <li th:each="store, iterStat : ${storeList}">
                                     <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}">
                                     <div class="mctgShop__img"
-                                             th:style="'background-image: url(' + (${store.storeProfileImg != null ? store.storeProfileImg : '/path/to/default/image.jpg'}) + ');'"></div>
+                                             th:style="'background-image: url(' + (${store.storeProfileImg != null ? '/' + store.storeProfileImg : '/path/to/default/image.jpg'}) + ');'"></div>
                                         <div class="mctgShop__info">
                                             <span class="mctgShop__info--review">
                                                 <i class="fa-solid fa-star"></i>
