@@ -157,7 +157,7 @@
                             <input type="file" id="storeBusinessRegistrationFile" name="storeBusinessRegistrationFile" onchange="previewImage(this, 'regFilePreview')">
                             <th:block th:if="${store.storeBusinessRegistrationFile}">
                                 <div>
-                                    <img id="regFilePreview" th:src="@{${store.storeBusinessRegistrationFile}}" alt="사업자등록증 이미지" style="max-width: 100px;">
+                                    <img id="regFilePreview" th:src="@{'/' + ${store.storeBusinessRegistrationFile}}" alt="사업자등록증 이미지" style="max-width: 100px;">
                                 </div>
                             </th:block>
                         </div>
@@ -167,7 +167,7 @@
                             <input type="file" id="storeBusinessReportFile" name="storeBusinessReportFile" onchange="previewImage(this, 'reportFilePreview')">
                             <th:block th:if="${store.storeBusinessReportFile}">
                                 <div>
-                                    <img id="reportFilePreview" th:src="@{${store.storeBusinessReportFile}}" alt="영업신고증 이미지" style="max-width: 100px;">
+                                    <img id="reportFilePreview" th:src="@{'/' + ${store.storeBusinessReportFile}}" alt="영업신고증 이미지" style="max-width: 100px;">
                                 </div>
                             </th:block>
                         </div>
@@ -177,7 +177,7 @@
                             <input type="file" id="storeProfileImg" name="storeProfileImg" onchange="previewImage(this, 'profileImgPreview')">
                             <th:block th:if="${store.storeProfileImg}">
                                 <div>
-                                    <img id="profileImgPreview" th:src="@{${store.storeProfileImg}}" alt="가게 프로필 이미지" style="max-width: 100px;">
+                                    <img id="profileImgPreview" th:src="@{'/' + ${store.storeProfileImg}}" alt="가게 프로필 이미지" style="max-width: 100px;">
                                 </div>
                             </th:block>
                         </div>
