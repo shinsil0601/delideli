@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,9 @@ public class UserBoardController {
     @GetMapping("/notice")
     public String notice(Model model,
                          @RequestParam(name = "keyword", defaultValue = "none") String keyword,
-                         @RequestParam(name = "page", defaultValue = "1") int page, @AuthenticationPrincipal User user, HttpServletResponse response) {
+                         @RequestParam(name = "page", defaultValue = "1") int page,
+                         @RequestParam(name = "pageSize", defaultValue = "5") int pageSize,
+                         @AuthenticationPrincipal User user, HttpServletResponse response) {
         if (user != null) {
             boolean hasUserRole = user.getAuthorities().stream()
                     .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
@@ -60,28 +63,28 @@ public class UserBoardController {
                 model.addAttribute("user", userAccount);
             }
         }
-        int totalNumber = 0;
-        int recordPerPage = 5;
-        Map<String, Object> map;
+
+        int totalNumber;
         List<Board> list;
 
         if (keyword.equals("none")) {
             totalNumber = userBoardService.getTotalNotice();
-            map = PageUtil.getPageData(totalNumber, recordPerPage, page);
-            int countPerPage = (int) map.get("countPerPage");
-            int startNo = (int) map.get("startNo");
-            list = userBoardService.getBoardList(countPerPage, startNo);
+            list = userBoardService.getBoardList(pageSize, (page - 1) * pageSize);
         } else {
             totalNumber = userBoardService.getTotalKeyword(keyword);
-            map = PageUtil.getPageData(totalNumber, recordPerPage, page);
-            int countPerPage = (int) map.get("countPerPage");
-            int startNo = (int) map.get("startNo");
-            list = userBoardService.getAllKeyword(countPerPage, startNo, keyword);
+            list = userBoardService.getAllKeyword(pageSize, (page - 1) * pageSize, keyword);
             model.addAttribute("keyword", keyword);
         }
 
+        // 페이지네이션 정보 계산
+        int totalPages = (int) Math.ceil((double) totalNumber / pageSize);
+        Map<String, Object> paginationMap = createPaginationMap(page, totalPages);
+
         model.addAttribute("list", list);
-        model.addAttribute("map", map);
+        model.addAttribute("map", paginationMap);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalPages", totalPages);
 
         return "user/board/notice.list";
     }
@@ -116,8 +119,12 @@ public class UserBoardController {
 
     // 이벤트 목록
     @GetMapping("/event")
-    public String event(Model model, @RequestParam(name = "keyword", defaultValue = "none") String keyword,
-                        @RequestParam(name = "page", defaultValue = "1") int page,@AuthenticationPrincipal User user, HttpServletResponse response) {
+    public String event(Model model,
+                        @RequestParam(name = "keyword", defaultValue = "none") String keyword,
+                        @RequestParam(name = "page", defaultValue = "1") int page,
+                        @RequestParam(name = "pageSize", defaultValue = "5") int pageSize,
+                        @AuthenticationPrincipal User user,
+                        HttpServletResponse response) {
         if (user != null) {
             boolean hasUserRole = user.getAuthorities().stream()
                     .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
@@ -135,28 +142,28 @@ public class UserBoardController {
                 model.addAttribute("user", userAccount);
             }
         }
-        int totalNumber = 0;
-        int recordPerPage = 5;
-        Map<String, Object> map;
+
+        int totalNumber;
         List<Board> list;
 
         if (keyword.equals("none")) {
             totalNumber = userBoardService.getTotalEvent();
-            map = PageUtil.getPageData(totalNumber, recordPerPage, page);
-            int countPerPage = (int) map.get("countPerPage");
-            int startNo = (int) map.get("startNo");
-            list = userBoardService.getEventList(countPerPage, startNo);
+            list = userBoardService.getEventList(pageSize, (page - 1) * pageSize);
         } else {
             totalNumber = userBoardService.getTotalKeywordEvent(keyword);
-            map = PageUtil.getPageData(totalNumber, recordPerPage, page);
-            int countPerPage = (int) map.get("countPerPage");
-            int startNo = (int) map.get("startNo");
-            list = userBoardService.getAllKeywordEvent(countPerPage, startNo, keyword);
+            list = userBoardService.getAllKeywordEvent(pageSize, (page - 1) * pageSize, keyword);
             model.addAttribute("keyword", keyword);
         }
 
+        // 페이지네이션 정보 계산
+        int totalPages = (int) Math.ceil((double) totalNumber / pageSize);
+        Map<String, Object> paginationMap = createPaginationMap(page, totalPages);
+
         model.addAttribute("list", list);
-        model.addAttribute("map", map);
+        model.addAttribute("map", paginationMap);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalPages", totalPages);
 
         return "user/board/event.list";
     }
@@ -294,4 +301,13 @@ public class UserBoardController {
         return "redirect:user/myAsk";
     }
 
+    // 페이지네이션 정보를 맵핑하는 메서드
+    private Map<String, Object> createPaginationMap(int currentPage, int totalPages) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("prev", currentPage > 1);
+        map.put("next", currentPage < totalPages);
+        map.put("startPageNo", 1); // 필요에 따라 조정 가능
+        map.put("endPageNo", totalPages); // 필요에 따라 조정 가능
+        return map;
+    }
 }
