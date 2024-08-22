@@ -54,11 +54,12 @@
                 </div>
                 <div class="board__view--btn-items myAskDetail--btn-items">
                     <button type="button" class="view-btn1" th:onclick="'location.href=\'' + @{/user/myAsk} + '\''">목록</button>
-                    <button type="button" class="view-btn2" th:onclick="'location.href=\'' + @{/user/myAskDelete/{boardKey}(boardKey=${board.boardKey})} + '\''">삭제하기</button>
+                    <button type="button" class="view-btn2" th:onclick="'confirmDelete('+ ${board.boardKey} +')'" th:text="삭제하기"></button>
                 </div>
 
             </div>
         </div>
+        <script src="/user/js/module/myAskDetail.js"></script>
     </main>
     <!-- End:Main -->
 
