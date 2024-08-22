@@ -24,14 +24,14 @@
             <section class="mainBanner__wrap">
                 <div class="mainBanner__con">
                     <ul class="mainBanner__items swiper-wrapper">
-                        <li class="mainBanner__item swiper-slide" style="background-image: url();">
-                            <p>Banner1</p>
+                        <li class="mainBanner__item swiper-slide" style="background-image: url(/admin/images/uploads/mainBanner__1.jpg);">
+                            <!--<p>Banner1</p>-->
                         </li>
-                        <li class="mainBanner__item swiper-slide" style="background-image: url();">
-                            <p>Banner2</p>
+                        <li class="mainBanner__item swiper-slide" style="background-image: url(/admin/images/uploads/mainBanner__2.jpg);">
+                            <!--<p>Banner2</p>-->
                         </li>
-                        <li class="mainBanner__item swiper-slide" style="background-image: url();">
-                            <p>Banner3</p>
+                        <li class="mainBanner__item swiper-slide" style="background-image: url(/admin/images/uploads/mainBanner__3.jpg);">
+                            <!--<p>Banner3</p>-->
                         </li>
                     </ul>
                     <div class="mainBanner__prevNext">
@@ -73,9 +73,9 @@
                     <!-- 해당 카테고리 가게 목록 -->
                     <div class="mainCategory__shop-con">
                         <div class="mainCategory__shop active">
-                            <ul class="mctgShop__items" th:each="store, iterStat : ${storeList}">
+                            <ul class="mctgShop__items">
                                 <!-- 가게 리스트 출력 -->
-                                <li>
+                                <li th:each="store, iterStat : ${storeList}">
                                     <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}">
                                     <div class="mctgShop__img"
                                              th:style="'background-image: url(' + (${store.storeProfileImg != null ? store.storeProfileImg : '/path/to/default/image.jpg'}) + ');'"></div>

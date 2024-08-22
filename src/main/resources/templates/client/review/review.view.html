@@ -20,10 +20,6 @@
     <th:block th:include="inc/client/aside :: clientAside"></th:block>
     <!-- End:Aside -->
 
-                <!-- Start:Contents -->
-                <section class="contents">
-                    <h3 th:text="${store.storeName} + '의 리뷰 목록'"></h3><br>
-
         <!-- Start:Contents -->
         <section class="contents">
             <h3 th:text="${store.storeName} + '의 리뷰 목록'"></h3><br>
@@ -80,12 +76,11 @@
             <!-- Start:Pagination -->
             <th:block th:include="inc/client/pagination-order :: OrderListPagination (${type})"></th:block>
             <!-- End:Pagination -->
-
-            <script src="/client/js/module/review.view.js"></script>
-        </section>
-        <!-- End:Contents -->
-    </main>
-    <!-- End:Main -->
+                    <script src="/client/js/module/review.view.js"></script>
+                </section>
+                <!-- End:Contents -->
+            </main>
+            <!-- End:Main -->
 </div>
 </body>
 </html>
