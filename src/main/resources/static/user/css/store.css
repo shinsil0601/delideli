@@ -200,6 +200,27 @@
     color: var(--gray-900);
     padding-bottom: 1rem;
 }
+.sp__status {
+    width: 8rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.4rem 0;
+    border-radius: 0.8rem;
+    margin-bottom: 1rem;
+}
+.sp__status--on {
+    background: var(--teal-500);
+    color: var(--whiteColor);
+}
+.sp__status--off {
+    background: var(--gray-400);
+    color: var(--gray-900);
+}
+.sp__status--stop {
+    background: var(--failedColor);
+    color: var(--whiteColor);
+}
 .sp__menu p {
     font-size: var(--font-size-18);
     font-weight: 500;
@@ -243,6 +264,27 @@
 .storeDetail__img img {
     width: 100%;
     height: 100%;
+}
+.sd__status {
+    width: 8rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.4rem 0;
+    border-radius: 0.8rem;
+    margin-bottom: 1rem;
+}
+.sd__status--on {
+    background: var(--teal-500);
+    color: var(--whiteColor);
+}
+.sd__status--off {
+    background: var(--gray-400);
+    color: var(--gray-900);
+}
+.sd__status--stop {
+    background: var(--failedColor);
+    color: var(--whiteColor);
 }
 .storeDetail__title {
     display: flex;
@@ -403,9 +445,14 @@
 .sbTabCnt__review-info h3 i {
     color: var(--mainColor);
 }
-.sbTabCnt__review-info p {
+.sbTabCnt__review-info h4 {
     padding-top: 2rem;
     border-top: 1px solid var(--gray-200);
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.sbTabCnt__review-info p {
     color: var(--gray-500);
 }
 .sdTabCnt__info-tab {
@@ -444,4 +491,252 @@
 .sdTabCnt__info-cnt > li {
     font-weight: 500;
     color: var(--gray-500);
+}
+
+/* Order */
+.od__cnt-box {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+}
+.od__left {
+    padding: 4rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 2rem;
+}
+.od__rider-con {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.od__odDetail-con {
+    padding-top: 2rem;
+}
+.od__odDetail-con > h2 {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--subColor);
+}
+.od__odDetail-con > h3 {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    padding-top: 1rem;
+}
+.od__odDetail-con > p {
+    padding: 1rem 0;
+    font-weight: 500;
+    color: var(--gray-700);
+}
+.od__odDetail-box {
+    padding: 1rem 0;
+    border-top: 1px solid #dddd;
+}
+.od__odDetail-box button {
+    margin-top: 2rem;
+    width: 100%;
+    padding: 0.8rem 0;
+    text-align: center;
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    color: var(--gray-900);
+}
+.od__point-con {
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.od__point-con > h2 {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.od__point-con > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-14);
+    font-weight: 700;
+    color: var(--whiteColor);
+    border-radius: 0.8rem;
+    background: var(--gray-600);
+    padding: 1rem 1.6rem;
+}
+.od__addr-con {
+    padding-top: 2rem;
+}
+.od__addr-con > p {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--failedColor);
+    text-align: center;
+}
+.od__addr-box > h3 {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.od__addr-box > p {
+    font-weight: 500;
+    color: var(--gray-900);
+    padding-bottom: 1rem;
+}
+.od__addr-box > button {
+    width: 100%;
+    border: 1px solid var(--gray-200);
+    background: var(--whiteColor);
+    color: var(--gray-900);
+    text-align: center;
+    padding: 1rem 0;
+}
+.od__addr-list {
+    padding-top: 2rem;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr 8.2rem;
+}
+.od__addr-list select {
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+    padding: 1rem 1.6rem;
+}
+.od__addr-list button {
+    width: 8.2rem;
+    font-size: var(--font-size-14);
+    font-weight: 700;
+    color: var(--whiteColor);
+    text-align: center;
+    background: var(--gray-600);
+    padding: 1rem 1.6rem;
+}
+.od__addr-modal {
+    padding-top: 2rem;
+}
+.od__addr-modal h2 {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.od__addr-form {
+    display: grid;
+    gap: 2rem;
+    padding-top: 2rem;
+}
+.od__addr-box {
+    display: grid;
+    gap: 1rem;
+}
+.od__addr-box label {
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.od__addr-box {
+    width: 100%;
+}
+.od__addr-input {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.od__addr-input > button {
+    width: 8.2rem;
+    font-size: var(--font-size-14);
+    color: var(--whiteColor);
+    text-align: center;
+    background: var(--gray-600);
+    padding: 1rem 1.6rem;
+}
+.od__addr-btn {
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+.od__addr-btn > button {
+    width: 8.2rem;
+    font-size: var(--font-size-14);
+    text-align: center;
+    padding: 1rem 1.6rem;
+}
+.od__addr-btn--1 {
+    background: var(--gray-600);
+    color: var(--whiteColor);
+}
+.od__phone-con {
+    padding-top: 2rem;
+    font-weight: 700;
+    color: var(--gray-700);
+}
+.od__payment-con {
+    padding-top: 2rem;
+}
+.od__payment-con h2 {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.od__payment-con select {
+    margin-top: 1rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.8rem;
+    padding: 1rem 1.6rem;
+}
+.od__delivery-con {
+    padding-top: 2rem;
+}
+.od__delivery-con p {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-500);
+}
+.od__coupon-con {
+    padding-top: 2rem;
+}
+.od__coupon-con p {
+    font-size: var(--font-size-18);
+    font-weight: 700;
+    color: var(--gray-500);
+}
+.od__totalPrice-con {
+    padding-top: 2rem;
+}
+.od__totalPrice-con h3 {
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.od__totalPrice-con p {
+    padding-top: 1rem;
+    font-size: var(--font-size-24);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.od__right .od__desc:last-child {
+    padding-top: 2rem;
+}
+.od__desc h3 {
+    padding-bottom: 1rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.od__desc textarea {
+    width: 100%;
+    height: 18rem;
+}
+.od__btn-con {
+    padding-top: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+.od__btn-con button {
+    width: 14rem;
+    padding: 1.6rem 0;
+    text-align: center;
+    background: var(--mainColor);
+    color: var(--subColor);
 }
