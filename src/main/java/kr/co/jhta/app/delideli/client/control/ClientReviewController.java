@@ -36,34 +36,65 @@ public class ClientReviewController {
     @Autowired
     private final UserService userService;
 
-    //사장님 가게목록
     @GetMapping("/review")
-    public String clientReview(@AuthenticationPrincipal User user, Model model) {
+    public String clientReview(@AuthenticationPrincipal User user,
+                               @RequestParam(value = "page", defaultValue = "1") int page,
+                               @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
+                               Model model) {
         ClientAccount clientAccount = clientService.findClientById(user.getUsername());
-        ArrayList<ClientStoreInfo> storeList = clientStoreService.getAllStore(clientAccount.getClientKey());
         model.addAttribute("client", clientAccount);
+
+        // 가게 목록 페이징 처리
+        ArrayList<ClientStoreInfo> storeList = clientStoreService.getAllStoreWithPaging(clientAccount.getClientKey(), page, pageSize);
         model.addAttribute("store", storeList);
+
+        int totalStores = clientStoreService.getTotalStoreCountByClientKey(clientAccount.getClientKey());
+        int totalPages = (int) Math.ceil((double) totalStores / pageSize);
+
+        // 페이지네이션 정보 추가
+        Map<String, Object> paginationMap = createPaginationMap(page, totalPages);
+
+        model.addAttribute("map", paginationMap);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", pageSize); // 페이지 사이즈 설정
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("type", "review");
         model.addAttribute("on", "review");
 
         return "client/review/review.list";
     }
 
-    //리뷰 상세보기
+    // 리뷰 상세보기 (페이지네이션 적용)
     @GetMapping("/review/{storeKey}")
     public String clientReview(@AuthenticationPrincipal User user,
-                               @PathVariable("storeKey") String storeKey, Model model) {
+                               @PathVariable("storeKey") String storeKey,
+                               @RequestParam(value = "page", defaultValue = "1") int page,
+                               @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
+                               Model model) {
         ClientAccount clientAccount = clientService.findClientById(user.getUsername());
         ClientStoreInfo store = clientStoreService.getStoreDetail(Integer.parseInt(storeKey));
-        //가게리뷰
-        ArrayList<ClientReview> reviewList = clientReviewService.getAllReview(clientAccount.getClientKey(), storeKey);
+
+        // 가게 리뷰 페이징 처리
+        ArrayList<ClientReview> reviewList = clientReviewService.getAllReviewWithPaging(clientAccount.getClientKey(), storeKey, page, pageSize);
         for (ClientReview review : reviewList) {
             UserAccount userAccount = userService.getUserAccountByUserKey(review.getUserKey());
             review.setUserNickname(userAccount.getUserNickname());
         }
 
+        int totalReviews = clientReviewService.getTotalReviewsByStoreKey(clientAccount.getClientKey(), storeKey);
+        int totalPages = (int) Math.ceil((double) totalReviews / pageSize);
+
+        // 페이지네이션 정보 추가
+        Map<String, Object> paginationMap = createPaginationMap(page, totalPages);
+
         model.addAttribute("client", clientAccount);
         model.addAttribute("store", store);
         model.addAttribute("reviewList", reviewList);
+        model.addAttribute("map", paginationMap);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", pageSize); // 페이지 사이즈 설정
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("type", "review");
         model.addAttribute("on", "review");
 
         return "client/review/review.view";

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 - 사장님 계정 목록페이지</title>
+  <!-- Include:공통 CSS -->
+  <th:block th:include="inc/common/common-css :: commonCss"></th:block>
+  <!-- Include:Admin CSS -->
+  <th:block th:include="inc/admin/admin-css :: adminCss"></th:block>
+  <!-- Include:공통 JS -->
+  <th:block th:include="inc/common/common-js :: commonJs"></th:block>
+  <!-- Include:Admin JS -->
+  <th:block th:include="inc/admin/admin-js :: adminJs"></th:block>
+
+  <script>
+    function toggleAccess(clientKey) {
+      const button = document.getElementById('toggle-btn-' + clientKey);
+      const statusSpan = document.getElementById('status-' + clientKey);
+
+      // 로그 추가
+      console.log('button ID:', 'toggle-btn-' + clientKey);
+      console.log('statusSpan ID:', 'status-' + clientKey);
+      console.log('statusSpan element:', statusSpan);
+
+      if (!statusSpan) {
+        console.error(`상태 표시 요소를 찾을 수 없습니다. clientKey: ${clientKey}`);
+        return;
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: '/admin/member/clientAccess',
+        data: { clientKey: clientKey },
+        success: function(response) {
+          if (response.status === 'success') {
+            if (statusSpan) {
+              if (response.clientAccess === 1) {
+                button.innerText = '승인취소';
+                statusSpan.innerText = '승인완료';
+              } else {
+                button.innerText = '승인';
+                statusSpan.innerText = '승인대기';
+              }
+            }
+          } else {
+            alert('처리 중 오류가 발생했습니다.');
+          }
+        },
+        error: function() {
+          alert('서버와 통신 중 오류가 발생했습니다.');
+        }
+      });
+    }
+
+  </script>
+
+</head>
+<body>
+<div class="admin-wrap">
+  <!-- Start:Aside -->
+  <th:block th:include="inc/admin/aside :: adminAside"></th:block>
+  <!-- End:Aside -->
+
+  <!-- Start:Main -->
+  <main id="mainpage__wrap">
+    <!-- Start:Header -->
+    <th:block th:include="inc/admin/header :: adminHeader"></th:block>
+    <!-- End:Header -->
+
+    <!-- Start:Contents -->
+    <section class="contents">
+      <h3>회원관리</h3>
+      <h4>회원관리 - 사장목록</h4>
+
+      <table>
+        <tr>
+          <th>번호</th>
+          <th>아이디</th>
+          <th>대표명</th>
+          <th>사업자등록번호</th>
+          <th>이메일</th>
+          <th>계정승인요청</th>
+          <th>계정삭제요청</th>
+          <th>등록일</th>
+          <th>관리</th>
+        </tr>
+
+        <tr th:each="admin : ${clientAccount}">
+          <td></td>
+          <td th:text="${admin.clientId}"></td>
+          <td th:text="${admin.clientName}"></td>
+          <td th:text="${admin.clientEID}"></td>
+          <td th:text="${admin.clientEmail}"></td>
+          <td>
+            <!-- th:id를 사용하여 id 속성 설정 -->
+            <span th:id="'status-' + ${admin.clientKey}"
+                  th:text="${admin.clientAccess ? '승인완료' : '승인대기'}"></span>
+          </td>
+          <td>
+            <span th:text="${admin.clientDelete ? 'O' : 'X'}"></span>
+          </td>
+          <td th:text="${admin.clientRegdate}"></td>
+          <td>
+            <button th:id="'toggle-btn-' + ${admin.clientKey}"
+                    th:text="${admin.clientAccess ? '승인취소' : '승인'}"
+                    th:onclick="'toggleAccess(' + ${admin.clientKey} + ')'">
+            </button>
+            <button>수정</button>
+            <button>정산</button>
+            <button>삭제</button>
+          </td>
+        </tr>
+
+      </table>
+    </section>
+    <!-- End:Contents -->
+  </main>
+  <!-- End:Main -->
+</div>
+</body>
+</html>
