@@ -30,7 +30,7 @@
                         <li th:each="store : ${storeList}">
                             <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}">
                                 <div class="myLike__img">
-                                    <img th:src="${store.storeProfileImg}" alt="가게 이미지">
+                                    <img th:src="'/' + ${store.storeProfileImg}" alt="가게 이미지">
                                 </div>
                                 <p class="myLike__rating">
                                     <i class="fa-solid fa-star"></i> [[${store.averageRating}]]
