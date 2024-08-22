@@ -47,7 +47,6 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     // 승인 상태를 토글하는 메서드
     @Override
     public int toggleClientAccess(int clientKey) {
-        log.info("toggleClientAccess>>>> {}", clientKey);
         AdminMemberAdmin admin = adminMemberMapper.getClientByKey(clientKey);
         int newAccessStatus = admin.isClientAccess() ? 0 : 1;  // clientAccess 값에 따른 토글
         adminMemberMapper.updateClientAccess(clientKey, newAccessStatus);
