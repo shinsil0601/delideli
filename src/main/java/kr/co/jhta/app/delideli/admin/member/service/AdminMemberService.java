@@ -11,6 +11,6 @@ public interface AdminMemberService {
     List<AdminMemberAdmin> getAllclientList();
 
     // 승인 상태를 토글하는 메서드
-    public int toggleClientAccess(int clientKey);
+    int toggleClientAccess(int clientKey);
 
 }

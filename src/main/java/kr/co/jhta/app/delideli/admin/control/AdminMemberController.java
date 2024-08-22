@@ -35,7 +35,6 @@ public class AdminMemberController {
     @PostMapping("/member/clientAccess")
     @ResponseBody
     public Map<String, Object> toggleAccess(@RequestParam int clientKey) {
-        log.info("clientKey>>>>>>>!!!!!: {}", clientKey);
         int newAccessStatus = adminMemberService.toggleClientAccess(clientKey);
         Map<String, Object> response = new HashMap<>();
         response.put("status", "success");
