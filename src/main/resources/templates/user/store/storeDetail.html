@@ -25,7 +25,7 @@
                     <div class="storeDetail__box">
                         <div class="storeDetail__box--left">
                             <div class="storeDetail__img">
-                                <img th:src="${store.storeProfileImg}" alt="가게 이미지">
+                                <img th:src="'/' + ${store.storeProfileImg}" alt="가게 이미지">
                             </div>
                             <div class="storeDetail__info-box">
                                 <p th:if="${store.businessStatus == '영업중'}" class="sd__status sd__status--on">영업중</p>
