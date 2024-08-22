@@ -32,7 +32,7 @@
                     <th:block th:each="store : ${store}">
                         <li>
                             <a th:href="@{/client/menu/{storeKey}(storeKey=${store.storeInfoKey})}">
-                                <img th:src="${store.storeProfileImg}" alt="가게 이미지">
+                                <img th:src="'/' + ${store.storeProfileImg}" alt="가게 이미지">
                                 <div th:text="${store.storeName}"></div>
                             </a>
                         </li>
