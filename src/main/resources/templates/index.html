@@ -73,9 +73,9 @@
                     <!-- 해당 카테고리 가게 목록 -->
                     <div class="mainCategory__shop-con">
                         <div class="mainCategory__shop active">
-                            <ul class="mctgShop__items" th:each="store, iterStat : ${storeList}">
+                            <ul class="mctgShop__items">
                                 <!-- 가게 리스트 출력 -->
-                                <li>
+                                <li th:each="store, iterStat : ${storeList}">
                                     <a th:href="@{'/user/storeDetail/' + ${store.storeInfoKey}}">
                                     <div class="mctgShop__img"
                                              th:style="'background-image: url(' + (${store.storeProfileImg != null ? store.storeProfileImg : '/path/to/default/image.jpg'}) + ');'"></div>
