@@ -14,30 +14,27 @@
         <th:block th:include="inc/client/client-js :: clientJs"></th:block>
 
 </head>
-    <body>
-        <div class="client-wrap">
-            <!-- Start:Aside -->
-            <th:block th:include="inc/client/aside :: clientAside"></th:block>
-            <!-- End:Aside -->
-            
-            <!-- Start:Main -->
-            <main id="mainpage__wrap">
-                <!-- Start:Contents -->
-                <section class="contents">
-                    <h3 th:text="${store.storeName} + '의 리뷰 목록'"></h3><br>
+<body>
+<div class="client-wrap">
+    <!-- Start:Aside -->
+    <th:block th:include="inc/client/aside :: clientAside"></th:block>
+    <!-- End:Aside -->
 
-                    <ul>
-                        <th:block th:each="review : ${reviewList}">
-                            <li>
-                                <!-- 신고 버튼 -->
-                                <a href="javascript:void(0);"
-                                   th:onclick="'reportReview(' + ${review.reviewKey} + ', this)'"
-                                   th:text="${review.reportReview ? '신고 완료' : '신고🚨'}"
-                                   th:style="${review.reportReview ? 'pointer-events: none;' : ''}">
-                                </a>
-                                <span th:if="${review.reviewComment == null || review.reviewComment.isEmpty()}" th:text="'미작성'"></span>
-                                <span th:if="${review.reviewComment != null && !review.reviewComment.isEmpty()}" th:text="'작성 완료'"></span>
+        <!-- Start:Contents -->
+        <section class="contents">
+            <h3 th:text="${store.storeName} + '의 리뷰 목록'"></h3><br>
 
+            <ul>
+                <th:block th:each="review : ${reviewList}">
+                    <li>
+                        <!-- 신고 버튼 -->
+                        <a href="javascript:void(0);"
+                           th:onclick="'reportReview(' + ${review.reviewKey} + ', this)'"
+                           th:text="${review.reportReview ? '신고 완료' : '신고🚨'}"
+                           th:style="${review.reportReview ? 'pointer-events: none;' : ''}">
+                        </a>
+                        <span th:if="${review.reviewComment == null || review.reviewComment.isEmpty()}" th:text="'미작성'"></span>
+                        <span th:if="${review.reviewComment != null && !review.reviewComment.isEmpty()}" th:text="'작성 완료'"></span>
                                 <p th:text="${review.userNickname}"></p>
                                 [[${#temporals.format(review.reviewRegdate.toLocalDate(), 'yyyy/MM/dd')}]]
                                 <p>별점 : [[${review.reviewRating}]]</p>
