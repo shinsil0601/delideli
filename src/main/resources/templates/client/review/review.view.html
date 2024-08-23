@@ -35,47 +35,46 @@
                         </a>
                         <span th:if="${review.reviewComment == null || review.reviewComment.isEmpty()}" th:text="'미작성'"></span>
                         <span th:if="${review.reviewComment != null && !review.reviewComment.isEmpty()}" th:text="'작성 완료'"></span>
+                                <p th:text="${review.userNickname}"></p>
+                                [[${#temporals.format(review.reviewRegdate.toLocalDate(), 'yyyy/MM/dd')}]]
+                                <p>별점 : [[${review.reviewRating}]]</p>
+                                <p>[[${review.reviewDesc}]]</p>
+                                <img th:src="${review.reviewPhoto1}" alt="1번 리뷰 이미지" th:if="${review.reviewPhoto1} != null">
+                                <img th:src="${review.reviewPhoto2}" alt="2번 리뷰 이미지" th:if="${review.reviewPhoto2} != null">
 
-                        <p th:text="${review.userNickname}"></p>
-                        [[${#temporals.format(review.reviewRegdate.toLocalDate(), 'yyyy/MM/dd')}]]
-                        <p>별점 : [[${review.reviewRating}]]</p>
-                        <p>[[${review.reviewDesc}]]</p>
-                        <img th:src="${review.reviewPhoto1}" alt="1번 리뷰 이미지" th:if="${review.reviewPhoto1} != null">
-                        <img th:src="${review.reviewPhoto2}" alt="2번 리뷰 이미지" th:if="${review.reviewPhoto2} != null">
+                                <!-- 주문 목록 반복 -->
+                                <p>주문메뉴</p>
+                                <ul>
+                                    <th:block th:each="order : ${review.orderList}">
+                                        <th:block th:each="detail : ${order.clientOrderDetails}">
+                                            <li th:if="${review.orderKey == detail.orderKey}">
+                                                <span th:text="${detail.menuName} + ${detail.quantity} + '개'"></span>
+                                                <span th:text="'(' + ${detail.optionName} + ')'"></span>
+                                            </li>
+                                        </th:block>
+                                    </th:block>
+                                </ul>
 
-                        <!-- 주문 목록 반복 -->
-                        <p>주문메뉴</p>
-                        <ul>
-                            <th:block th:each="order : ${review.orderList}">
-                                <th:block th:each="detail : ${order.clientOrderDetails}">
-                                    <li th:if="${review.orderKey == detail.orderKey}">
-                                        <span th:text="${detail.menuName} + ${detail.quantity} + '개'"></span>
-                                        <span th:text="'(' + ${detail.optionName} + ')'"></span>
-                                    </li>
-                                </th:block>
-                            </th:block>
-                        </ul>
-
-                        <!-- 사장님 답변 여부창 -->
-                        <!-- 작성했을 때 -->
-                        <div th:if="${review.reviewComment != null && !review.reviewComment.isEmpty()}">
-                            <p class="commentText" th:text="'사장님 답변 : ' + ${review.reviewComment}"></p>
-                            <button class="editButton" data-review-key="${review.reviewKey}">수정하기</button>
-                            <textarea name="editComment" class="editComment" cols="30" rows="10" th:text="${review.reviewComment}" placeholder="내용을 입력해주세요" style="display: none"></textarea>
-                            <button class="saveButton" th:data-review-key="${review.reviewKey}" style="display: none">수정</button>
-                        </div>
-                        <!-- 작성 안했을 때 -->
-                        <div th:if="${review.reviewComment == null || review.reviewComment.isEmpty()}">
-                            <textarea name="writeComment" class="writeComment" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea>
-                            <button class="saveNewButton" th:data-review-key="${review.reviewKey}">저장</button>
-                        </div>
-                        <br>
-                    </li>
-                </th:block>
-            </ul>
-            <!-- Start:Pagination -->
-            <th:block th:include="inc/client/pagination-order :: OrderListPagination (${type})"></th:block>
-            <!-- End:Pagination -->
+                                <!-- 사장님 답변 여부창 -->
+                                <!-- 작성했을 때 -->
+                                <div th:if="${review.reviewComment != null && !review.reviewComment.isEmpty()}">
+                                    <p class="commentText" th:text="'사장님 답변 : ' + ${review.reviewComment}"></p>
+                                    <button class="editButton" data-review-key="${review.reviewKey}">수정하기</button>
+                                    <textarea name="editComment" class="editComment" cols="30" rows="10" th:text="${review.reviewComment}" placeholder="내용을 입력해주세요" style="display: none"></textarea>
+                                    <button class="saveButton" th:data-review-key="${review.reviewKey}" style="display: none">수정</button>
+                                </div>
+                                <!-- 작성 안했을 때 -->
+                                <div th:if="${review.reviewComment == null || review.reviewComment.isEmpty()}">
+                                    <textarea name="writeComment" class="writeComment" cols="30" rows="10" placeholder="내용을 입력해주세요"></textarea>
+                                    <button class="saveNewButton" th:data-review-key="${review.reviewKey}">저장</button>
+                                </div>
+                                <br>
+                            </li>
+                        </th:block>
+                    </ul>
+                    <!-- Start:Pagination -->
+                    <th:block th:include="inc/client/pagination-order :: OrderListPagination (${type})"></th:block>
+                    <!-- End:Pagination -->
                     <script src="/client/js/module/review.view.js"></script>
                 </section>
                 <!-- End:Contents -->
