@@ -53,7 +53,7 @@
                     <div class="mainCategory__top">
                         <div class="mainCategory__label">
                             <div class="mainCategory__label--img">
-                                <img th:src="@{${selectedCategory.categoryImg}}" alt="카테고리이미지">
+                                <img th:src="@{'/' + ${selectedCategory.categoryImg}}" alt="카테고리이미지">
                             </div>
                             <p class="mainCategory__label--name" th:text="${selectedCategory.categoryName}">카테고리명</p>
                         </div>
